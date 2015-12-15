@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+        
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        
+        <script src="http://d3js.org/d3.v3.min.js"></script>
+        <script type="text/javascript" src="bootstrap-slider.js"></script>
+        <link rel="stylesheet" href="bootstrap-slider.css">
+        
+        <script type="text/javascript" src="compare_bar_graph.js"></script>
+        
+        <title>Compare</title>
+        
+        <style>
+            
+            .axis path, .axis line
+            {
+                fill: none;
+                stroke: #777;
+                shape-rendering: crispEdges;
+            }
+            
+            .tick
+            {
+                stroke-dasharray: 1, 2;
+            }
+            .bar
+            {
+                fill: FireBrick;
+            }
+            @media (min-width: 10px) {
+                .axis text{
+                    font-family: 'Arial';
+                    font-size: 10px;
+                }
+            }
+            @media (min-width: 400px) {
+                .axis text{
+                    font-family: 'Arial';
+                    font-size: 13px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class='row'>Test</div>
+            <div class='row'>
+                <button type="button" id='change_graph'>Relative</button>
+            </div>
+            <div class='row'>
+                <div class='col-xs-12' id='graph_column'>
+                    <div id="graph"></div>
+                </div>
+                
+            </div>
+        </div>
+    </body>
+
+</html>
