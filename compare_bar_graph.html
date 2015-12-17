@@ -30,18 +30,25 @@
             }
             .bar
             {
-                fill: FireBrick;
+                fill: #EB1515;
             }
+            
             @media (min-width: 10px) {
                 .axis text{
                     font-family: 'Arial';
                     font-size: 10px;
+                }
+                #graph_title{
+                    font-size: 14px;
                 }
             }
             @media (min-width: 400px) {
                 .axis text{
                     font-family: 'Arial';
                     font-size: 13px;
+                }
+                #graph_title{
+                    font-size: 16px;
                 }
             }
         </style>
@@ -53,10 +60,11 @@
                 <button type="button" id='change_graph'>Relative</button>
             </div>
             <div class='row'>
-                <div class='col-xs-12' id='graph_column'>
+                <div class='col-xs-1'></div>
+                <div class='col-xs-10' id='graph_column'>
                     <div id="graph"></div>
                 </div>
-                
+                <div class='col-xs-1'></div>
             </div>
         </div>
     </body>
