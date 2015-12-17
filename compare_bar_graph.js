@@ -37,7 +37,7 @@ $(window).load(function () {
         });
         
         $('#change_graph').click(function(){
-            compare_graph.update_data();
+            compare_graph.update_data(the_data);
         })
         
         
@@ -54,86 +54,82 @@ function compare_graph_class(the_data){
 
     self.update_data = function(the_data){
         /*Switches the data from absolute to relative dataset or visa-versa*/
-        
+            
+            //change to relative
             if (self.current_data == 'death_total') {
-                //change to relative
-                self.yRange = d3.scale.linear()
-                    .range([self.height, 0])
-                    .domain([0, 450]);
-                self.yAxis = d3.svg.axis()
-                    .scale(yRange)
-                    .tickSize(5)
-                    .orient('left')
-                    .tickSubdivide(true);
-                self.svg.selectAll("rect")
-                   .data(the_data)
-                   .transition()
-                   .attr("y", function(d) { return yRange(d.Relative/1000000); })
-                   .attr("height", function(d) { return self.height - yRange(d.Relative/1000000); });
-                self.svg.selectAll("g.y.axis")
-                    .transition()
-                    .call(yAxis)
-                self.graph_title.text('Absolute Death Toll');
-                
                 self.current_data = 'relative';
+                
+                //Update the y axis
+                self.yRange.domain([0, 450]);
+                self.yAxis.scale(self.yRange);
+                self.y_axis
+                    .transition()
+                    .call(self.yAxis);
+                
+                //Update the bars with the new data
+                self.svg.selectAll("rect")
+                    .data(the_data)
+                    .transition()
+                    .attr("y", function(d) { return self.y_data_function(d); })
+                    .attr("height", function(d) { return self.height - self.y_data_function(d)});
+                
+                //Update the graph title
+                self.graph_title.text('Death Toll - 1950 Equivalent');
             }
             
+            //change to absolute
             else if (self.current_data == 'relative') {
-                //change to death total
-                var svg = d3.select('#graph')
-                var yRange = d3.scale.linear()
-                    .range([height, 0])
-                    .domain([0, 55]);
-                var yAxis = d3.svg.axis()
-                    .scale(yRange)
-                    .tickSize(5)
-                    .orient('left')
-                    .tickSubdivide(true);
-                svg.selectAll("rect")
-                   .data(the_data)
-                   .transition()
-                   .attr("y", function(d) { return yRange(d.Death_Total/1000000); })
-                   .attr("height", function(d) { return height - yRange(d.Death_Total/1000000); });
-                svg.selectAll("g.y.axis")
-                    .transition()
-                    .call(yAxis)
-                self.graph_title.text('Absolute Death Toll');
+                self.current_data = 'death_total';
                 
-                current_data = 'death_total';
+                //Update the y axis
+                self.yRange.domain([0, 55]);
+                self.yAxis.scale(self.yRange);
+                self.y_axis
+                    .transition()
+                    .call(self.yAxis);
+                
+                //Update the bars with the new data
+                self.svg.selectAll("rect")
+                    .data(the_data)
+                    .transition()
+                    .attr("y", function(d) { return self.y_data_function(d); })
+                    .attr("height", function(d) { return self.height - self.y_data_function(d)});
+                
+                //Update the graph title
+                self.graph_title.text('Absolute Death Toll');
             }
     }
     
     self.resize = function(the_data){
         /*Resizes the graph due to a window size change*/
         
+        //Get the new graph dimensions
         self.set_graph_dimensions();
         
+        //Update the svg dimensions
         self.svg
             .attr("width", self.width + self.margin.left + self.margin.right)
             .attr("height", self.height + self.margin.top + self.margin.bottom);
-        
         self.svg_g
             .attr("transform", "translate(" + self.margin.left + "," + self.margin.top + ")");
         
+        //Update the graph title position
         self.graph_title
-            .attr("x", (self.width / 2))             
+            .attr("x", (self.width / 2))
             .attr("y", (0 - self.margin.top/2));
         
-        
+        //Rescale the range and axis functions to account for the new dimensions
         self.xRange
             .rangeRoundBands([0, self.width], .1);
-          
-        self.yRange();
-        
         self.xAxis
             .scale(self.xRange);
-          
+        self.yRange
+            .range([self.height, 0]);
         self.yAxis
             .scale(self.yRange);
         
         //resize the x-axis
         self.x_axis
-            .attr("class", "x axis")
             .attr("transform", "translate(0," + self.height + ")")
             .call(self.xAxis)
                 .selectAll("text")
@@ -153,6 +149,7 @@ function compare_graph_class(the_data){
             .attr("y", 0 - self.margin.left)
             .attr("x",0 - (self.height / 2))
         
+        //Update the actual bar rectangles
         self.svg.selectAll("rect")
             .attr("x", function(d) { return self.xRange([d.Cause, d.Century_String]); })
             .attr("width", self.xRange.rangeBand())
@@ -164,6 +161,7 @@ function compare_graph_class(the_data){
     self.draw = function(){
         /*Draws the graph according to the size of the graph element*/
         
+        //Get the graph dimensions
         self.set_graph_dimensions();
         
         //Create Graph SVG
@@ -231,6 +229,7 @@ function compare_graph_class(the_data){
         //Add the y-axis
         self.y_axis = self.svg_g.append('svg:g')
             .attr('class', 'y axis');
+        console.log(self.y_axis)
         self.y_axis.call(self.yAxis);
         
         //Add the y axis label
@@ -252,8 +251,10 @@ function compare_graph_class(the_data){
                 .attr("width", self.xRange.rangeBand())
                 .attr("y", function(d) { return self.y_data_function(d); })
                 .attr("height", function(d) { return self.height - self.y_data_function(d)});   
-    }
     
+    }//End draw graph
+    
+    /* Reusable functions********************/
     self.set_graph_dimensions = function(){
         /*Resets the higheth width and margins based on the column width*/
         var column_width = $('#graph_column').width();
