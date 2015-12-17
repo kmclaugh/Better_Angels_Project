@@ -1,12 +1,7 @@
-var max_cdf_surge = 30;
-var max_cdf_standard_dev = Math.round(max_cdf_surge/5);
-var number_of_drivers = 100
 
 $(window).load(function () {
     
     $(document).ready(function () {
-        
-    
         
         var the_data = [
             {"Relative": 105000000.0, "Cause": "Fall of Rome", "Century_String": "3rd-5th", "Death_Total": 8000000.0, "Year": 350.0},
@@ -32,27 +27,31 @@ $(window).load(function () {
             {"Relative": 40000000.0, "Cause": "Mao Zedong", "Century_String": "20th", "Death_Total": 40000000.0, "Year": 1975.0},
         ]
         
+        //When the window resizes, resize the graph
         $( window ).resize(function() {
-            compare_graph.resize(the_data);
+            compare_graph.resize();
         });
         
         $('#change_graph').click(function(){
-            compare_graph.update_data(the_data);
+            compare_graph.update_data();
         })
         
-        
-        var compare_graph = new compare_graph_class(the_data);
-        compare_graph.draw(the_data);
+        //Init the graph
+        var compare_graph = new compare_graph_class(the_data, 'graph');
+        compare_graph.draw();
     });
 });
 
-function compare_graph_class(the_data){
+function compare_graph_class(the_data, graph_container_id){
+    /*Class for the compare graph*/
+    
     var self = this;
     self.margin = {};
     self.current_data = 'death_total';
-    self.svg_g;
+    self.data = the_data;
+    self.graph_container_id = graph_container_id
 
-    self.update_data = function(the_data){
+    self.update_data = function(){
         /*Switches the data from absolute to relative dataset or visa-versa*/
             
             //change to relative
@@ -68,7 +67,7 @@ function compare_graph_class(the_data){
                 
                 //Update the bars with the new data
                 self.svg.selectAll("rect")
-                    .data(the_data)
+                    .data(self.data)
                     .transition()
                     .attr("y", function(d) { return self.y_data_function(d); })
                     .attr("height", function(d) { return self.height - self.y_data_function(d)});
@@ -90,7 +89,7 @@ function compare_graph_class(the_data){
                 
                 //Update the bars with the new data
                 self.svg.selectAll("rect")
-                    .data(the_data)
+                    .data(self.data)
                     .transition()
                     .attr("y", function(d) { return self.y_data_function(d); })
                     .attr("height", function(d) { return self.height - self.y_data_function(d)});
@@ -100,7 +99,7 @@ function compare_graph_class(the_data){
             }
     }
     
-    self.resize = function(the_data){
+    self.resize = function(){
         /*Resizes the graph due to a window size change*/
         
         //Get the new graph dimensions
@@ -165,7 +164,7 @@ function compare_graph_class(the_data){
         self.set_graph_dimensions();
         
         //Create Graph SVG
-        self.svg = d3.select('#graph')
+        self.svg = d3.select('#'+self.graph_container_id)
             .append("svg")
                 .attr("width", self.width + self.margin.left + self.margin.right)
                 .attr("height", self.height + self.margin.top + self.margin.bottom);
@@ -178,14 +177,13 @@ function compare_graph_class(the_data){
         self.graph_title = self.svg_g.append("text")
             .attr("x", (self.width / 2))             
             .attr("y", (0 - self.margin.top/2))
-            .attr("text-anchor", "middle")  
-            .style("font-size", "16px")
+            .attr("text-anchor", "middle")
             .attr('id', 'graph_title')
             .text("Absolute Death Toll");
                     
         self.xRange = d3.scale.ordinal()
             .rangeRoundBands([0, self.width], .1)
-            .domain(the_data.map(function(d) {
+            .domain(self.data.map(function(d) {
                     return [d.Cause, d.Century_String];
                 })
             );
@@ -229,7 +227,6 @@ function compare_graph_class(the_data){
         //Add the y-axis
         self.y_axis = self.svg_g.append('svg:g')
             .attr('class', 'y axis');
-        console.log(self.y_axis)
         self.y_axis.call(self.yAxis);
         
         //Add the y axis label
@@ -239,14 +236,13 @@ function compare_graph_class(the_data){
             .attr("x",0 - (self.height / 2))
             .attr("dy", "1em")
             .style("text-anchor", "middle")
-            .attr('id', 'y_axis_label')
             .text("Millions of Deaths");
         
     
         var bar = self.svg_g.selectAll("bar")
-            .data(the_data)
+            .data(self.data)
             .enter().append("rect")
-                .style("fill", "red")
+                .attr("class", "bar")
                 .attr("x", function(d) { return self.xRange([d.Cause, d.Century_String]); })
                 .attr("width", self.xRange.rangeBand())
                 .attr("y", function(d) { return self.y_data_function(d); })
@@ -257,10 +253,10 @@ function compare_graph_class(the_data){
     /* Reusable functions********************/
     self.set_graph_dimensions = function(){
         /*Resets the higheth width and margins based on the column width*/
-        var column_width = $('#graph_column').width();
+        var graph_container_width = $('#'+self.graph_container_id).width();
         var left_margin = function(){
-            if (column_width < 400){
-                return 40;
+            if (graph_container_width < 400){
+                return 45;
             }
             else{
                 return 50;
@@ -272,7 +268,7 @@ function compare_graph_class(the_data){
             bottom: 300,
             left: left_margin()
         };
-        self.width = column_width - self.margin.right - self.margin.left;
+        self.width = graph_container_width - self.margin.right - self.margin.left;
         self.height = 550 - self.margin.top - self.margin.bottom;
     }
     
