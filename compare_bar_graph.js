@@ -294,7 +294,7 @@ function compare_graph_class(the_data, graph_container_id){
     
     self.x_labels_transform_function = function(){
         /*transforms the labels with the right angel*/
-        var text_height = $('.tick_labels').height();
+        var text_height = 15//$('.tick_labels').height(); HACK the height function doesn't work in FF but it's alway 15 so who cares
         if (text_height > self.xRange.rangeBand()) {
             var rotate_angle_radians = Math.PI/2;
             var dx = 0;
@@ -302,7 +302,9 @@ function compare_graph_class(the_data, graph_container_id){
         }
         else{
             var x0 = self.xRange.rangeBand()/2 + self.margin.left;
-            var text_length = $('.tick_labels').width();
+            var text_element = $('.tick_labels')
+            var text_length = text_element[0].getComputedTextLength();
+            
             var rotate_angle_radians = Math.cos(x0/text_length) + 0.2*Math.cos(x0/text_length);
             var dx = text_height/2 * Math.cos(rotate_angle_radians)
             var dy = text_height/2 * Math.sin(rotate_angle_radians);
