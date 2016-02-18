@@ -63,7 +63,6 @@ function line_graph_class(the_data, graph_container_id){
         /*Updates the graph to only display data that has display set to true*/
             
             var display_change = self.data[update_index]['display']
-            console.log($('#circle_id'+update_index).attr('class'));
             if (display_change == 'hidden') {
                 display_change = 'visible';
                 remove_class($('#circle_id'+update_index), 'visibility_hidden');
@@ -252,11 +251,11 @@ function line_graph_class(the_data, graph_container_id){
         });
         
         //Create Graph legend
-        x = $('#'+self.graph_container_id).prepend('<div class=row id=legend_row_'+self.graph_container_id+'></div>')
+        x = $('#'+self.graph_container_id).prepend('<div class="row legend_row" id=legend_row_'+self.graph_container_id+'></div>')
         self.legend_row = $('#legend_row_'+self.graph_container_id);
         var i = 0;
         self.data.forEach(function(datum){
-           self.legend_row.prepend('<div class="col-xs-6 col-md-2"><div class="legend_span" data_index='+i+' id=legend_id'+i+'><svg width="12" height="10"><circle id=circle_id'+i+' class="legend dot visibility_'+datum.display+' '+datum.Country.replace(" ","_")+'" r="3.5" cx="4" cy="5"></circle></svg>'+datum.Country+'</div></div>'); 
+           self.legend_row.prepend('<div class="col-xs-6 col-md-2"><a class="legend_span" data_index='+i+' id=legend_id'+i+'><svg width="12" height="10"><circle id=circle_id'+i+' class="legend dot visibility_'+datum.display+' '+datum.Country.replace(" ","_")+'" r="3.5" cx="4" cy="5"></circle></svg>'+datum.Country+'</a></div>'); 
             i++;
         });
         
