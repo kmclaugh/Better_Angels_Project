@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+        <meta content="utf-8" http-equiv="encoding">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="jquery-2.1.4.js"></script>
+        
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="bootstrap.min.css">
+        <script src="bootstrap.min.js"></script>
+        
+        <script src="d3.v3.min.js"></script>
+        
+        <script type="text/javascript" src="Homocide_Rates.js"></script>
+        
+        <title>Compare</title>
+        
+        <style>
+            
+            .axis path, .axis line
+            {
+                fill: none;
+                stroke: #777;
+                shape-rendering: crispEdges;
+            }
+            
+            .tick
+            {
+                stroke-dasharray: 1, 2;
+            }
+            .England{
+                stroke: #EB1515
+            }
+            .England.dot{
+                fill: #EB1515;
+            }
+            .Average_Non-State{
+                stroke: #152FEB
+            }
+            .Average_Non-State.dot{
+                fill: #152FEB;
+            }
+            .visibility_hidden{
+                fill: none!important;
+            }
+            
+            
+            
+            @media (min-width: 10px) {
+                .axis text{
+                    font-family: 'Arial';
+                    font-size: 10px;
+                }
+                #graph_title{
+                    font-size: 14px;
+                }
+            }
+            @media (min-width: 400px) {
+                .axis text{
+                    font-family: 'Arial';
+                    font-size: 13px;
+                }
+                #graph_title{
+                    font-size: 16px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class='row'>Test</div>
+            <div class='row'>
+                <button type="button" id='change_graph'>Relative</button>
+            </div>
+            <div class='row'>
+                <div class='col-xs-12' id='graph_column'>
+                    <div id="graph"></div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+</html>
