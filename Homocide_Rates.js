@@ -295,7 +295,7 @@ function line_graph_class(the_data, graph_container_id){
         self.margin = {
             top: 10,
             right: 10,
-            bottom: 10,
+            bottom: 20,
             left: left_margin()
         };
         self.width = graph_container_width - self.margin.right - self.margin.left;
