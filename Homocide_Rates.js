@@ -28,8 +28,11 @@ $(window).load(function () {
         $( window ).resize(function() {
             line_graph.resize();
         });
-        
+        $('#change_graph').click(function(){
+            alert ('a')
+        });
         $(document).on("click", '.legend_span', function() {
+            alert('b '+$(this).attr('data_index'));
             line_graph.update_data($(this).attr('data_index'));
         })
         
@@ -251,7 +254,7 @@ function line_graph_class(the_data, graph_container_id){
         });
         
         //Create Graph legend
-        x = $('#'+self.graph_container_id).prepend('<div class="row legend_row" id=legend_row_'+self.graph_container_id+'></div>')
+        x = $('#'+self.graph_container_id).prepend('<div class="row legend_row" id=legend_row_'+self.graph_container_id+'></div><div class="row"><div class="col-xs-6" style="height:100px;">&nbsp</div></div>')
         self.legend_row = $('#legend_row_'+self.graph_container_id);
         var i = 0;
         self.data.forEach(function(datum){
