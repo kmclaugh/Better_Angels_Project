@@ -31,8 +31,12 @@ $(window).load(function () {
         $('#change_graph').click(function(){
             alert ('a')
         });
-        $(document).on("click tap", '.legend_span', function() {
+        $(document).on("tap", '.legend_span', function() {
             alert('b '+$(this).attr('data_index'));
+            line_graph.update_data($(this).attr('data_index'));
+        })
+        $(document).on("click", '.legend_span', function() {
+            alert('c '+$(this).attr('data_index'));
             line_graph.update_data($(this).attr('data_index'));
         })
         
