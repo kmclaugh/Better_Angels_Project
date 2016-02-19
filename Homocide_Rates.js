@@ -21,6 +21,25 @@ $(window).load(function () {
                 {x : 1984, y: 1.2},
                 {x : 2010, y: 1.2},
             ]},
+            {'Country':'Netherlands and Belgium', 'display':'visible', 'values':[
+                {x : 1300, y: 47},
+                {x : 1450, y: 45},
+                {x : 1550, y: 25},
+                {x : 1625, y: 6},
+                {x : 1675, y: 9},
+                {x : 1725, y: 7},
+                {x : 1775, y: 4},
+                {x : 1812, y: 2},
+                {x : 1837, y: 5},
+                {x : 1862, y: 0.9},
+                {x : 1887, y: 1.5},
+                {x : 1912, y: 1.7},
+                {x : 1937, y: 1.3},
+                {x : 1962, y: 0.6},
+                {x : 1984, y: 1.2},
+                {x : 2010, y: 1.1},
+            ]},
+
             {'Country':'Average Non-State', 'display':'hidden', 'values':[{x:1250, y:518}, {x:1250, y:518}]}
         ]
         
@@ -236,7 +255,7 @@ function line_graph_class(the_data, graph_container_id){
         self.data.forEach(function(country) {
             
             var new_line = self.svg_g.append('svg:path')
-                .attr("class", "line "+country.Country.replace(" ","_"))
+                .attr("class", "line "+country.Country.replace(" ","_").replace(" ","_"))//HACK
                 .attr('stroke-width', 2)
                 .attr('fill', 'none')
                 .attr('visibility', country.display)
@@ -246,7 +265,7 @@ function line_graph_class(the_data, graph_container_id){
             var new_points = self.svg_g.selectAll(".point")
                 .data(country.values)
                 .enter().append("circle")
-                    .attr("class", "dot "+country.Country.replace(" ","_"))
+                    .attr("class", "dot "+country.Country.replace(" ","_").replace(" ","_"))//HACK
                     .attr('visibility', country.display)
                     .attr("r", 3.5)
                     .attr("cx", function(d) { return self.xRange(d.x); })
@@ -260,7 +279,7 @@ function line_graph_class(the_data, graph_container_id){
         self.legend_row = $('#legend_row_'+self.graph_container_id);
         var i = 0;
         self.data.forEach(function(datum){
-           self.legend_row.prepend('<div class="col-xs-6 col-sm-3 col-md-2 pull-right"><button class="legend_span" data_index='+i+' id=legend_id'+i+'><svg width="12" height="10"><circle id=circle_id'+i+' class="legend dot visibility_'+datum.display+' '+datum.Country.replace(" ","_")+'" r="3.5" cx="4" cy="5"></circle></svg>'+datum.Country+'</button></div>'); 
+           self.legend_row.prepend('<div class="col-xs-6 col-sm-3 col-md-2 pull-right"><button class="legend_span" data_index='+i+' id=legend_id'+i+'><svg width="12" height="10"><circle id=circle_id'+i+' class="legend dot visibility_'+datum.display+' '+datum.Country.replace(" ","_").replace(" ","_")+'" r="3.5" cx="4" cy="5"></circle></svg>'+datum.Country+'</button></div>'); 
             i++;
         });
         
