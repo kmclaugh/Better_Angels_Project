@@ -350,7 +350,9 @@ function line_graph_class(the_data, graph_container_id){
         self.legend_row = $('#legend_row_'+self.graph_container_id);
         var i = 0;
         self.data.forEach(function(datum){
-           self.legend_row.prepend('<div class="col-xs-6 col-sm-3 col-md-2 pull-right"><button class="legend_span" data_index='+i+' id=legend_id'+i+'><svg width="12" height="10"><circle id=circle_id'+i+' class="legend dot visibility_'+datum.display+' '+datum.Country.replace(" ","_").replace(" ","_")+'" r="3.5" cx="4" cy="5"></circle></svg>'+datum.Country+'</button></div>'); 
+            var legend_element = '<button class="legend_span" data_index='+i+' id=legend_id'+i+'><svg width="12" height="10"><circle id=circle_id'+i+' class="legend dot visibility_'+datum.display+' '+datum.Country.replace(" ","_").replace(" ","_")+'" r="3.5" cx="4" cy="5"></circle></svg>'+datum.Country+'</button>';
+            self.legend_row.prepend('<div class="pull-right">'+legend_element+'</div>'); 
+            find_minimum_col_size($('#legend_id'+i));            
             i++;
         });
         
@@ -390,3 +392,4 @@ function line_graph_class(the_data, graph_container_id){
         self.height = 250 - self.margin.top - self.margin.bottom;
     }
 }
+
