@@ -4,22 +4,23 @@ $(window).load(function () {
     $(document).ready(function () {
         
         var the_data = [
-            {'Country':'England',  'name':'england', 'display':'hidden', 'values':[
-                {x : 1300, y: 23},
-                {x : 1550, y: 7},
-                {x : 1625, y: 6},
-                {x : 1675, y: 4},
-                {x : 1725, y: 2},
-                {x : 1775, y: 1},
-                {x : 1812, y: 2},
-                {x : 1837, y: 1.7},
-                {x : 1862, y: 1.6},
-                {x : 1887, y: 0.8},
+            {'Country':'Scandinavia', 'name':'scandinavia', 'display':'hidden', 'values':[
+                {x : 1300, y: 42},
+                {x : 1450, y: 46},
+                {x : 1550, y: 21},
+                {x : 1625, y: 24},
+                {x : 1675, y: 12},
+                {x : 1725, y: 3},
+                {x : 1775, y: 0.7},
+                {x : 1812, y: 1},
+                {x : 1837, y: 1.4},
+                {x : 1862, y: 1.2},
+                {x : 1887, y: 0.9},
                 {x : 1912, y: 0.8},
-                {x : 1937, y: 0.8},
-                {x : 1962, y: 0.7},
+                {x : 1937, y: 0.6},
+                {x : 1962, y: 0.6},
                 {x : 1984, y: 1.2},
-                {x : 2010, y: 1.2},
+                {x : 2010, y: 1.2}
             ]},
             {'Country':'Netherlands and Belgium',  'name':'netherlands_and_belgium', 'display':'hidden', 'values':[
                 {x : 1300, y: 47},
@@ -39,23 +40,22 @@ $(window).load(function () {
                 {x : 1984, y: 1.2},
                 {x : 2010, y: 1.1}
             ]},
-            {'Country':'Scandinavia', 'name':'scandinavia', 'display':'hidden', 'values':[
-                {x : 1300, y: 42},
-                {x : 1450, y: 46},
-                {x : 1550, y: 21},
-                {x : 1625, y: 24},
-                {x : 1675, y: 12},
-                {x : 1725, y: 3},
-                {x : 1775, y: 0.7},
-                {x : 1812, y: 1},
-                {x : 1837, y: 1.4},
-                {x : 1862, y: 1.2},
-                {x : 1887, y: 0.9},
+            {'Country':'England',  'name':'england', 'display':'hidden', 'values':[
+                {x : 1300, y: 23},
+                {x : 1550, y: 7},
+                {x : 1625, y: 6},
+                {x : 1675, y: 4},
+                {x : 1725, y: 2},
+                {x : 1775, y: 1},
+                {x : 1812, y: 2},
+                {x : 1837, y: 1.7},
+                {x : 1862, y: 1.6},
+                {x : 1887, y: 0.8},
                 {x : 1912, y: 0.8},
-                {x : 1937, y: 0.6},
-                {x : 1962, y: 0.6},
+                {x : 1937, y: 0.8},
+                {x : 1962, y: 0.7},
                 {x : 1984, y: 1.2},
-                {x : 2010, y: 1.2}
+                {x : 2010, y: 1.2},
             ]},
             {'Country':'Germany and Switzerland', 'name':'germany_and_switzerland', 'display':'hidden', 'values':[
                 {x : 1300, y: 37},
@@ -93,6 +93,10 @@ $(window).load(function () {
                 {x : 1984, y: 1.7},
                 {x : 2010, y: 0.9}
             ]},
+            {'Country':'Semai', 'name':'semai', 'display':'hidden', 'values':[{x:1250, y:30}]},
+            {'Country':'Inuit', 'name':'inuit', 'display':'hidden', 'values':[{x:1250, y:100}]},
+            {'Country':'!Kung', 'name':'kung', 'display':'hidden', 'values':[{x:1250, y:42}]},
+            {'Country':'Average Non-State', 'name':'average_non_state', 'display':'visible', 'values':[{x:1250, y:518}]},
             {'Country':'European Averages', 'name':'european_averages', 'display':'visible', 'values':[
                 {x : 1300, y: 41},
                 {x : 1450, y: 38},
@@ -110,11 +114,7 @@ $(window).load(function () {
                 {x : 1962, y: 1},
                 {x : 1984, y: 1},
                 {x : 2010, y: 1},
-            ]},
-            {'Country':'Semai', 'name':'semai', 'display':'hidden', 'values':[{x:1250, y:30}]},
-            {'Country':'Inuit', 'name':'inuit', 'display':'hidden', 'values':[{x:1250, y:100}]},
-            {'Country':'!Kung', 'name':'kung', 'display':'hidden', 'values':[{x:1250, y:42}]},
-            {'Country':'Average Non-State', 'name':'average_non_state', 'display':'visible', 'values':[{x:1250, y:518}]}
+            ]}
         ]
         
         //When the window resizes, resize the graph
