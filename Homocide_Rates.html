@@ -102,6 +102,16 @@
             .legend_row{
                 text-align: right;
             }
+            @media (min-width: 1px) {
+                .legend_button_wrapper{
+                    float: left!important;
+                }
+            }
+            @media (min-width: 550px) {
+                .legend_button_wrapper{
+                    float: right!important;
+                }
+            }
             .legend_button{
                 background-color: transparent;
                 border: hidden;
@@ -124,14 +134,28 @@
                     font-size: 16px;
                 }
             }
+            .graph{
+                max-width: 900px;
+            }
+            .graph_column{
+                margin-left:auto;
+                margin-right: auto;
+            }
+            .graph_title{
+                font-size: larger;
+                font-weight: bold;
+                text-align: center;
+                padding-bottom: 10px;
+            }
+            
         </style>
     </head>
     <body>
         <div class="container">
             <div class='row'>Test</div>
             <div class='row'>
-                <div class='col-xs-12' id='graph_column'>
-                    <div id="graph"></div>
+                <div class='col-xs-12 graph_column'>
+                    <div class="graph" id='graph1'></div>
                 </div>
             </div>
         </div>

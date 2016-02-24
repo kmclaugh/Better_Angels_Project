@@ -129,7 +129,7 @@ $(window).load(function () {
         })
         
         //Init the graph
-        var line_graph = new line_graph_class(the_data, 'graph');
+        var line_graph = new line_graph_class(the_data, 'graph1', 'Homocide Rates for Western Europe and Prestate Societies');
         line_graph.draw();
     });
 });
@@ -145,14 +145,15 @@ function add_class(object, class_to_add){
     object.attr('class', new_classes);
 }
 
-function line_graph_class(the_data, graph_container_id){
+function line_graph_class(the_data, graph_container_id, title_text){
     /*Class for the line graph*/
     
     var self = this;
     self.margin = {};
     self.current_data = 'linear';
     self.data = the_data;
-    self.graph_container_id = graph_container_id
+    self.graph_container_id = graph_container_id;
+    self.title_text = title_text;
 
     self.update_data = function(update_index){
         /*Updates the graph to only display data that has display set to true*/
@@ -346,14 +347,19 @@ function line_graph_class(the_data, graph_container_id){
         });
         
         //Create Graph legend
-        x = $('#'+self.graph_container_id).prepend('<div class="row legend_row" id=legend_row_'+self.graph_container_id+'>')
+        $('#'+self.graph_container_id).prepend('<div class="row legend_row" id=legend_row_'+self.graph_container_id+'>')
         self.legend_row = $('#legend_row_'+self.graph_container_id);
         var i = 0;
         self.data.forEach(function(datum){
             var legend_element = '<button class="legend_button" data_index='+i+' id=legend_id'+i+'><svg width="15" height="14" style="vertical-align: middle"><circle id=circle_id'+i+' class="legend dot visibility_'+datum.display+' '+datum.name+'" r="5" cx="6" cy="7"></circle></svg>'+datum.Country+'</button>';
-            self.legend_row.prepend('<div class="pull-right">'+legend_element+'</div>');       
+            self.legend_row.prepend('<div class="legend_button_wrapper">'+legend_element+'</div>');       
             i++;
         });
+        
+        //Create Graph Title
+        $('#'+self.graph_container_id).prepend('<div class="row title_row" id=title_row_'+self.graph_container_id+'>');
+        self.title_row = $('#title_row_'+self.graph_container_id);
+        self.title_row.prepend('<div class="graph_title">'+self.title_text+'</div>');
         
     }//End draw graph
     
