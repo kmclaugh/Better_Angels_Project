@@ -96,8 +96,8 @@ $(window).load(function () {
             {'Country':'Semai', 'name':'semai', 'display':'hidden', 'values':[{x:1250, y:30}]},
             {'Country':'Inuit', 'name':'inuit', 'display':'hidden', 'values':[{x:1250, y:100}]},
             {'Country':'!Kung', 'name':'kung', 'display':'hidden', 'values':[{x:1250, y:42}]},
-            {'Country':'Average Non-State', 'name':'average_non_state', 'display':'visible', 'values':[{x:1250, y:518}]},
-            {'Country':'European Averages', 'name':'european_averages', 'display':'visible', 'values':[
+            {'Country':'Average Non-State<sup>1</sup>', 'name':'average_non_state', 'display':'visible', 'values':[{x:1250, y:518}]},
+            {'Country':'European Average<sup>2</sup>', 'name':'european_averages', 'display':'visible', 'values':[
                 {x : 1300, y: 41},
                 {x : 1450, y: 38.4},
                 {x : 1550, y: 22.2},
@@ -121,15 +121,15 @@ $(window).load(function () {
         $( window ).resize(function() {
             line_graph.resize();
         });
-        $('#change_graph').click(function(){
-            alert ('a')
-        });
         $(document).on("click", '.legend_button', function() {
             line_graph.update_data($(this).attr('data_index'));
         })
         
         //Init the graph
-        var line_graph = new line_graph_class(the_data, 'graph1', 'Homocide Rates for Western Europe and Prestate Societies');
+        var graph_source_code = 'https://github.com/kmclaugh/Better_Angels_Project/blob/master/Worst_Atrocities_Bar_Graph.js';
+        var graph_note = '<sup>1</sup>Nonstate Average is a geometric mean of 26 societies, not including Semai, Inuit, and !Kung</br>';
+        graph_note += '<sup>2</sup>European Average is a geometric mean of five regions with missing data interpolated.';
+        var line_graph = new line_graph_class(the_data, 'graph1', 'Homocide Rates for Western Europe and Prestate Societies', graph_note, graph_source_code);
         line_graph.draw();
     });
 });
@@ -145,7 +145,7 @@ function add_class(object, class_to_add){
     object.attr('class', new_classes);
 }
 
-function line_graph_class(the_data, graph_container_id, title_text){
+function line_graph_class(the_data, graph_container_id, title_text, note_text, source_code){
     /*Class for the line graph*/
     
     var self = this;
@@ -154,6 +154,8 @@ function line_graph_class(the_data, graph_container_id, title_text){
     self.data = the_data;
     self.graph_container_id = graph_container_id;
     self.title_text = title_text;
+    self.note_text = note_text;
+    self.source_code = source_code;
 
     self.update_data = function(update_index){
         /*Updates the graph to only display data that has display set to true*/
@@ -346,6 +348,15 @@ function line_graph_class(the_data, graph_container_id, title_text){
     
         });
         
+         //Add the y axis label
+        self.y_axis_label = self.svg_g.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - self.margin.left)
+            .attr("x",0 - (self.height / 2))
+            .attr("dy", ".75em")
+            .style("text-anchor", "middle")
+            .text("Homocides per 100,000 per year");
+        
         //Create Graph legend
         $('#'+self.graph_container_id).prepend('<div class="row legend_row" id=legend_row_'+self.graph_container_id+'>')
         self.legend_row = $('#legend_row_'+self.graph_container_id);
@@ -360,6 +371,16 @@ function line_graph_class(the_data, graph_container_id, title_text){
         $('#'+self.graph_container_id).prepend('<div class="row title_row" id=title_row_'+self.graph_container_id+'>');
         self.title_row = $('#title_row_'+self.graph_container_id);
         self.title_row.prepend('<div class="graph_title">'+self.title_text+'</div>');
+        
+        //Create Graph Source
+        $('#'+self.graph_container_id).append('<div class="row source_row" id=source_row_'+self.graph_container_id+'>');
+        self.source_row = $('#source_row_'+self.graph_container_id);
+        self.source_row.prepend('<a class="source code" target="_blank" href='+self.source_code+'>Graph Source Code</a>');
+        
+        //Create Graph Note
+        $('#'+self.graph_container_id).append('<div class="row note_row" id=note_row_'+self.graph_container_id+'>');
+        self.title_row = $('#note_row_'+self.graph_container_id);
+        self.title_row.prepend('<div class="graph_note">'+self.note_text+'</div>');
         
     }//End draw graph
     
@@ -379,19 +400,12 @@ function line_graph_class(the_data, graph_container_id, title_text){
     self.set_graph_dimensions = function(){
         /*Resets the higheth width and margins based on the column width*/
         var graph_container_width = $('#'+self.graph_container_id).width();
-        var left_margin = function(){
-            if (graph_container_width < 400){
-                return 45;
-            }
-            else{
-                return 50;
-            }
-        }
+        var left_margin = 50;
         self.margin = {
             top: 10,
             right: 10,
             bottom: 20,
-            left: left_margin()
+            left: 50
         };
         self.width = graph_container_width - self.margin.right - self.margin.left;
         self.height = 250 - self.margin.top - self.margin.bottom;
