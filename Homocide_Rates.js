@@ -99,20 +99,20 @@ $(window).load(function () {
             {'Country':'Average Non-State', 'name':'average_non_state', 'display':'visible', 'values':[{x:1250, y:518}]},
             {'Country':'European Averages', 'name':'european_averages', 'display':'visible', 'values':[
                 {x : 1300, y: 41},
-                {x : 1450, y: 38},
-                {x : 1550, y: 22},
-                {x : 1625, y: 16},
-                {x : 1675, y: 11},
-                {x : 1725, y: 6},
-                {x : 1775, y: 5},
-                {x : 1812, y: 5},
-                {x : 1837, y: 5},
-                {x : 1862, y: 4},
-                {x : 1887, y: 2},
-                {x : 1912, y: 2},
-                {x : 1937, y: 1},
-                {x : 1962, y: 1},
-                {x : 1984, y: 1},
+                {x : 1450, y: 38.4},
+                {x : 1550, y: 22.2},
+                {x : 1625, y: 15.8},
+                {x : 1675, y: 11.4},
+                {x : 1725, y: 6.2},
+                {x : 1775, y: 4.5},
+                {x : 1812, y: 5.2},
+                {x : 1837, y: 5.4},
+                {x : 1862, y: 3.5},
+                {x : 1887, y: 2.2},
+                {x : 1912, y: 1.8},
+                {x : 1937, y: 1.3},
+                {x : 1962, y: .8},
+                {x : 1984, y: 1.3},
                 {x : 2010, y: 1},
             ]}
         ]
@@ -370,8 +370,8 @@ function line_graph_class(the_data, graph_container_id, title_text){
         if (d.display == 'visible') {
             max = d3.max(d.values, function(v) { return v.y; });
         }
-        if (max > 500) {
-            max = 1000;
+        if (max > 0) {
+            max = order_of_magnitude(max) * 10;//set the max to next highest order of magnitude
         }
         return max;
     }
@@ -398,3 +398,9 @@ function line_graph_class(the_data, graph_container_id, title_text){
     }
 }
 
+function order_of_magnitude(n) {
+    /*Return the order of magnitude of n*/
+    var order = Math.floor(Math.log(n) / Math.LN10
+                       + 0.000000001); // because float math sucks like that
+    return Math.pow(10,order);
+}
