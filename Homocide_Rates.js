@@ -4,7 +4,7 @@ $(window).load(function () {
     $(document).ready(function () {
         
         var the_data = [
-            {'Country':'England', 'display':'visible', 'values':[
+            {'Country':'England',  'name':'england', 'display':'hidden', 'values':[
                 {x : 1300, y: 23},
                 {x : 1550, y: 7},
                 {x : 1625, y: 6},
@@ -21,7 +21,7 @@ $(window).load(function () {
                 {x : 1984, y: 1.2},
                 {x : 2010, y: 1.2},
             ]},
-            {'Country':'Netherlands and Belgium', 'display':'visible', 'values':[
+            {'Country':'Netherlands and Belgium',  'name':'netherlands_and_belgium', 'display':'hidden', 'values':[
                 {x : 1300, y: 47},
                 {x : 1450, y: 45},
                 {x : 1550, y: 25},
@@ -39,7 +39,7 @@ $(window).load(function () {
                 {x : 1984, y: 1.2},
                 {x : 2010, y: 1.1}
             ]},
-            {'Country':'Scandinavia', 'display':'visible', 'values':[
+            {'Country':'Scandinavia', 'name':'scandinavia', 'display':'hidden', 'values':[
                 {x : 1300, y: 42},
                 {x : 1450, y: 46},
                 {x : 1550, y: 21},
@@ -57,7 +57,7 @@ $(window).load(function () {
                 {x : 1984, y: 1.2},
                 {x : 2010, y: 1.2}
             ]},
-            {'Country':'Germany and Switzerland', 'display':'visible', 'values':[
+            {'Country':'Germany and Switzerland', 'name':'germany_and_switzerland', 'display':'hidden', 'values':[
                 {x : 1300, y: 37},
                 {x : 1450, y: 16},
                 {x : 1550, y: 11},
@@ -75,7 +75,7 @@ $(window).load(function () {
                 {x : 1984, y: 1.2},
                 {x : 2010, y: 0.8}
             ]},
-            {'Country':'Italy', 'display':'visible', 'values':[
+            {'Country':'Italy', 'name':'italy', 'display':'hidden', 'values':[
                 {x : 1300, y: 56},
                 {x : 1450, y: 73},
                 {x : 1550, y: 47},
@@ -93,7 +93,7 @@ $(window).load(function () {
                 {x : 1984, y: 1.7},
                 {x : 2010, y: 0.9}
             ]},
-            {'Country':'European Averages', 'display':'visible', 'values':[
+            {'Country':'European Averages', 'name':'european_averages', 'display':'visible', 'values':[
                 {x : 1300, y: 41},
                 {x : 1450, y: 38},
                 {x : 1550, y: 22},
@@ -111,7 +111,10 @@ $(window).load(function () {
                 {x : 1984, y: 1},
                 {x : 2010, y: 1},
             ]},
-            {'Country':'Average Non-State', 'display':'hidden', 'values':[{x:1250, y:518}, {x:1250, y:518}]}
+            {'Country':'Semai', 'name':'semai', 'display':'hidden', 'values':[{x:1250, y:30}]},
+            {'Country':'Inuit', 'name':'inuit', 'display':'hidden', 'values':[{x:1250, y:100}]},
+            {'Country':'!Kung', 'name':'kung', 'display':'hidden', 'values':[{x:1250, y:42}]},
+            {'Country':'Average Non-State', 'name':'average_non_state', 'display':'visible', 'values':[{x:1250, y:518}]}
         ]
         
         //When the window resizes, resize the graph
@@ -121,7 +124,7 @@ $(window).load(function () {
         $('#change_graph').click(function(){
             alert ('a')
         });
-        $(document).on("click", '.legend_span', function() {
+        $(document).on("click", '.legend_button', function() {
             line_graph.update_data($(this).attr('data_index'));
         })
         
@@ -323,7 +326,7 @@ function line_graph_class(the_data, graph_container_id){
         self.data.forEach(function(country) {
             
             var new_line = self.svg_g.append('svg:path')
-                .attr("class", "line "+country.Country.replace(" ","_").replace(" ","_"))//HACK
+                .attr("class", "line "+country.name)
                 .attr('stroke-width', 2)
                 .attr('fill', 'none')
                 .attr('visibility', country.display)
@@ -333,9 +336,9 @@ function line_graph_class(the_data, graph_container_id){
             var new_points = self.svg_g.selectAll(".point")
                 .data(country.values)
                 .enter().append("circle")
-                    .attr("class", "dot "+country.Country.replace(" ","_").replace(" ","_"))//HACK
+                    .attr("class", "dot "+country.name)
                     .attr('visibility', country.display)
-                    .attr("r", 3.5)
+                    .attr("r", 4)
                     .attr("cx", function(d) { return self.xRange(d.x); })
                     .attr("cy", function(d) { return self.yRange(d.y); });
             self.points_lists.push(new_points)
@@ -347,7 +350,7 @@ function line_graph_class(the_data, graph_container_id){
         self.legend_row = $('#legend_row_'+self.graph_container_id);
         var i = 0;
         self.data.forEach(function(datum){
-            var legend_element = '<button class="legend_span" data_index='+i+' id=legend_id'+i+'><svg width="12" height="10"><circle id=circle_id'+i+' class="legend dot visibility_'+datum.display+' '+datum.Country.replace(" ","_").replace(" ","_")+'" r="3.5" cx="4" cy="5"></circle></svg>'+datum.Country+'</button>';
+            var legend_element = '<button class="legend_button" data_index='+i+' id=legend_id'+i+'><svg width="15" height="14" style="vertical-align: middle"><circle id=circle_id'+i+' class="legend dot visibility_'+datum.display+' '+datum.name+'" r="5" cx="6" cy="7"></circle></svg>'+datum.Country+'</button>';
             self.legend_row.prepend('<div class="pull-right">'+legend_element+'</div>');       
             i++;
         });
