@@ -126,7 +126,7 @@ $(window).load(function () {
         })
         
         //Init the graph
-        var graph_source_code = 'https://github.com/kmclaugh/Better_Angels_Project/blob/master/Worst_Atrocities_Bar_Graph.js';
+        var graph_source_code = 'https://github.com/kmclaugh/Better_Angels_Project/tree/master/Homocide_Rates_for_Western_Europe_and_Prestate_Societies';
         var graph_note = '<sup>1</sup>Nonstate Average is a geometric mean of 26 societies, not including Semai, Inuit, and !Kung</br>';
         graph_note += '<sup>2</sup>European Average is a geometric mean of five regions with missing data interpolated.';
         var data_source = '<p>European Data: Figure 2 in Eisner (2003) – Long-Term Historical Trends in Violent Crime. In Crime and Justice, 30, 83–142.</p>'
