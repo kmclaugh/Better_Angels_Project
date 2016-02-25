@@ -129,7 +129,11 @@ $(window).load(function () {
         var graph_source_code = 'https://github.com/kmclaugh/Better_Angels_Project/blob/master/Worst_Atrocities_Bar_Graph.js';
         var graph_note = '<sup>1</sup>Nonstate Average is a geometric mean of 26 societies, not including Semai, Inuit, and !Kung</br>';
         graph_note += '<sup>2</sup>European Average is a geometric mean of five regions with missing data interpolated.';
-        var line_graph = new line_graph_class(the_data, 'graph1', 'Homocide Rates for Western Europe and Prestate Societies', graph_note, graph_source_code);
+        var data_source = '<p>European Data: Figure 2 in Eisner (2003) – Long-Term Historical Trends in Violent Crime. In Crime and Justice, 30, 83–142.</p>'
+        var graph_title = 'Homocide Rates for Western Europe and Prestate Societies'
+        var graph_decription = 'Long term homocide rates for Western Europe 1300-200 compared to prestate societies'
+        var image = 'homocide_rates.png';
+        var line_graph = new line_graph_class(the_data, 'graph1', graph_title, graph_note, graph_source_code, data_source, graph_decription, image);
         line_graph.draw();
     });
 });
@@ -145,7 +149,7 @@ function add_class(object, class_to_add){
     object.attr('class', new_classes);
 }
 
-function line_graph_class(the_data, graph_container_id, title_text, note_text, source_code){
+function line_graph_class(the_data, graph_container_id, title_text, notes, source_code, data_source, description, image){
     /*Class for the line graph*/
     
     var self = this;
@@ -154,8 +158,11 @@ function line_graph_class(the_data, graph_container_id, title_text, note_text, s
     self.data = the_data;
     self.graph_container_id = graph_container_id;
     self.title_text = title_text;
-    self.note_text = note_text;
+    self.notes = notes;
     self.source_code = source_code;
+    self.data_source = data_source;
+    self.description = description;
+    self.image = image;
 
     self.update_data = function(update_index){
         /*Updates the graph to only display data that has display set to true*/
@@ -372,15 +379,34 @@ function line_graph_class(the_data, graph_container_id, title_text, note_text, s
         self.title_row = $('#title_row_'+self.graph_container_id);
         self.title_row.prepend('<div class="graph_title">'+self.title_text+'</div>');
         
-        //Create Graph Source
+        //Create Graph Notes, Sources
         $('#'+self.graph_container_id).append('<div class="row source_row" id=source_row_'+self.graph_container_id+'>');
         self.source_row = $('#source_row_'+self.graph_container_id);
-        self.source_row.prepend('<a class="source code" target="_blank" href='+self.source_code+'>Graph Source Code</a>');
-        
-        //Create Graph Note
-        $('#'+self.graph_container_id).append('<div class="row note_row" id=note_row_'+self.graph_container_id+'>');
-        self.title_row = $('#note_row_'+self.graph_container_id);
-        self.title_row.prepend('<div class="graph_note">'+self.note_text+'</div>');
+        //Notes
+        var modal_header = '<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Notes</h4></div>';
+        var modal_body = '<div class="modal-body">'+self.notes+'</div>';
+        var modal = '<div class="modal fade" id="notes_modal_'+self.graph_container_id+'" role="dialog"><div class="modal-dialog"><div class="modal-content">'+modal_header+modal_body+'</div></div>';
+        self.data_modal = $('#notes_modal_'+self.graph_container_id);
+        self.source_row.append('<div class="col-xs-6 col-sm-3"><a id=notes_link_'+self.graph_container_id+' data-toggle="modal" data-target="#notes_modal_'+self.graph_container_id+'">Graph Notes<sup>1-2</sup></a></div>'+modal);
+        self.data_source_link = $('#notes_link_'+self.graph_container_id);
+        //Code
+        self.source_row.append('<div class="col-xs-6 col-sm-3"><a class="source code" target="_blank" href='+self.source_code+'>Source Code</a></div>');
+        //Data
+        var modal_header = '<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Data Sources</h4></div>';
+        var modal_body = '<div class="modal-body">'+self.data_source+'</div>';
+        var modal = '<div class="modal fade" id="data_source_modal_'+self.graph_container_id+'" role="dialog"><div class="modal-dialog"><div class="modal-content">'+modal_header+modal_body+'</div></div>';
+        self.data_modal = $('#data_source_modal_'+self.graph_container_id);
+        self.source_row.append('<div class="col-xs-6 col-sm-3"><a id=data_source_link_'+self.graph_container_id+' data-toggle="modal" data-target="#data_source_modal_'+self.graph_container_id+'">Data Sources</a></div>'+modal);
+        self.data_source_link = $('#data_source_link_'+self.graph_container_id);
+        $('#'+self.graph_container_id).append('<div class="row controls_row" id=controls_row_'+self.graph_container_id+'>');
+        //Downloads
+        var modal_header = '<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Downloads</h4></div>';
+        var image_link = '<a href="'+self.image+'" download>static image</a>'
+        var modal_body = '<div class="modal-body"><p>'+image_link+'</p></div>';
+        var modal = '<div class="modal fade" id="downloads_modal_'+self.graph_container_id+'" role="dialog"><div class="modal-dialog"><div class="modal-content">'+modal_header+modal_body+'</div></div>';
+        self.downloads_modal = $('#downloads_modal_'+self.graph_container_id);
+        self.source_row.append('<div class="col-xs-6 col-sm-3"><a id=downloads_link_'+self.graph_container_id+' data-toggle="modal" data-target="#downloads_modal_'+self.graph_container_id+'">Downloads</a></div>'+modal);
+        self.data_source_link = $('#downloads_link_'+self.graph_container_id);
         
     }//End draw graph
     
