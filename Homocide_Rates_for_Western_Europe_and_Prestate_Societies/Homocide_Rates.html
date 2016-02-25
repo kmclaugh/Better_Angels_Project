@@ -93,6 +93,9 @@
             .visibility_hidden{
                 fill: none!important;
             }
+            .controls_row{
+                text-align: center;
+            }
             .legend.dot{
                 stroke-width: 2px;
             }
@@ -115,7 +118,6 @@
             }
             @media (min-width: 10px) {
                 .axis text{
-                    font-family: 'Arial';
                     font-size: 10px;
                 }
                 #graph_title{
@@ -124,7 +126,6 @@
             }
             @media (min-width: 400px) {
                 .axis text{
-                    font-family: 'Arial';
                     font-size: 13px;
                 }
                 #graph_title{
@@ -144,14 +145,34 @@
                 text-align: center;
                 padding-bottom: 10px;
             }
+            .scale_col{
+                text-align: center;
+            }
+            .scale{
+                margin: 0px;
+                font-weight: normal;
+            }
+            @media (min-width: 1px) {
+                .scale{
+                    font-size: 16px;
+                }
+                input.scale{
+                    margin-top: 4px;
+                }
+            }
+            @media (min-width: 768px) {
+                .scale{
+                    float: left!important;
+                    font-size: 14px;
+                }
+                input.scale{
+                    margin-top: 3px;
+                }
+            }
             .source_row{
                 text-align: center;
                 font-style: italic;
                 padding-top: 10px;
-            }
-            .controls_row{
-                text-align: center;
-                font-style: italic;
             }
             a {
                 cursor: pointer;

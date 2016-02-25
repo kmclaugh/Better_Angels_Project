@@ -4,6 +4,25 @@ $(window).load(function () {
     $(document).ready(function () {
         
         var the_data = [
+            {'Country':'Average Non-State<sup>1</sup>', 'name':'average_non_state', 'display':'visible', 'values':[{x:1250, y:518}]},
+            {'Country':'European Average<sup>2</sup>', 'name':'european_averages', 'display':'visible', 'values':[
+                {x : 1300, y: 41},
+                {x : 1450, y: 38.4},
+                {x : 1550, y: 22.2},
+                {x : 1625, y: 15.8},
+                {x : 1675, y: 11.4},
+                {x : 1725, y: 6.2},
+                {x : 1775, y: 4.5},
+                {x : 1812, y: 5.2},
+                {x : 1837, y: 5.4},
+                {x : 1862, y: 3.5},
+                {x : 1887, y: 2.2},
+                {x : 1912, y: 1.8},
+                {x : 1937, y: 1.3},
+                {x : 1962, y: .8},
+                {x : 1984, y: 1.3},
+                {x : 2010, y: 1},
+            ]},
             {'Country':'Scandinavia', 'name':'scandinavia', 'display':'hidden', 'values':[
                 {x : 1300, y: 42},
                 {x : 1450, y: 46},
@@ -95,26 +114,7 @@ $(window).load(function () {
             ]},
             {'Country':'Semai', 'name':'semai', 'display':'hidden', 'values':[{x:1250, y:30}]},
             {'Country':'Inuit', 'name':'inuit', 'display':'hidden', 'values':[{x:1250, y:100}]},
-            {'Country':'!Kung', 'name':'kung', 'display':'hidden', 'values':[{x:1250, y:42}]},
-            {'Country':'Average Non-State<sup>1</sup>', 'name':'average_non_state', 'display':'visible', 'values':[{x:1250, y:518}]},
-            {'Country':'European Average<sup>2</sup>', 'name':'european_averages', 'display':'visible', 'values':[
-                {x : 1300, y: 41},
-                {x : 1450, y: 38.4},
-                {x : 1550, y: 22.2},
-                {x : 1625, y: 15.8},
-                {x : 1675, y: 11.4},
-                {x : 1725, y: 6.2},
-                {x : 1775, y: 4.5},
-                {x : 1812, y: 5.2},
-                {x : 1837, y: 5.4},
-                {x : 1862, y: 3.5},
-                {x : 1887, y: 2.2},
-                {x : 1912, y: 1.8},
-                {x : 1937, y: 1.3},
-                {x : 1962, y: .8},
-                {x : 1984, y: 1.3},
-                {x : 2010, y: 1},
-            ]}
+            {'Country':'!Kung', 'name':'kung', 'display':'hidden', 'values':[{x:1250, y:42}]}
         ]
         
         //When the window resizes, resize the graph
@@ -123,6 +123,9 @@ $(window).load(function () {
         });
         $(document).on("click", '.legend_button', function() {
             line_graph.update_data($(this).attr('data_index'));
+        })
+        $(document).on("click", '#log_scale_graph1', function() {
+            line_graph.toggle_scale();
         })
         
         //Init the graph
@@ -154,9 +157,10 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
     
     var self = this;
     self.margin = {};
-    self.current_data = 'linear';
+    self.current_scale = 'log';
     self.data = the_data;
     self.graph_container_id = graph_container_id;
+    self.graph_element = $('#'+self.graph_container_id);
     self.title_text = title_text;
     self.notes = notes;
     self.source_code = source_code;
@@ -164,6 +168,58 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
     self.description = description;
     self.image = image;
 
+    self.toggle_scale = function(){
+        if (self.current_scale == 'log'){
+            self.current_scale = 'linear';
+            
+            //Rescale yRange range and doman for linear
+            self.yRange = d3.scale.linear()
+                .range([self.height, 0])
+                .domain([0,d3.max(self.data, function(d) {return self.find_max_y(d, self.current_scale)})]);
+            //Update the y-axis
+            self.yAxis.scale(self.yRange);
+            self.y_axis.transition().call(self.yAxis);
+                
+            //Update the actual lines
+            i = 0;
+            self.lines.forEach(function(line) {
+                line.transition().attr("d", self.homocide_line_function(self.data[i].values));
+                i++;
+            });
+            
+            //Update the points
+            self.svg.selectAll("circle")
+                .transition()
+                .attr("cx", function(d) {return self.xRange(d.x);})
+                .attr("cy", function(d) {return self.yRange(d.y);});
+        }
+        
+        else if (self.current_scale == 'linear'){
+            self.current_scale = 'log';
+            
+            //Rescale yRange range and doman for log
+            self.yRange = d3.scale.log()
+                .range([self.height, 0])
+                .domain([0.1, d3.max(self.data, function(d) {return self.find_max_y(d, self.current_scale)})]);
+            //Update the y-axis
+            self.yAxis.scale(self.yRange);
+            self.y_axis.transition().call(self.yAxis);
+                
+            //Update the actual lines
+            i = 0;
+            self.lines.forEach(function(line) {
+                line.transition().attr("d", self.homocide_line_function(self.data[i].values));
+                i++;
+            });
+            
+            //Update the points
+            self.svg.selectAll("circle")
+                .transition()
+                .attr("cx", function(d) {return self.xRange(d.x);})
+                .attr("cy", function(d) {return self.yRange(d.y);});
+        }
+    }
+    
     self.update_data = function(update_index){
         /*Updates the graph to only display data that has display set to true*/
             
@@ -182,7 +238,7 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
             
             self.yRange.domain([
                 0.1,
-                d3.max(self.data, function(d) {return self.find_max_y(d)})
+                d3.max(self.data, function(d) {return self.find_max_y(d,self.current_scale)})
             ]);
             
             self.y_axis.transition().call(self.yAxis);
@@ -209,11 +265,10 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
             
             //Update the points complete HACK
             self.points_lists[update_index][0].forEach(function(point){
-                $(point)
-                    .attr('visibility', display_change);
+                $(point).attr('visibility', display_change);
             });
     }
-    
+        
     self.resize = function(){
         /*Resizes the graph due to a window size change*/
         
@@ -310,7 +365,7 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
         
         self.yRange.domain([
             0.1,
-            d3.max(self.data, function(d) {return self.find_max_y(d)})
+            d3.max(self.data, function(d) {return self.find_max_y(d, self.current_scale)})
         ]);
         
         /*Add axis elements*/
@@ -365,23 +420,32 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
             .text("Homocides per 100,000 per year");
         
         //Create Graph legend
-        $('#'+self.graph_container_id).prepend('<div class="row legend_row" id=legend_row_'+self.graph_container_id+'>')
+        self.graph_element.prepend('<div class="row legend_row" id=legend_row_'+self.graph_container_id+'>')
         self.legend_row = $('#legend_row_'+self.graph_container_id);
+        self.legend_row.append('<div class="col-xs-12 col-sm-2 scale_col" id=scale_col_'+self.graph_container_id+'></div>')
+        self.scale_col = $('#scale_col_'+self.graph_container_id);
+        self.legend_row.append('<div class="col-xs-12 col-sm-10" id=legend_col_'+self.graph_container_id+'></div>')
+        self.legend_col = $('#legend_col_'+self.graph_container_id);
         var i = 0;
         self.data.forEach(function(datum){
             var legend_element = '<button class="legend_button" data_index='+i+' id=legend_id'+i+'><svg width="15" height="14" style="vertical-align: middle"><circle id=circle_id'+i+' class="legend dot visibility_'+datum.display+' '+datum.name+'" r="5" cx="6" cy="7"></circle></svg>'+datum.Country+'</button>';
-            self.legend_row.prepend('<div class="legend_button_wrapper">'+legend_element+'</div>');       
+            self.legend_col.append('<div class="legend_button_wrapper">'+legend_element+'</div>');       
             i++;
         });
         
+        //Create log button
+        self.scale_col.append('<span class="scale"><input class="scale" type="checkbox" id="log_scale_'+self.graph_container_id+'" value="log" checked><label class="scale" for="log_scale_'+self.graph_container_id+'">&nbsplog scale<label></span>');
+        self.scale_button = $('#log_scale_'+self.graph_container_id);
+        
         //Create Graph Title
-        $('#'+self.graph_container_id).prepend('<div class="row title_row" id=title_row_'+self.graph_container_id+'>');
+        self.graph_element.prepend('<div class="row title_row" id=title_row_'+self.graph_container_id+'>');
         self.title_row = $('#title_row_'+self.graph_container_id);
         self.title_row.prepend('<div class="graph_title">'+self.title_text+'</div>');
         
         //Create Graph Notes, Sources
-        $('#'+self.graph_container_id).append('<div class="row source_row" id=source_row_'+self.graph_container_id+'>');
+        self.graph_element.append('<div class="row source_row" id=source_row_'+self.graph_container_id+'>');
         self.source_row = $('#source_row_'+self.graph_container_id);
+        
         //Notes
         var modal_header = '<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Notes</h4></div>';
         var modal_body = '<div class="modal-body">'+self.notes+'</div>';
@@ -389,8 +453,7 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
         self.data_modal = $('#notes_modal_'+self.graph_container_id);
         self.source_row.append('<div class="col-xs-6 col-sm-3"><a id=notes_link_'+self.graph_container_id+' data-toggle="modal" data-target="#notes_modal_'+self.graph_container_id+'">Graph Notes<sup>1-2</sup></a></div>'+modal);
         self.data_source_link = $('#notes_link_'+self.graph_container_id);
-        //Code
-        self.source_row.append('<div class="col-xs-6 col-sm-3"><a class="source code" target="_blank" href='+self.source_code+'>Source Code</a></div>');
+        
         //Data
         var modal_header = '<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Data Sources</h4></div>';
         var modal_body = '<div class="modal-body">'+self.data_source+'</div>';
@@ -398,7 +461,11 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
         self.data_modal = $('#data_source_modal_'+self.graph_container_id);
         self.source_row.append('<div class="col-xs-6 col-sm-3"><a id=data_source_link_'+self.graph_container_id+' data-toggle="modal" data-target="#data_source_modal_'+self.graph_container_id+'">Data Sources</a></div>'+modal);
         self.data_source_link = $('#data_source_link_'+self.graph_container_id);
-        $('#'+self.graph_container_id).append('<div class="row controls_row" id=controls_row_'+self.graph_container_id+'>');
+        self.graph_element.append('<div class="row controls_row" id=controls_row_'+self.graph_container_id+'>');
+        
+        //Code
+        self.source_row.append('<div class="col-xs-6 col-sm-3"><a class="source code" target="_blank" href='+self.source_code+'>Source Code</a></div>');
+        
         //Downloads
         var modal_header = '<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Downloads</h4></div>';
         var image_link = '<a href="'+self.image+'" download>static image</a>'
@@ -411,13 +478,13 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
     }//End draw graph
     
     /* Reusable functions********************/
-    self.find_max_y = function(d){
+    self.find_max_y = function(d, log){
         /*Returns the max y value*/
         var max = 0
         if (d.display == 'visible') {
             max = d3.max(d.values, function(v) { return v.y; });
         }
-        if (max > 0) {
+        if (max > 0 && log == 'log') {
             max = order_of_magnitude(max) * 10;//set the max to next highest order of magnitude
         }
         return max;
@@ -425,7 +492,7 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
     
     self.set_graph_dimensions = function(){
         /*Resets the higheth width and margins based on the column width*/
-        var graph_container_width = $('#'+self.graph_container_id).width();
+        var graph_container_width = self.graph_element.width();
         var left_margin = 50;
         self.margin = {
             top: 10,
