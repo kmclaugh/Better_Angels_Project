@@ -386,9 +386,17 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
             
         /*init tooltip for data points*/
         var tip = d3.tip()
+        .offset([-10, 0])
         .attr('class', 'd3-tip')
         .html(function(d) {
-            return '<div><strong>' + d.Country + '</strong></div><div>' + d.x +', '+ d.y + '</div>';
+            var country = d3.select(this.parentNode).datum().Country
+            if (d.x != 1250){
+                var year_string = ' in '+d.x;
+            }
+            else{
+                var year_string = '';
+            }
+            return '<div class="data_tip"><div class=tip_title><strong>'+country+'</strong></div><div class="tip_data">'+d.y+year_string+'</div></div>';
         });
         
         self.svg_g.call(tip);
@@ -408,7 +416,7 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
     
         });
         // Add the points
-        self.svg_g.selectAll(".series")
+        self.points_lists= self.svg_g.selectAll(".series")
             .data(self.data)
             .enter().append("g")
                 .attr("class", function(d){ return "series "+ d.name; })
@@ -416,21 +424,13 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
                 .selectAll(".point")
                     .data(function(d) { ;return d.values; })
                     .enter().append("circle")
-                      .attr("class", "dot")
-                      .attr("r", 4)
-                      .attr("cx", function(d) { return self.xRange(d.x); })
-                      .attr("cy", function(d) { return self.yRange(d.y); });
-        //var new_points = self.svg_g.selectAll(".point")
-        //    .data(self.data)
-        //    .enter().append("circle")
-        //        .attr("class", "dot "+country.name)
-        //        .attr('visibility', country.display)
-        //        .on('mouseover', tip.show)
-        //        .on('mouseout', tip.hide)
-        //        .attr("r", 4)
-        //        .attr("cx", function(d, i) { return console.log(d.values); self.xRange(d.values[i].x); })
-        //        .attr("cy", function(d, i) { return self.yRange(d.values[i].y); });
-        //self.points_lists= new_points;
+                        .attr("class", "dot")
+                        .on('mouseover', tip.show)
+                        .on('mouseout', tip.hide)
+                        .on('mouseover', tip.show)
+                        .attr("r", 4)
+                        .attr("cx", function(d) { return self.xRange(d.x); })
+                        .attr("cy", function(d) { return self.yRange(d.y); });
         
          //Add the y axis label
         self.y_axis_label = self.svg_g.append("text")
