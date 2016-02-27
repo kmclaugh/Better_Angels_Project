@@ -6,12 +6,13 @@
         <meta content="utf-8" http-equiv="encoding">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 
-        <script src="../jquery-2.1.3.min.js"></script>
+        <script src="../vendor/jquery-2.1.3.min.js"></script>
         <!-- Bootstrap -->
-        <link rel="stylesheet" href="../bootstrap.min.css">
-        <script src="../bootstrap.min.js"></script>
+        <link rel="stylesheet" href="../vendor/bootstrap.min.css">
+        <script src="../vendor/bootstrap.min.js"></script>
         
-        <script src="../d3.v3.min.js"></script>
+        <script src="../vendor/d3.v3.min.js"></script>
+        <script src="../vendor/index.js"></script>
         
         <script type="text/javascript" src="Homocide_Rates.js"></script>
         
@@ -33,61 +34,61 @@
             .england{
                 stroke: #EB1515
             }
-            .england.dot{
+            .england.series{
                 fill: #EB1515;
             }
             .netherlands_and_belgium{
                 stroke: #FFAC00;
             }
-            .netherlands_and_belgium.dot{
+            .netherlands_and_belgium.series{
                 fill: #FFAC00;
             }
             .scandinavia{
                 stroke: #3C763D;
             }
-            .scandinavia.dot{
+            .scandinavia.series{
                 fill: #3C763D;
             }
             .germany_and_switzerland{
                 stroke: #994d00;
             }
-            .germany_and_switzerland.dot{
+            .germany_and_switzerland.series{
                 fill: #994d00;
             }
             .italy{
                 stroke: #0066cc;
             }
-            .italy.dot{
+            .italy.series{
                 fill: #0066cc;
             }
             .european_averages{
                 stroke: black;
             }
-            .european_averages.dot{
+            .european_averages.series{
                 fill: black;
             }
             .average_non_state{
                 stroke: #66ccff;
             }
-            .average_non_state.dot{
+            .average_non_state.series{
                 fill: #66ccff;
             }
             .kung{
                 stroke: #D9534F;
             }
-            .kung.dot{
+            .kung.series{
                 fill: #D9534F;
             }
             .inuit{
                 stroke: #666633;
             }
-            .inuit.dot{
+            .inuit.series{
                 fill: #666633;
             }
             .semai{
                 stroke: #993399;
             }
-            .semai.dot{
+            .semai.series{
                 fill: #993399;
             }
             .visibility_hidden{
@@ -96,7 +97,7 @@
             .controls_row{
                 text-align: center;
             }
-            .legend.dot{
+            .legend.series{
                 stroke-width: 2px;
             }
             .legend_row{

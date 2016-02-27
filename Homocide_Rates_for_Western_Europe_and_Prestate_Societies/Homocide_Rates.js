@@ -123,10 +123,10 @@ $(window).load(function () {
         });
         $(document).on("click", '.legend_button', function() {
             line_graph.update_data($(this).attr('data_index'));
-        })
+        });
         $(document).on("click", '#log_scale_graph1', function() {
             line_graph.toggle_scale();
-        })
+        });
         
         //Init the graph
         var graph_source_code = 'https://github.com/kmclaugh/Better_Angels_Project/tree/master/Homocide_Rates_for_Western_Europe_and_Prestate_Societies';
@@ -253,6 +253,9 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
                 i++;
             });
             
+            //Update the series
+            $('g.series.'+self.data[update_index].name).attr('visibility', display_change);
+            
             //Update the points
             self.svg.selectAll("circle")
                 .transition()
@@ -263,10 +266,6 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
                     return self.yRange(d.y);
                 })
             
-            //Update the points complete HACK
-            self.points_lists[update_index][0].forEach(function(point){
-                $(point).attr('visibility', display_change);
-            });
     }
         
     self.resize = function(){
@@ -302,9 +301,9 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
             .call(self.yAxis);
         
         //Update the position of the y axis label
-        //self.y_axis_label
-        //    .attr("y", 0 - self.margin.left)
-        //    .attr("x",0 - (self.height / 2))
+        self.y_axis_label
+            .attr("y", 0 - self.margin.left)
+            .attr("x",0 - (self.height / 2))
         
         //Update the actual lines
         i = 0;
@@ -384,7 +383,16 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
         self.homocide_line_function = d3.svg.line()
             .x(function(d) { return self.xRange(d.x); })
             .y(function(d) { return self.yRange(d.y); });
+            
+        /*init tooltip for data points*/
+        var tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .html(function(d) {
+            return '<div><strong>' + d.Country + '</strong></div><div>' + d.x +', '+ d.y + '</div>';
+        });
         
+        self.svg_g.call(tip);
+              
         /*Create the path and points*/
         self.lines = [];
         self.points_lists = [];
@@ -397,18 +405,32 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
                 .attr('visibility', country.display)
                 .attr("d", self.homocide_line_function(country.values));
             self.lines.push(new_line);
-            
-            var new_points = self.svg_g.selectAll(".point")
-                .data(country.values)
-                .enter().append("circle")
-                    .attr("class", "dot "+country.name)
-                    .attr('visibility', country.display)
-                    .attr("r", 4)
-                    .attr("cx", function(d) { return self.xRange(d.x); })
-                    .attr("cy", function(d) { return self.yRange(d.y); });
-            self.points_lists.push(new_points)
     
         });
+        // Add the points
+        self.svg_g.selectAll(".series")
+            .data(self.data)
+            .enter().append("g")
+                .attr("class", function(d){ return "series "+ d.name; })
+                .attr('visibility', function(d){ return d.display })
+                .selectAll(".point")
+                    .data(function(d) { ;return d.values; })
+                    .enter().append("circle")
+                      .attr("class", "dot")
+                      .attr("r", 4)
+                      .attr("cx", function(d) { return self.xRange(d.x); })
+                      .attr("cy", function(d) { return self.yRange(d.y); });
+        //var new_points = self.svg_g.selectAll(".point")
+        //    .data(self.data)
+        //    .enter().append("circle")
+        //        .attr("class", "dot "+country.name)
+        //        .attr('visibility', country.display)
+        //        .on('mouseover', tip.show)
+        //        .on('mouseout', tip.hide)
+        //        .attr("r", 4)
+        //        .attr("cx", function(d, i) { return console.log(d.values); self.xRange(d.values[i].x); })
+        //        .attr("cy", function(d, i) { return self.yRange(d.values[i].y); });
+        //self.points_lists= new_points;
         
          //Add the y axis label
         self.y_axis_label = self.svg_g.append("text")
@@ -428,7 +450,7 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
         self.legend_col = $('#legend_col_'+self.graph_container_id);
         var i = 0;
         self.data.forEach(function(datum){
-            var legend_element = '<button class="legend_button" data_index='+i+' id=legend_id'+i+'><svg width="15" height="14" style="vertical-align: middle"><circle id=circle_id'+i+' class="legend dot visibility_'+datum.display+' '+datum.name+'" r="5" cx="6" cy="7"></circle></svg>'+datum.Country+'</button>';
+            var legend_element = '<button class="legend_button" data_index='+i+' id=legend_id'+i+'><svg width="15" height="14" style="vertical-align: middle"><circle id=circle_id'+i+' class="legend series visibility_'+datum.display+' '+datum.name+'" r="5" cx="6" cy="7"></circle></svg>'+datum.Country+'</button>';
             self.legend_col.append('<div class="legend_button_wrapper">'+legend_element+'</div>');       
             i++;
         });
