@@ -120,6 +120,7 @@ $(window).load(function () {
         
         //When the window resizes, resize the graph
         $( window ).resize(function() {
+            $('.graph_column').height($( window ).height()*.75);
             line_graph.resize();
         });
         $(document).on("click", '.legend_button', function() {
