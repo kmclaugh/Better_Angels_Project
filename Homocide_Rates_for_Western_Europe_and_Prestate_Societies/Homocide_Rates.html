@@ -13,7 +13,17 @@
         
         <script src="../vendor/d3.v3.min.js"></script>
         <script src="../vendor/index.js"></script>
-        
+        <script>
+            $(window).load(function () {
+                $(document).ready(function () {
+                    //Set the height of the graph column to the window height
+                    $('.graph_column').height($( window ).height()*.75);
+                    $( window ).resize(function() {
+                        $('.graph_column').height($( window ).height()*.75);
+                    });
+                });
+            });
+        </script>
         <script type="text/javascript" src="Homocide_Rates.js"></script>
         
         <title>Homocide Rates</title>
@@ -133,12 +143,10 @@
                     font-size: 16px;
                 }
             }
-            .graph{
-                max-width: 900px;
-            }
             .graph_column{
                 margin-left:auto;
                 margin-right: auto;
+                height: 100vh;
             }
             .graph_title{
                 font-size: larger;
@@ -207,19 +215,6 @@
             .tip_data{
                 padding: 5px;
             }
-                
-            /* Creates a small triangle extender for the tooltip */
-            .d3-tip:after {
-              box-sizing: border-box;
-              display: inline;
-              font-size: 10px;
-              width: 100%;
-              line-height: 1;
-              color: rgba(0, 0, 0, 0.8);
-              content: "\25BC";
-              position: absolute;
-              text-align: center;
-            }
             
         </style>
     </head>
@@ -227,7 +222,7 @@
         <div class="container">
             <div class='row'>
                 <div class='col-xs-12 graph_column'>
-                    <div class="graph" id='graph1'></div>
+                    <div class="graph" id='graph1' style="height: 100%"></div>
                 </div>
             </div>
         </div>

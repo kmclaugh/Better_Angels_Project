@@ -3,6 +3,7 @@ $(window).load(function () {
     
     $(document).ready(function () {
         
+        
         var the_data = [
             {'Country':'Average Non-State<sup>1</sup>', 'name':'average_non_state', 'display':'visible', 'values':[{x:1250, y:518}]},
             {'Country':'European Average<sup>2</sup>', 'name':'european_averages', 'display':'visible', 'values':[
@@ -425,7 +426,10 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
                     .data(function(d) { ;return d.values; })
                     .enter().append("circle")
                         .attr("class", "dot")
-                        .on('mouseover', tip.show)
+                        .on('mouseover', function(d){
+                            $(this).add
+                            tip.show(d);
+                        })
                         .on('mouseout', tip.hide)
                         .on('mouseover', tip.show)
                         .attr("r", 4)
@@ -515,6 +519,8 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
     self.set_graph_dimensions = function(){
         /*Resets the higheth width and margins based on the column width*/
         var graph_container_width = self.graph_element.width();
+        var graph_container_height = self.graph_element.height();
+        console.log(graph_container_height)
         var left_margin = 50;
         self.margin = {
             top: 10,
@@ -523,7 +529,7 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
             left: 50
         };
         self.width = graph_container_width - self.margin.right - self.margin.left;
-        self.height = 250 - self.margin.top - self.margin.bottom;
+        self.height = graph_container_height - self.margin.top - self.margin.bottom;
     }
 }
 
