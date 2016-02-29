@@ -9,8 +9,15 @@
 {
     stroke-dasharray: 1, 2;
 }
-.dot{
-    r: 4px;
+@media (min-width: 1px) {
+    .dot{
+        r: 2px;
+    }
+}
+@media (min-width: 550px) {
+    .dot{
+        r: 4px;
+    }
 }
 .dot:hover{
     r: 8px;
