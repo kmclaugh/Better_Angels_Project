@@ -10,17 +10,26 @@
     stroke-dasharray: 1, 2;
 }
 @media (min-width: 1px) {
+    .line{
+        stroke-width: 1px;
+    }
     .dot{
         r: 2px;
     }
-}
-@media (min-width: 550px) {
-    .dot{
+    .dot:hover{
         r: 4px;
     }
 }
-.dot:hover{
-    r: 8px;
+@media (min-width: 550px) {
+    .line{
+        stroke-width: 2px;
+    }
+    .dot{
+        r: 4px;
+    }
+    .dot:hover{
+        r: 8px;
+    }
 }
 .england{
     stroke: #EB1515
