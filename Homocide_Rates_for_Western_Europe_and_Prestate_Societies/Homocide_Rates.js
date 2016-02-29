@@ -133,7 +133,9 @@ $(window).load(function () {
         var graph_source_code = 'https://github.com/kmclaugh/Better_Angels_Project/tree/master/Homocide_Rates_for_Western_Europe_and_Prestate_Societies';
         var graph_note = '<sup>1</sup>Nonstate Average is a geometric mean of 26 societies, not including Semai, Inuit, and !Kung</br>';
         graph_note += '<sup>2</sup>European Average is a geometric mean of five regions with missing data interpolated.';
-        var data_source = '<p>European Data: Figure 2 in Eisner (2003) – Long-Term Historical Trends in Violent Crime. In Crime and Justice, 30, 83–142.</p>'
+        var better_angels_source = '<a href="https://books.google.com/books?id=J7ATQb6LZX0C&lpg=PT80&ots=6AVqdCI9oK&dq=Note%3A%20This%20graph%20is%20Figure%202%20in%20Eisner%20(2003)&pg=PT81#v=onepage&q=Note:%20This%20graph%20is%20Figure%202%20in%20Eisner%20(2003)&f=false" target="_blank">Figure 3-3, Pinker, Steven (2011-10-04). The Better Angels of Our Nature: Why Violence Has Declined. Penguin Group US. Page: 63, Kindle Location 1629-1630</a>';
+        var original_data_source = '<a href="https://soci.ucalgary.ca/brannigan/sites/soci.ucalgary.ca.brannigan/files/long-term-historical-trends-of-violent-crime.pdf#page=13" target="_blank">European Data: Figure 2 in Eisner (2003) – Long-Term Historical Trends in Violent Crime. In Crime and Justice, 30, 83.</a>';
+        var data_source = '<p>' + better_angels_source + '</p><p>' + original_data_source + '</p>';
         var graph_title = 'Homocide Rates for Western Europe and Prestate Societies'
         var graph_decription = 'Long term homocide rates for Western Europe 1300-200 compared to prestate societies'
         var image = 'homocide_rates.png';
