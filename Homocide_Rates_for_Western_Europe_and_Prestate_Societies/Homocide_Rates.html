@@ -14,26 +14,26 @@
         <script src="../vendor/d3.v3.min.js"></script>
         <script src="../vendor/index.js"></script>
         <script type="text/javascript">
-        (function(doc) {
-        
-            var addEvent = 'addEventListener',
-                type = 'gesturestart',
-                qsa = 'querySelectorAll',
-                scales = [1, 1],
-                meta = qsa in doc ? doc[qsa]('meta[name=viewport]') : [];
-        
-            function fix() {
-                meta.content = 'width=device-width,minimum-scale=' + scales[0] + ',maximum-scale=' + scales[1];
-                doc.removeEventListener(type, fix, true);
-            }
-        
-            if ((meta = meta[meta.length - 1]) && addEvent in doc) {
-                fix();
-                scales = [.25, 1.6];
-                doc[addEvent](type, fix, true);
-            }
-        
-        }(document));
+            (function(doc) {
+            
+                var addEvent = 'addEventListener',
+                    type = 'gesturestart',
+                    qsa = 'querySelectorAll',
+                    scales = [1, 1],
+                    meta = qsa in doc ? doc[qsa]('meta[name=viewport]') : [];
+            
+                function fix() {
+                    meta.content = 'width=device-width,minimum-scale=' + scales[0] + ',maximum-scale=' + scales[1];
+                    doc.removeEventListener(type, fix, true);
+                }
+            
+                if ((meta = meta[meta.length - 1]) && addEvent in doc) {
+                    fix();
+                    scales = [.25, 1.6];
+                    doc[addEvent](type, fix, true);
+                }
+            
+            }(document));
         </script>
         <script>
             $(window).load(function () {
@@ -47,198 +47,8 @@
             });
         </script>
         <script type="text/javascript" src="Homocide_Rates.js"></script>
-        
+        <link rel="stylesheet" href="Homocide_Rates.css">
         <title>Homocide Rates</title>
-        
-        <style>
-            
-            .axis path, .axis line
-            {
-                fill: none;
-                stroke: #777;
-                shape-rendering: crispEdges;
-            }
-            
-            .tick
-            {
-                stroke-dasharray: 1, 2;
-            }
-            .england{
-                stroke: #EB1515
-            }
-            .england.series{
-                fill: #EB1515;
-            }
-            .netherlands_and_belgium{
-                stroke: #FFAC00;
-            }
-            .netherlands_and_belgium.series{
-                fill: #FFAC00;
-            }
-            .scandinavia{
-                stroke: #3C763D;
-            }
-            .scandinavia.series{
-                fill: #3C763D;
-            }
-            .germany_and_switzerland{
-                stroke: #994d00;
-            }
-            .germany_and_switzerland.series{
-                fill: #994d00;
-            }
-            .italy{
-                stroke: #0066cc;
-            }
-            .italy.series{
-                fill: #0066cc;
-            }
-            .european_averages{
-                stroke: black;
-            }
-            .european_averages.series{
-                fill: black;
-            }
-            .average_non_state{
-                stroke: #66ccff;
-            }
-            .average_non_state.series{
-                fill: #66ccff;
-            }
-            .kung{
-                stroke: #D9534F;
-            }
-            .kung.series{
-                fill: #D9534F;
-            }
-            .inuit{
-                stroke: #666633;
-            }
-            .inuit.series{
-                fill: #666633;
-            }
-            .semai{
-                stroke: #993399;
-            }
-            .semai.series{
-                fill: #993399;
-            }
-            .visibility_hidden{
-                fill: none!important;
-            }
-            .controls_row{
-                text-align: center;
-            }
-            .legend.series{
-                stroke-width: 2px;
-            }
-            .legend_row{
-                text-align: right;
-            }
-            @media (min-width: 1px) {
-                .legend_button_wrapper{
-                    float: left!important;
-                }
-            }
-            @media (min-width: 550px) {
-                .legend_button_wrapper{
-                    float: right!important;
-                }
-            }
-            .legend_button{
-                background-color: transparent;
-                border: hidden;
-            }
-            @media (min-width: 10px) {
-                .axis text{
-                    font-size: 10px;
-                }
-                #graph_title{
-                    font-size: 14px;
-                }
-            }
-            @media (min-width: 400px) {
-                .axis text{
-                    font-size: 13px;
-                }
-                #graph_title{
-                    font-size: 16px;
-                }
-            }
-            .graph_column{
-                margin-left:auto;
-                margin-right: auto;
-                height: 100vh;
-            }
-            .graph_title{
-                font-size: larger;
-                font-weight: bold;
-                text-align: center;
-                padding-bottom: 10px;
-            }
-            .scale_col{
-                text-align: center;
-            }
-            .scale{
-                margin: 0px;
-                font-weight: normal;
-            }
-            @media (min-width: 1px) {
-                .scale_col{
-                    padding-bottom: 10px;
-                }
-                .scale{
-                    font-size: 16px;
-                }
-                input.scale{
-                    margin-top: 4px;
-                }
-            }
-            @media (min-width: 768px) {
-                .scale_col{
-                    padding-bottom: 0px;
-                }
-                .scale{
-                    float: left!important;
-                    font-size: 14px;
-                }
-                input.scale{
-                    margin-top: 3px;
-                }
-            }
-            .source_row{
-                text-align: center;
-                font-style: italic;
-                padding-top: 10px;
-            }
-            a {
-                cursor: pointer;
-            }
-            body {
-                padding-right: 0px !important
-            }
-              
-            .modal-open {
-                overflow-y: auto;
-            }
-            .data_tip{
-                background-color: white;
-                border: solid;
-                border-color: #D8D8D8;
-                border-width: 1px;
-                text-align: center;
-            }
-            .tip_title{
-                border-bottom: solid;
-                border-color: #D8D8D8;
-                border-width: 1px;
-                padding: 5px;
-            }
-            .tip_data{
-                padding: 5px;
-            }
-            
-        </style>
     </head>
     <body>
         <div class="container">

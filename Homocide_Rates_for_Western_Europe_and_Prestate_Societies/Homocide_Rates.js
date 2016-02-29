@@ -410,7 +410,6 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
             
             var new_line = self.svg_g.append('svg:path')
                 .attr("class", "line "+country.name)
-                .attr('stroke-width', 2)
                 .attr('fill', 'none')
                 .attr('visibility', country.display)
                 .attr("d", self.homocide_line_function(country.values));
@@ -427,13 +426,8 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
                     .data(function(d) { ;return d.values; })
                     .enter().append("circle")
                         .attr("class", "dot")
-                        .on('mouseover', function(d){
-                            $(this).add
-                            tip.show(d);
-                        })
                         .on('mouseout', tip.hide)
                         .on('mouseover', tip.show)
-                        .attr("r", 4)
                         .attr("cx", function(d) { return self.xRange(d.x); })
                         .attr("cy", function(d) { return self.yRange(d.y); });
         
