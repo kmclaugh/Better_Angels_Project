@@ -5,14 +5,26 @@
         <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
         <meta content="utf-8" http-equiv="encoding">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
         
-        <!-- Bootstrap -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script src="../vendor/jquery-2.1.3.min.js"></script>
+        <link rel="stylesheet" href="../vendor/bootstrap.min.css">
+        <script src="../vendor/bootstrap.min.js"></script>
+        <script src="../vendor/d3.v3.min.js"></script>
+        <script src="../vendor/d3-tip.js"></script>
         
-        <script src="https://d3js.org/d3.v3.min.js"></script>
-        
+        <link rel="stylesheet" href="../graph_styles.css">
+        <script src="../graphing_functions.js"></script>
+        <script type="text/javascript">
+            $(window).load(function () {
+                $(document).ready(function () {
+                    //Set the height of the graph column to the window height
+                    $('.graph_column').height($( window ).height()*.75);
+                    $( window ).resize(function() {
+                        $('.graph_column').height($( window ).height()*.75);
+                    });
+                });
+            });
+        </script>
         <script type="text/javascript" src="Worst_Atrocities_Bar_Graph.js"></script>
         
         <title>Compare</title>
@@ -57,13 +69,12 @@
     </head>
     <body>
         <div class="container">
-            <div class='row'>Test</div>
             <div class='row'>
                 <button type="button" id='change_graph'>Relative</button>
             </div>
             <div class='row'>
-                <div class='col-xs-12' id='graph_column'>
-                    <div id="graph"></div>
+                <div class='col-xs-12 graph_column'>
+                    <div class="graph" id='worst_atrocities_graph'></div>
                 </div>
             </div>
         </div>

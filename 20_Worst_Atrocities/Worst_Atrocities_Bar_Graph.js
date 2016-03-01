@@ -37,7 +37,7 @@ $(window).load(function () {
         })
         
         //Init the graph
-        var compare_graph = new compare_graph_class(the_data, 'graph');
+        var compare_graph = new compare_graph_class(the_data, 'worst_atrocities_graph');
         compare_graph.draw();
     });
 });
@@ -46,10 +46,16 @@ function compare_graph_class(the_data, graph_container_id){
     /*Class for the compare graph*/
     
     var self = this;
-    self.margin = {};
+    self.margin = {
+        top: 30,
+        right: 0,
+        bottom: 190,
+        left: 50
+    };
     self.current_data = 'death_total';
     self.data = the_data;
-    self.graph_container_id = graph_container_id
+    self.graph_container_id = graph_container_id;
+    self.graph_element = $('#'+self.graph_container_id);
 
     self.update_data = function(){
         /*Switches the data from absolute to relative dataset or visa-versa*/
@@ -73,7 +79,7 @@ function compare_graph_class(the_data, graph_container_id){
                     .attr("height", function(d) { return self.height - self.y_data_function(d)});
                 
                 //Update the graph title
-                self.graph_title.text('Death Toll - 1950 Equivalent');
+                //self.graph_title.text('Death Toll - 1950 Equivalent');
             }
             
             //change to absolute
@@ -95,7 +101,7 @@ function compare_graph_class(the_data, graph_container_id){
                     .attr("height", function(d) { return self.height - self.y_data_function(d)});
                 
                 //Update the graph title
-                self.graph_title.text('Absolute Death Toll');
+                //self.graph_title.text('Absolute Death Toll');
             }
     }
     
@@ -103,7 +109,7 @@ function compare_graph_class(the_data, graph_container_id){
         /*Resizes the graph due to a window size change*/
         
         //Get the new graph dimensions
-        self.set_graph_dimensions();
+        set_graph_dimensions(self, 331);
         
         //Update the svg dimensions
         self.svg
@@ -111,11 +117,6 @@ function compare_graph_class(the_data, graph_container_id){
             .attr("height", self.height + self.margin.top + self.margin.bottom);
         self.svg_g
             .attr("transform", "translate(" + self.margin.left + "," + self.margin.top + ")");
-        
-        //Update the graph title position
-        self.graph_title
-            .attr("x", (self.width / 2))
-            .attr("y", (0 - self.margin.top/2));
         
         //Rescale the range and axis functions to account for the new dimensions
         self.xRange
@@ -161,7 +162,7 @@ function compare_graph_class(the_data, graph_container_id){
         /*Draws the graph according to the size of the graph element*/
         
         //Get the graph dimensions
-        self.set_graph_dimensions();
+        set_graph_dimensions(self, 331);
         
         //Create Graph SVG
         self.svg = d3.select('#'+self.graph_container_id)
@@ -172,14 +173,6 @@ function compare_graph_class(the_data, graph_container_id){
         //Add a layer to the svg
         self.svg_g = self.svg.append("g")
             .attr("transform", "translate(" + self.margin.left + "," + self.margin.top + ")");
-        
-        //Add the graph title
-        self.graph_title = self.svg_g.append("text")
-            .attr("x", (self.width / 2))             
-            .attr("y", (0 - self.margin.top/2))
-            .attr("text-anchor", "middle")
-            .attr('id', 'graph_title')
-            .text("Absolute Death Toll");
                     
         self.xRange = d3.scale.ordinal()
             .rangeRoundBands([0, self.width], .1)
@@ -187,7 +180,7 @@ function compare_graph_class(the_data, graph_container_id){
                     return [d.Cause, d.Century_String];
                 })
             );
-          
+            
         self.yRange = d3.scale.linear()
             .range([self.height, 0])
             .domain(function(){
@@ -237,7 +230,6 @@ function compare_graph_class(the_data, graph_container_id){
             .attr("dy", "1em")
             .style("text-anchor", "middle")
             .text("Millions of Deaths");
-        
     
         var bar = self.svg_g.selectAll("bar")
             .data(self.data)
@@ -251,27 +243,6 @@ function compare_graph_class(the_data, graph_container_id){
     }//End draw graph
     
     /* Reusable functions********************/
-    self.set_graph_dimensions = function(){
-        /*Resets the higheth width and margins based on the column width*/
-        var graph_container_width = $('#'+self.graph_container_id).width();
-        var left_margin = function(){
-            if (graph_container_width < 400){
-                return 45;
-            }
-            else{
-                return 50;
-            }
-        }
-        self.margin = {
-            top: 30,
-            right: 0,
-            bottom: 300,
-            left: left_margin()
-        };
-        self.width = graph_container_width - self.margin.right - self.margin.left;
-        self.height = 550 - self.margin.top - self.margin.bottom;
-    }
-    
     self.x_labels_data_function = function(d){
         /*Returns the correct label for the x axis*/
         if (d[0] == 'Mao Zedong') {

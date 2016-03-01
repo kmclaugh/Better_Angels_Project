@@ -134,7 +134,7 @@ $(window).load(function () {
         var graph_title = 'Homocide Rates for Western Europe and Prestate Societies'
         var graph_decription = 'Long term homocide rates for Western Europe 1300-200 compared to prestate societies'
         var image = 'homocide_rates.png';
-        var line_graph = new line_graph_class(the_data, 'graph1', graph_title, graph_note, graph_source_code, data_source, graph_decription, image);
+        var line_graph = new line_graph_class(the_data, 'homocide_rates_graph', graph_title, graph_note, graph_source_code, data_source, graph_decription, image);
         line_graph.draw();
     });
 });
@@ -154,7 +154,12 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
     /*Class for the line graph*/
     
     var self = this;
-    self.margin = {};
+    self.margin = {
+        top: 10,
+        right: 10,
+        bottom: 20,
+        left: 50
+    };
     self.current_scale = 'log';
     self.data = the_data;
     self.graph_container_id = graph_container_id;
@@ -220,57 +225,55 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
     
     self.update_data = function(update_index){
         /*Updates the graph to only display data that has display set to true*/
-            
-            var display_change = self.data[update_index]['display']
-            if (display_change == 'hidden') {
-                display_change = 'visible';
-                remove_class($('#circle_id'+update_index), 'visibility_hidden');
-                add_class($('#circle_id'+update_index), 'visibility_visible');
-            }
-            else{
-                display_change = 'hidden';
-                add_class($('#circle_id'+update_index), 'visibility_hidden');
-                remove_class($('#circle_id'+update_index), 'visibility_visible');
-            }
-            self.data[update_index]['display'] = display_change;
-            
-            self.yRange.domain([
-                0.1,
-                d3.max(self.data, function(d) {return self.find_max_y(d,self.current_scale)})
-            ]);
-            
-            self.y_axis.transition().call(self.yAxis);
-            
-            //Update the actual lines
-            i = 0;
-            self.lines.forEach(function(line) {
-                line
-                    .transition()
-                    .attr("d", self.homocide_line_function(self.data[i].values))
-                    .attr('visibility', self.data[i].display);
-                i++;
-            });
-            
-            //Update the series
-            $('g.series.'+self.data[update_index].name).attr('visibility', display_change);
-            
-            //Update the points
-            self.svg.selectAll("circle")
+        var display_change = self.data[update_index]['display']
+        if (display_change == 'hidden') {
+            display_change = 'visible';
+            remove_class($('#circle_id'+update_index), 'visibility_hidden');
+            add_class($('#circle_id'+update_index), 'visibility_visible');
+        }
+        else{
+            display_change = 'hidden';
+            add_class($('#circle_id'+update_index), 'visibility_hidden');
+            remove_class($('#circle_id'+update_index), 'visibility_visible');
+        }
+        self.data[update_index]['display'] = display_change;
+        
+        self.yRange.domain([
+            0.1,
+            d3.max(self.data, function(d) {return self.find_max_y(d,self.current_scale)})
+        ]);
+        
+        self.y_axis.transition().call(self.yAxis);
+        
+        //Update the actual lines
+        i = 0;
+        self.lines.forEach(function(line) {
+            line
                 .transition()
-                .attr("cx", function(d) {
-                    return self.xRange(d.x);
-                })
-                .attr("cy", function(d) {
-                    return self.yRange(d.y);
-                })
-            
+                .attr("d", self.homocide_line_function(self.data[i].values))
+                .attr('visibility', self.data[i].display);
+            i++;
+        });
+        
+        //Update the series
+        $('g.series.'+self.data[update_index].name).attr('visibility', display_change);
+        
+        //Update the points
+        self.svg.selectAll("circle")
+            .transition()
+            .attr("cx", function(d) {
+                return self.xRange(d.x);
+            })
+            .attr("cy", function(d) {
+                return self.yRange(d.y);
+            })
     }
         
     self.resize = function(){
         /*Resizes the graph due to a window size change*/
         
         //Get the new graph dimensions
-        self.set_graph_dimensions();
+        set_graph_dimensions(self);
         
         //Update the svg dimensions
         self.svg
@@ -325,7 +328,7 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
         /*Draws the graph according to the size of the graph element*/
         
         //Get the graph dimensions
-        self.set_graph_dimensions();
+        set_graph_dimensions(self);
         
         //Create Graph SVG
         self.svg = d3.select('#'+self.graph_container_id)
@@ -383,23 +386,24 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
             .y(function(d) { return self.yRange(d.y); });
             
         /*init tooltip for data points*/
-        var tip = d3.tip()
-        .offset([-10, 0])
-        .attr('class', 'd3-tip')
-        .html(function(d) {
-            var country = d3.select(this.parentNode).datum().Country
-            if (d.x != 1250){
-                var year_string = ' in '+d.x;
-            }
-            else{
-                var year_string = '';
-            }
-            return '<div class="data_tip"><div class=tip_title><strong>'+country+'</strong></div><div class="tip_data">'+d.y+year_string+'</div></div>';
-        });
+        self.tool_tip = d3.tip()
+            .offset([-10, 0])
+            .attr('class', 'd3-tip')
+            .html(function(d) {
+                var country = d3.select(this.parentNode).datum().Country
+                if (d.x != 1250){
+                    var year_string = ' in '+d.x;
+                }
+                else{
+                    var year_string = '';
+                }
+                return '<div class="data_tip"><div class=tip_title><strong>'+country+'</strong></div><div class="tip_data">'+d.y+year_string+'</div></div>';
+            });
         
-        self.svg_g.call(tip);
+        self.svg_g.call(self.tool_tip);
               
         /*Create the path and points*/
+        //path
         self.lines = [];
         self.points_lists = [];
         self.data.forEach(function(country) {
@@ -412,7 +416,7 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
             self.lines.push(new_line);
     
         });
-        // Add the points
+        //points
         self.points_lists= self.svg_g.selectAll(".series")
             .data(self.data)
             .enter().append("g")
@@ -422,8 +426,8 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
                     .data(function(d) { ;return d.values; })
                     .enter().append("circle")
                         .attr("class", "dot")
-                        .on('mouseout', tip.hide)
-                        .on('mouseover', tip.show)
+                        .on('mouseout', self.tool_tip.hide)
+                        .on('mouseover', self.tool_tip.show)
                         .attr("cx", function(d) { return self.xRange(d.x); })
                         .attr("cy", function(d) { return self.yRange(d.y); });
         
@@ -510,22 +514,6 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
         }
         return max;
     }
-    
-    self.set_graph_dimensions = function(){
-        /*Resets the higheth width and margins based on the column width*/
-        var graph_container_width = self.graph_element.width();
-        var graph_container_height = self.graph_element.height();
-        console.log(graph_container_height)
-        var left_margin = 50;
-        self.margin = {
-            top: 10,
-            right: 10,
-            bottom: 20,
-            left: 50
-        };
-        self.width = graph_container_width - self.margin.right - self.margin.left;
-        self.height = graph_container_height - self.margin.top - self.margin.bottom;
-    }
 }
 
 function order_of_magnitude(n) {
@@ -533,77 +521,4 @@ function order_of_magnitude(n) {
     var order = Math.floor(Math.log(n) / Math.LN10
                        + 0.000000001); // because float math sucks like that
     return Math.pow(10,order);
-}
-
-function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
-    //If JSONData is not an object then JSON.parse will parse the JSON string in an Object
-    var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
-    
-    var CSV = '';    
-    //Set Report title in first row or line
-    
-    CSV += ReportTitle + '\r\n\n';
-
-    //This condition will generate the Label/Header
-    if (ShowLabel) {
-        var row = "";
-        
-        //This loop will extract the label from 1st index of on array
-        for (var index in arrData[0]) {
-            
-            //Now convert each value to string and comma-seprated
-            row += index + ',';
-        }
-
-        row = row.slice(0, -1);
-        
-        //append Label row with line break
-        CSV += row + '\r\n';
-    }
-    
-    //1st loop is to extract each row
-    for (var i = 0; i < arrData.length; i++) {
-        var row = "";
-        
-        //2nd loop will extract each column and convert it in string comma-seprated
-        for (var index in arrData[i]) {
-            row += '"' + arrData[i][index] + '",';
-        }
-
-        row.slice(0, row.length - 1);
-        
-        //add a line break after each row
-        CSV += row + '\r\n';
-    }
-
-    if (CSV == '') {        
-        alert("Invalid data");
-        return;
-    }   
-    
-    //Generate a file name
-    var fileName = "MyReport_";
-    //this will remove the blank-spaces from the title and replace it with an underscore
-    fileName += ReportTitle.replace(/ /g,"_");   
-    
-    //Initialize file format you want csv or xls
-    var uri = 'data:text/csv;charset=utf-8,' + escape(CSV);
-    
-    // Now the little tricky part.
-    // you can use either>> window.open(uri);
-    // but this will not work in some browsers
-    // or you will not get the correct file extension    
-    
-    //this trick will generate a temp <a /> tag
-    var link = document.createElement("a");    
-    link.href = uri;
-    
-    //set the visibility hidden so it will not effect on your web-layout
-    link.style = "visibility:hidden";
-    link.download = fileName + ".csv";
-    
-    //this part will append the anchor tag and remove it after automatic click
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
 }
