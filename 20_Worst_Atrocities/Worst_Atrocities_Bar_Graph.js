@@ -49,7 +49,7 @@ function compare_graph_class(the_data, graph_container_id){
     self.margin = {
         top: 30,
         right: 0,
-        bottom: 190,
+        bottom: 200,
         left: 50
     };
     self.current_data = 'death_total';
@@ -109,7 +109,7 @@ function compare_graph_class(the_data, graph_container_id){
         /*Resizes the graph due to a window size change*/
         
         //Get the new graph dimensions
-        set_graph_dimensions(self, 331);
+        set_graph_dimensions(self, 350);
         
         //Update the svg dimensions
         self.svg
@@ -162,7 +162,7 @@ function compare_graph_class(the_data, graph_container_id){
         /*Draws the graph according to the size of the graph element*/
         
         //Get the graph dimensions
-        set_graph_dimensions(self, 331);
+        set_graph_dimensions(self, 350);
         
         //Create Graph SVG
         self.svg = d3.select('#'+self.graph_container_id)

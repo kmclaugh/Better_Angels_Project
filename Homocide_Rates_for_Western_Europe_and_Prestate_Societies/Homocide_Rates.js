@@ -122,7 +122,7 @@ $(window).load(function () {
         $(document).on("click", '.legend_button', function() {
             line_graph.update_data($(this).attr('data_index'));
         });
-        $(document).on("click", '#log_scale_graph1', function() {
+        $(document).on("click", '#log_scale_homocide_rates_graph', function() {
             line_graph.toggle_scale();
         });
         
@@ -134,7 +134,8 @@ $(window).load(function () {
         var graph_title = 'Homocide Rates for Western Europe and Prestate Societies'
         var graph_decription = 'Long term homocide rates for Western Europe 1300-200 compared to prestate societies'
         var image = 'homocide_rates.png';
-        var line_graph = new line_graph_class(the_data, 'homocide_rates_graph', graph_title, graph_note, graph_source_code, data_source, graph_decription, image);
+        var csv_file = 'Homocide_Rate.csv';
+        var line_graph = new line_graph_class(the_data, 'homocide_rates_graph', graph_title, graph_note, graph_source_code, data_source, graph_decription, image, csv_file);
         line_graph.draw();
     });
 });
@@ -150,7 +151,7 @@ function add_class(object, class_to_add){
     object.attr('class', new_classes);
 }
 
-function line_graph_class(the_data, graph_container_id, title_text, notes, source_code, data_source, description, image){
+function line_graph_class(the_data, graph_container_id, title_text, notes, source_code, data_source, description, image, csv_file){
     /*Class for the line graph*/
     
     var self = this;
@@ -170,6 +171,7 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
     self.data_source = data_source;
     self.description = description;
     self.image = image;
+    self.csv_file = csv_file
 
     self.toggle_scale = function(){
         if (self.current_scale == 'log'){
@@ -458,47 +460,7 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
         self.scale_col.append('<span class="scale"><input class="scale" type="checkbox" id="log_scale_'+self.graph_container_id+'" value="log" checked><label class="scale" for="log_scale_'+self.graph_container_id+'">&nbsplog scale<label></span>');
         self.scale_button = $('#log_scale_'+self.graph_container_id);
         
-        //Create Graph Title
-        self.graph_element.prepend('<div class="row title_row" id=title_row_'+self.graph_container_id+'>');
-        self.title_row = $('#title_row_'+self.graph_container_id);
-        self.title_row.prepend('<div class="graph_title">'+self.title_text+'</div>');
-        
-        //Create Graph Notes, Sources
-        self.graph_element.append('<div class="row source_row" id=source_row_'+self.graph_container_id+'>');
-        self.source_row = $('#source_row_'+self.graph_container_id);
-        
-        //Notes
-        var modal_header = '<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Notes</h4></div>';
-        var modal_body = '<div class="modal-body">'+self.notes+'</div>';
-        var modal = '<div class="modal fade" id="notes_modal_'+self.graph_container_id+'" role="dialog"><div class="modal-dialog"><div class="modal-content">'+modal_header+modal_body+'</div></div>';
-        self.data_modal = $('#notes_modal_'+self.graph_container_id);
-        self.source_row.append('<div class="col-xs-6 col-sm-3"><a id=notes_link_'+self.graph_container_id+' data-toggle="modal" data-target="#notes_modal_'+self.graph_container_id+'">Graph Notes<sup>1-2</sup></a></div>'+modal);
-        self.data_source_link = $('#notes_link_'+self.graph_container_id);
-        
-        //Data
-        var modal_header = '<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Data Sources</h4></div>';
-        var modal_body = '<div class="modal-body">'+self.data_source+'</div>';
-        var modal = '<div class="modal fade" id="data_source_modal_'+self.graph_container_id+'" role="dialog"><div class="modal-dialog"><div class="modal-content">'+modal_header+modal_body+'</div></div>';
-        self.data_modal = $('#data_source_modal_'+self.graph_container_id);
-        self.source_row.append('<div class="col-xs-6 col-sm-3"><a id=data_source_link_'+self.graph_container_id+' data-toggle="modal" data-target="#data_source_modal_'+self.graph_container_id+'">Data Sources</a></div>'+modal);
-        self.data_source_link = $('#data_source_link_'+self.graph_container_id);
-        self.graph_element.append('<div class="row controls_row" id=controls_row_'+self.graph_container_id+'>');
-        
-        //Code
-        self.source_row.append('<div class="col-xs-6 col-sm-3"><a class="source code" target="_blank" href='+self.source_code+'>Source Code</a></div>');
-        
-        //Downloads
-        var image_link = '<a href="'+self.image+'" download>static image</a>'
-        var json_data = JSON.stringify(self.data);
-        var json_link = '<a href="data:text/json;charset=utf-8,'+encodeURIComponent(json_data)+'" download="data.json"" target="_blank">JSON data</a>';
-        var csv_link = '<a href="Homocide_Rate.csv" download>CSV Data</a>';
-        
-        var modal_header = '<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Downloads</h4></div>';
-        var modal_body = '<div class="modal-body"><p>'+image_link+'</p><p>'+json_link+'</p><p>'+csv_link+'</p></div>';
-        var modal = '<div class="modal fade" id="downloads_modal_'+self.graph_container_id+'" role="dialog"><div class="modal-dialog"><div class="modal-content">'+modal_header+modal_body+'</div></div>';
-        self.downloads_modal = $('#downloads_modal_'+self.graph_container_id);
-        self.source_row.append('<div class="col-xs-6 col-sm-3"><a id=downloads_link_'+self.graph_container_id+' data-toggle="modal" data-target="#downloads_modal_'+self.graph_container_id+'">Downloads</a></div>'+modal);
-        self.data_source_link = $('#downloads_link_'+self.graph_container_id);
+        create_graph_title_footer(self);
         
     }//End draw graph
     
