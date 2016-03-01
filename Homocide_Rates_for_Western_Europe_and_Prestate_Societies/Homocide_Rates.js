@@ -122,7 +122,7 @@ $(window).load(function () {
         $(document).on("click", '.legend_button', function() {
             line_graph.update_data($(this).attr('data_index'));
         });
-        $(document).on("click", '#log_scale_graph1', function() {
+        $(document).on("click", '#log_scale_homocide_rates_graph', function() {
             line_graph.toggle_scale();
         });
         
