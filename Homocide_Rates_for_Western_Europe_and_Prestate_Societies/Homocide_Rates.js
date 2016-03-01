@@ -25,7 +25,6 @@ $(window).load(function () {
                 {x : 2010, y: 1},
             ]},
             {'Country':'Scandinavia', 'name':'scandinavia', 'display':'hidden', 'values':[
-                {x : 1300, y: 42},
                 {x : 1450, y: 46},
                 {x : 1550, y: 21},
                 {x : 1625, y: 24},
@@ -51,7 +50,6 @@ $(window).load(function () {
                 {x : 1725, y: 7},
                 {x : 1775, y: 4},
                 {x : 1812, y: 2},
-                {x : 1837, y: 5},
                 {x : 1862, y: 0.9},
                 {x : 1887, y: 1.5},
                 {x : 1912, y: 1.7},
@@ -100,7 +98,6 @@ $(window).load(function () {
                 {x : 1450, y: 73},
                 {x : 1550, y: 47},
                 {x : 1625, y: 32},
-                {x : 1675, y: 29},
                 {x : 1725, y: 12},
                 {x : 1775, y: 9},
                 {x : 1812, y: 18},
@@ -133,9 +130,7 @@ $(window).load(function () {
         var graph_source_code = 'https://github.com/kmclaugh/Better_Angels_Project/tree/master/Homocide_Rates_for_Western_Europe_and_Prestate_Societies';
         var graph_note = '<sup>1</sup>Nonstate Average is a geometric mean of 26 societies, not including Semai, Inuit, and !Kung</br>';
         graph_note += '<sup>2</sup>European Average is a geometric mean of five regions with missing data interpolated.';
-        var better_angels_source = '<a href="https://books.google.com/books?id=J7ATQb6LZX0C&lpg=PT80&ots=6AVqdCI9oK&dq=Note%3A%20This%20graph%20is%20Figure%202%20in%20Eisner%20(2003)&pg=PT81#v=onepage&q=Note:%20This%20graph%20is%20Figure%202%20in%20Eisner%20(2003)&f=false" target="_blank">Figure 3-3, Pinker, Steven (2011-10-04). The Better Angels of Our Nature: Why Violence Has Declined. Penguin Group US. Page: 63, Kindle Location 1629-1630</a>';
-        var original_data_source = '<a href="https://soci.ucalgary.ca/brannigan/sites/soci.ucalgary.ca.brannigan/files/long-term-historical-trends-of-violent-crime.pdf#page=13" target="_blank">European Data: Figure 2 in Eisner (2003) – Long-Term Historical Trends in Violent Crime. In Crime and Justice, 30, 83.</a>';
-        var data_source = '<p>' + better_angels_source + '</p><p>' + original_data_source + '</p>';
+        var data_source = '<strong><i>The Better Angels of Our Nature</i> Sources:</strong> <p> European Data: </p> <p> <a href="https://books.google.com/books?id=J7ATQb6LZX0C&lpg=PT80&dq=%22FIGURE%203%E2%80%93%203.%20Homicide%20rates%20in%20five%20Western%20European%20regions%2C%201300%E2%80%93%202000%22&pg=PT81#v=onepage&q=%22FIGURE%203%E2%80%93%203.%20Homicide%20rates%20in%20five%20Western%20European%20regions,%201300%E2%80%93%202000%22&f=false" target="_blank"> Figure 3-3 in The Better Angels of Our Nature. Page 63, Kindle Location 1629. </a> </p> <p> <a href="https://books.google.com/books?id=J7ATQb6LZX0C&lpg=PT82&dq=%22FIGURE%203%E2%80%93%204.%20Homicide%20rates%20in%20Western%20Europe%2C%201300%E2%80%93%202000%22&pg=PT82#v=onepage&q=%22FIGURE%203%E2%80%93%204.%20Homicide%20rates%20in%20Western%20Europe,%201300%E2%80%93%202000%22&f=false" target="_blank"> Figure 3-4 in The Better Angels of Our Nature. Page 64, Kindle Location 1649. </a> </p> <p> Non-state Data: </p> <p> <a href="https://books.google.com/books?id=J7ATQb6LZX0C&lpg=PT82&dq=%22FIGURE%203%E2%80%93%204.%20Homicide%20rates%20in%20Western%20Europe%2C%201300%E2%80%93%202000%22&pg=PT82#v=onepage&q=%22FIGURE%203%E2%80%93%204.%20Homicide%20rates%20in%20Western%20Europe,%201300%E2%80%93%202000%22&f=false" target="_blank"> Figure 2-3 in The Better Angels of Our Nature. Page 53, Kindle Location 1459. </a> </p> <p> <a href="https://books.google.com/books?id=J7ATQb6LZX0C&lpg=PT82&dq=%22FIGURE%203%E2%80%93%204.%20Homicide%20rates%20in%20Western%20Europe%2C%201300%E2%80%93%202000%22&pg=PT82#v=onepage&q=%22FIGURE%203%E2%80%93%204.%20Homicide%20rates%20in%20Western%20Europe,%201300%E2%80%93%202000%22&f=false" target="_blank"> Figure 2-4 in The Better Angels of Our Nature. Page 55, Kindle Location 1503. </a> </p> <p> <strong>Original Sources:</strong> </p> <p> European Data: </p> <p> 1300-1984 from <a href="https://soci.ucalgary.ca/brannigan/sites/soci.ucalgary.ca.brannigan/files/long-term-historical-trends-of-violent-crime.pdf#page=13" target="_blank"> Table 1 in Manual Eisner (2003) - Long-Term Historical Trends in Violent Crime. In Crime and Justice. Page 99. </a> </p> <p> 2010 from <a href="http://www.unodc.org/gsh/en/data.html" target="_blank"> Homicide counts and rates, time series 2000-2012. By United Nations Office on Drugs and Crime. </a> </p> <p> <i>via:</i> <a href="http://ourworldindata.org/data/violence-rights/homicides/#homicide-rates-in-five-western-european-regions-1300-2010-max-roserref" target="_blank"> Max Roser (2015) - "Homicides". At OurWorldInData.org. </a> </p> <p> Non-state Data: </p> <p> Kung! and Inuit from <a href="http://www.amazon.com/War-Human-Civilization-Azar-Gat-ebook/dp/B006QV81C6/ref=mt_kindle?_encoding=UTF8&me=" target="_blank"> Azar Gat (2008) - War in Human Civilization. </a> </p> <p> Semai and average from <a href="http://www.amazon.com/War-before-Civilization-Lawrence-Keeley-ebook/dp/B005JC0PTK/ref=mt_kindle?_encoding=UTF8&me=" target="_blank"> Keeley (1997) - War Before Civilization: The Myth of the Peaceful Savage. </a> </p> <p> <i>via:</i> <a href="http://ourworldindata.org/data/violence-rights/ethnographic-and-archaeological-evidence-on-violent-deaths/#rate-of-violent-deaths-in-non-state-societies-max-roserref" target="_blank"> Max Roser (2015) - "Rate of Violent Deaths in State and Non-State Societies". At OurWorldInData.org. </a> </p>';
         var graph_title = 'Homocide Rates for Western Europe and Prestate Societies'
         var graph_decription = 'Long term homocide rates for Western Europe 1300-200 compared to prestate societies'
         var image = 'homocide_rates.png';
@@ -489,9 +484,13 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
         self.source_row.append('<div class="col-xs-6 col-sm-3"><a class="source code" target="_blank" href='+self.source_code+'>Source Code</a></div>');
         
         //Downloads
-        var modal_header = '<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Downloads</h4></div>';
         var image_link = '<a href="'+self.image+'" download>static image</a>'
-        var modal_body = '<div class="modal-body"><p>'+image_link+'</p></div>';
+        var json_data = JSON.stringify(self.data);
+        var json_link = '<a href="data:text/json;charset=utf-8,'+encodeURIComponent(json_data)+'" download="data.json"" target="_blank">JSON data</a>';
+        var csv_link = '<a href="Homocide_Rate.csv" download>CSV Data</a>';
+        
+        var modal_header = '<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Downloads</h4></div>';
+        var modal_body = '<div class="modal-body"><p>'+image_link+'</p><p>'+json_link+'</p><p>'+csv_link+'</p></div>';
         var modal = '<div class="modal fade" id="downloads_modal_'+self.graph_container_id+'" role="dialog"><div class="modal-dialog"><div class="modal-content">'+modal_header+modal_body+'</div></div>';
         self.downloads_modal = $('#downloads_modal_'+self.graph_container_id);
         self.source_row.append('<div class="col-xs-6 col-sm-3"><a id=downloads_link_'+self.graph_container_id+' data-toggle="modal" data-target="#downloads_modal_'+self.graph_container_id+'">Downloads</a></div>'+modal);
@@ -534,4 +533,77 @@ function order_of_magnitude(n) {
     var order = Math.floor(Math.log(n) / Math.LN10
                        + 0.000000001); // because float math sucks like that
     return Math.pow(10,order);
+}
+
+function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
+    //If JSONData is not an object then JSON.parse will parse the JSON string in an Object
+    var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+    
+    var CSV = '';    
+    //Set Report title in first row or line
+    
+    CSV += ReportTitle + '\r\n\n';
+
+    //This condition will generate the Label/Header
+    if (ShowLabel) {
+        var row = "";
+        
+        //This loop will extract the label from 1st index of on array
+        for (var index in arrData[0]) {
+            
+            //Now convert each value to string and comma-seprated
+            row += index + ',';
+        }
+
+        row = row.slice(0, -1);
+        
+        //append Label row with line break
+        CSV += row + '\r\n';
+    }
+    
+    //1st loop is to extract each row
+    for (var i = 0; i < arrData.length; i++) {
+        var row = "";
+        
+        //2nd loop will extract each column and convert it in string comma-seprated
+        for (var index in arrData[i]) {
+            row += '"' + arrData[i][index] + '",';
+        }
+
+        row.slice(0, row.length - 1);
+        
+        //add a line break after each row
+        CSV += row + '\r\n';
+    }
+
+    if (CSV == '') {        
+        alert("Invalid data");
+        return;
+    }   
+    
+    //Generate a file name
+    var fileName = "MyReport_";
+    //this will remove the blank-spaces from the title and replace it with an underscore
+    fileName += ReportTitle.replace(/ /g,"_");   
+    
+    //Initialize file format you want csv or xls
+    var uri = 'data:text/csv;charset=utf-8,' + escape(CSV);
+    
+    // Now the little tricky part.
+    // you can use either>> window.open(uri);
+    // but this will not work in some browsers
+    // or you will not get the correct file extension    
+    
+    //this trick will generate a temp <a /> tag
+    var link = document.createElement("a");    
+    link.href = uri;
+    
+    //set the visibility hidden so it will not effect on your web-layout
+    link.style = "visibility:hidden";
+    link.download = fileName + ".csv";
+    
+    //this part will append the anchor tag and remove it after automatic click
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
