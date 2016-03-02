@@ -29,21 +29,28 @@ $(window).load(function () {
         
         //When the window resizes, resize the graph
         $( window ).resize(function() {
-            compare_graph.resize();
+            worst_atrocities_graph.resize();
         });
         
         $('#change_graph').click(function(){
-            compare_graph.update_data();
+            worst_atrocities_graph.update_data();
         })
         
         //Init the graph
-        var compare_graph = new compare_graph_class(the_data, 'worst_atrocities_graph');
-        compare_graph.draw();
+        var graph_source_code = 'https://github.com/kmclaugh/Better_Angels_Project/tree/master/21_Worst_Atrocities';
+        var graph_note = 'Pinker: "Each death toll is the median or mode of the figures cited in a large number of histories and encyclopedias. They include not just deaths on the battlefield but indirect deaths of civilians from starvation and disease; they are thus considerably higher than estimates of battlefield casualties, though consistently so for both recent and ancient events."'
+        var data_source = '<strong><i>The Better Angels of Our Nature</i> Source:</strong> <p> <a href="https://books.google.com/books?id=J7ATQb6LZX0C&lpg=PT224&ots=6AVqfDE3pN&dq=High-throughput%20massacre%20was%20also%20perfected&pg=PT223#v=onepage&q=High-throughput%20massacre%20was%20also%20perfected&f=false" target="_blank"> 21 Worst Atrocities Table in The Better Angels of Our Nature. Page 195, Kindle Location 4436. </a> </p> <p> <strong>Original Source:</strong> </p> <p> <a href="http://necrometrics.com/pre1700a.htm" target="_blank"> Matthew White 2012 - "(Possibly) The Twenty (or so) Worst Things People Have Done to Each Other". At necrometrics.com. </a> </p>'
+        var graph_title = '21 Worst Atrocities - Absolute Death Toll'
+        var graph_decription = '21 worst recorded atrocities in human history by absolute and 1950 equivalent death tolls'
+        var image = 'Worst_Atrocities_Bar_Graph.png';
+        var csv_file = '21_Worst_Atrocisties.csv';
+        var worst_atrocities_graph = new worst_atrocities_graph_class(the_data, 'worst_atrocities_graph', graph_title, graph_note, graph_source_code, data_source, graph_decription, image, csv_file);
+        worst_atrocities_graph.draw();
     });
 });
 
-function compare_graph_class(the_data, graph_container_id){
-    /*Class for the compare graph*/
+function worst_atrocities_graph_class(the_data, graph_container_id, title_text, notes, source_code, data_source, description, image, csv_file){
+    /*Class for the worst atrocities graph*/
     
     var self = this;
     self.margin = {
@@ -56,53 +63,60 @@ function compare_graph_class(the_data, graph_container_id){
     self.data = the_data;
     self.graph_container_id = graph_container_id;
     self.graph_element = $('#'+self.graph_container_id);
+    self.title_text = title_text;
+    self.notes = notes;
+    self.source_code = source_code;
+    self.data_source = data_source;
+    self.description = description;
+    self.image = image;
+    self.csv_file = csv_file
 
     self.update_data = function(){
         /*Switches the data from absolute to relative dataset or visa-versa*/
             
-            //change to relative
-            if (self.current_data == 'death_total') {
-                self.current_data = 'relative';
-                
-                //Update the y axis
-                self.yRange.domain([0, 450]);
-                self.yAxis.scale(self.yRange);
-                self.y_axis
-                    .transition()
-                    .call(self.yAxis);
-                
-                //Update the bars with the new data
-                self.svg.selectAll("rect")
-                    .data(self.data)
-                    .transition()
-                    .attr("y", function(d) { return self.y_data_function(d); })
-                    .attr("height", function(d) { return self.height - self.y_data_function(d)});
-                
-                //Update the graph title
-                //self.graph_title.text('Death Toll - 1950 Equivalent');
-            }
+        //change to relative
+        if (self.current_data == 'death_total') {
+            self.current_data = 'relative';
             
-            //change to absolute
-            else if (self.current_data == 'relative') {
-                self.current_data = 'death_total';
-                
-                //Update the y axis
-                self.yRange.domain([0, 55]);
-                self.yAxis.scale(self.yRange);
-                self.y_axis
-                    .transition()
-                    .call(self.yAxis);
-                
-                //Update the bars with the new data
-                self.svg.selectAll("rect")
-                    .data(self.data)
-                    .transition()
-                    .attr("y", function(d) { return self.y_data_function(d); })
-                    .attr("height", function(d) { return self.height - self.y_data_function(d)});
-                
-                //Update the graph title
-                //self.graph_title.text('Absolute Death Toll');
-            }
+            //Update the y axis
+            self.yRange.domain([0, 450]);
+            self.yAxis.scale(self.yRange);
+            self.y_axis
+                .transition()
+                .call(self.yAxis);
+            
+            //Update the bars with the new data
+            self.svg.selectAll("rect")
+                .data(self.data)
+                .transition()
+                .attr("y", function(d) { return self.y_data_function(d); })
+                .attr("height", function(d) { return self.height - self.y_data_function(d)});
+            
+            //Update the graph title
+            self.title.text('21 Worst Atrocities - 1950 Equivalent Death Toll');
+        }
+        
+        //change to absolute
+        else if (self.current_data == 'relative') {
+            self.current_data = 'death_total';
+            
+            //Update the y axis
+            self.yRange.domain([0, 55]);
+            self.yAxis.scale(self.yRange);
+            self.y_axis
+                .transition()
+                .call(self.yAxis);
+            
+            //Update the bars with the new data
+            self.svg.selectAll("rect")
+                .data(self.data)
+                .transition()
+                .attr("y", function(d) { return self.y_data_function(d); })
+                .attr("height", function(d) { return self.height - self.y_data_function(d)});
+            
+            //Update the graph title
+            self.title.text('21 Worst Atrocities - Absolute Death Toll');
+        }
     }
     
     self.resize = function(){
@@ -238,7 +252,9 @@ function compare_graph_class(the_data, graph_container_id){
                 .attr("x", function(d) { return self.xRange([d.Cause, d.Century_String]); })
                 .attr("width", self.xRange.rangeBand())
                 .attr("y", function(d) { return self.y_data_function(d); })
-                .attr("height", function(d) { return self.height - self.y_data_function(d)});   
+                .attr("height", function(d) { return self.height - self.y_data_function(d)});
+        
+        create_graph_title_footer(self);
     
     }//End draw graph
     

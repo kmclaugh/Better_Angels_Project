@@ -5,7 +5,8 @@ function create_graph_title_footer(graph_object){
     //Create Graph Title
     graph_object.graph_element.prepend('<div class="row title_row" id=title_row_'+graph_object.graph_container_id+'>');
     graph_object.title_row = $('#title_row_'+graph_object.graph_container_id);
-    graph_object.title_row.prepend('<div class="graph_title">'+graph_object.title_text+'</div>');
+    graph_object.title_row.prepend('<div class="graph_title" id="title_'+graph_object.graph_container_id+'">'+graph_object.title_text+'</div>');
+    graph_object.title = $('#title_'+graph_object.graph_container_id);
     
     //Create Graph Notes, Sources
     graph_object.graph_element.append('<div class="row source_row" id=source_row_'+graph_object.graph_container_id+'>');
