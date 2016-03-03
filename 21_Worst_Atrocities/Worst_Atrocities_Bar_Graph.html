@@ -30,21 +30,9 @@
         <title>21 Worst Atrocities</title>
         
         <style>
-            
-            .axis path, .axis line
-            {
-                fill: none;
-                stroke: #777;
-                shape-rendering: crispEdges;
-            }
-            
-            .tick
-            {
-                stroke-dasharray: 1, 2;
-            }
             .bar
             {
-                fill: #EB1515;
+                fill: #8A0707;
             }
             
             @media (min-width: 10px) {
@@ -52,25 +40,19 @@
                     font-family: 'Arial';
                     font-size: 10px;
                 }
-                #graph_title{
-                    font-size: 14px;
-                }
             }
             @media (min-width: 400px) {
                 .axis text{
                     font-family: 'Arial';
                     font-size: 13px;
                 }
-                #graph_title{
-                    font-size: 16px;
-                }
             }
         </style>
     </head>
     <body>
         <div class="container">
-            <div class='row'>
-                <button type="button" id='change_graph'>Relative</button>
+            <div class='row text-center' style='margin-top: 10px;'>
+                <button class="btn btn-primary" type="button" id='change_releative_absolute'>Switch to 1950 Equivalent</button>
             </div>
             <div class='row'>
                 <div class='col-xs-12 graph_column'>

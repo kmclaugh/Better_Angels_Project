@@ -32,7 +32,7 @@ $(window).load(function () {
             worst_atrocities_graph.resize();
         });
         
-        $('#change_graph').click(function(){
+        $('#change_releative_absolute').click(function(){
             worst_atrocities_graph.update_data();
         })
         
@@ -73,10 +73,14 @@ function worst_atrocities_graph_class(the_data, graph_container_id, title_text, 
 
     self.update_data = function(){
         /*Switches the data from absolute to relative dataset or visa-versa*/
-            
+        
         //change to relative
         if (self.current_data == 'death_total') {
             self.current_data = 'relative';
+            
+            //change the button
+            $('#change_releative_absolute').text('Switch to Absolute');
+            
             
             //Update the y axis
             self.yRange.domain([0, 450]);
@@ -99,6 +103,9 @@ function worst_atrocities_graph_class(the_data, graph_container_id, title_text, 
         //change to absolute
         else if (self.current_data == 'relative') {
             self.current_data = 'death_total';
+            
+            //change the button
+            $('#change_releative_absolute').text('Switch to 1950 Equivalent');
             
             //Update the y axis
             self.yRange.domain([0, 55]);
