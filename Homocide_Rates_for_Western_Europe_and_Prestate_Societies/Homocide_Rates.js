@@ -1,3 +1,4 @@
+var line_graph;
 
 $(window).load(function () {
     
@@ -125,6 +126,9 @@ $(window).load(function () {
         $(document).on("click", '#log_scale_homocide_rates_graph', function() {
             line_graph.toggle_scale();
         });
+        $(document).on("click", '#save', function() {
+            save_graph_object_to_image(line_graph, 1170, 500)
+        });
         
         //Init the graph
         var graph_source_code = 'https://github.com/kmclaugh/Better_Angels_Project/tree/master/Homocide_Rates_for_Western_Europe_and_Prestate_Societies';
@@ -133,10 +137,12 @@ $(window).load(function () {
         var data_source = '<strong><i>The Better Angels of Our Nature</i> Sources:</strong> <p> European Data: </p> <p> <a href="https://books.google.com/books?id=J7ATQb6LZX0C&lpg=PT80&dq=%22FIGURE%203%E2%80%93%203.%20Homicide%20rates%20in%20five%20Western%20European%20regions%2C%201300%E2%80%93%202000%22&pg=PT81#v=onepage&q=%22FIGURE%203%E2%80%93%203.%20Homicide%20rates%20in%20five%20Western%20European%20regions,%201300%E2%80%93%202000%22&f=false" target="_blank"> Figure 3-3 in The Better Angels of Our Nature. Page 63, Kindle Location 1629. </a> </p> <p> <a href="https://books.google.com/books?id=J7ATQb6LZX0C&lpg=PT82&dq=%22FIGURE%203%E2%80%93%204.%20Homicide%20rates%20in%20Western%20Europe%2C%201300%E2%80%93%202000%22&pg=PT82#v=onepage&q=%22FIGURE%203%E2%80%93%204.%20Homicide%20rates%20in%20Western%20Europe,%201300%E2%80%93%202000%22&f=false" target="_blank"> Figure 3-4 in The Better Angels of Our Nature. Page 64, Kindle Location 1649. </a> </p> <p> Non-state Data: </p> <p> <a href="https://books.google.com/books?id=J7ATQb6LZX0C&lpg=PT82&dq=%22FIGURE%203%E2%80%93%204.%20Homicide%20rates%20in%20Western%20Europe%2C%201300%E2%80%93%202000%22&pg=PT82#v=onepage&q=%22FIGURE%203%E2%80%93%204.%20Homicide%20rates%20in%20Western%20Europe,%201300%E2%80%93%202000%22&f=false" target="_blank"> Figure 2-3 in The Better Angels of Our Nature. Page 53, Kindle Location 1459. </a> </p> <p> <a href="https://books.google.com/books?id=J7ATQb6LZX0C&lpg=PT82&dq=%22FIGURE%203%E2%80%93%204.%20Homicide%20rates%20in%20Western%20Europe%2C%201300%E2%80%93%202000%22&pg=PT82#v=onepage&q=%22FIGURE%203%E2%80%93%204.%20Homicide%20rates%20in%20Western%20Europe,%201300%E2%80%93%202000%22&f=false" target="_blank"> Figure 2-4 in The Better Angels of Our Nature. Page 55, Kindle Location 1503. </a> </p> <p> <strong>Original Sources:</strong> </p> <p> European Data: </p> <p> 1300-1984 from <a href="https://soci.ucalgary.ca/brannigan/sites/soci.ucalgary.ca.brannigan/files/long-term-historical-trends-of-violent-crime.pdf#page=13" target="_blank"> Table 1 in Manual Eisner (2003) - Long-Term Historical Trends in Violent Crime. In Crime and Justice. Page 99. </a> </p> <p> 2010 from <a href="http://www.unodc.org/gsh/en/data.html" target="_blank"> Homicide counts and rates, time series 2000-2012. By United Nations Office on Drugs and Crime. </a> </p> <p> <i>via:</i> <a href="http://ourworldindata.org/data/violence-rights/homicides/#homicide-rates-in-five-western-european-regions-1300-2010-max-roserref" target="_blank"> Max Roser (2015) - "Homicides". At OurWorldInData.org. </a> </p> <p> Non-state Data: </p> <p> Kung! and Inuit from <a href="http://www.amazon.com/War-Human-Civilization-Azar-Gat-ebook/dp/B006QV81C6/ref=mt_kindle?_encoding=UTF8&me=" target="_blank"> Azar Gat (2008) - War in Human Civilization. </a> </p> <p> Semai and average from <a href="http://www.amazon.com/War-before-Civilization-Lawrence-Keeley-ebook/dp/B005JC0PTK/ref=mt_kindle?_encoding=UTF8&me=" target="_blank"> Keeley (1997) - War Before Civilization: The Myth of the Peaceful Savage. </a> </p> <p> <i>via:</i> <a href="http://ourworldindata.org/data/violence-rights/ethnographic-and-archaeological-evidence-on-violent-deaths/#rate-of-violent-deaths-in-non-state-societies-max-roserref" target="_blank"> Max Roser (2015) - "Rate of Violent Deaths in State and Non-State Societies". At OurWorldInData.org. </a> </p>';
         var graph_title = 'Homocide Rates for Western Europe and Prestate Societies'
         var graph_decription = 'Long term homocide rates for Western Europe 1300-200 compared to prestate societies'
+        var graph_slug = 'Homocide_Rates_for_Western_Europe_and_Prestate_Societies';
         var image = 'homocide_rates.png';
         var csv_file = 'Homocide_Rate.csv';
-        var line_graph = new line_graph_class(the_data, 'homocide_rates_graph', graph_title, graph_note, graph_source_code, data_source, graph_decription, image, csv_file);
+        line_graph = new line_graph_class(the_data, 'homocide_rates_graph', graph_title, graph_slug, graph_note, graph_source_code, data_source, graph_decription, image, csv_file);
         line_graph.draw();
+        save_graph_object_to_image(line_graph, 1170, 500)
     });
 });
 
@@ -151,7 +157,7 @@ function add_class(object, class_to_add){
     object.attr('class', new_classes);
 }
 
-function line_graph_class(the_data, graph_container_id, title_text, notes, source_code, data_source, description, image, csv_file){
+function line_graph_class(the_data, graph_container_id, title_text, slug, notes, source_code, data_source, description, image, csv_file){
     /*Class for the line graph*/
     
     var self = this;
@@ -162,6 +168,7 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
         left: 50
     };
     self.current_scale = 'log';
+    self.slug = slug;
     self.data = the_data;
     self.graph_container_id = graph_container_id;
     self.graph_element = $('#'+self.graph_container_id);
@@ -172,6 +179,10 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
     self.description = description;
     self.image = image;
     self.csv_file = csv_file
+    
+    this.update_self = function(){
+        self = this;
+    }
 
     self.toggle_scale = function(){
         if (self.current_scale == 'log'){
@@ -331,10 +342,11 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
         
         //Get the graph dimensions
         set_graph_dimensions(self);
-        
+        console.log(self.graph_container_id)
         //Create Graph SVG
         self.svg = d3.select('#'+self.graph_container_id)
             .append("svg")
+                .attr('id', 'svg_'+self.graph_container_id)
                 .attr("width", self.width + self.margin.left + self.margin.right)
                 .attr("height", self.height + self.margin.top + self.margin.bottom);
         
@@ -344,9 +356,17 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
                     
         self.xRange = d3.scale.linear()
             .range([0, self.width]);
-          
-        self.yRange = d3.scale.log().nice()
-            .range([self.height, 0]);
+        
+        if (self.current_scale == 'log') {
+             self.yRange = d3.scale.log()
+                .range([self.height, 0])
+                .domain([0.1, d3.max(self.data, function(d) {return self.find_max_y(d, self.current_scale)})]);
+        }
+        else if (self.current_scale == 'linear') {
+            self.yRange = d3.scale.linear()
+                .range([self.height, 0])
+                .domain([0,d3.max(self.data, function(d) {return self.find_max_y(d, self.current_scale)})]);
+        }
         
         self.xAxis = d3.svg.axis()
             .scale(self.xRange)
@@ -363,11 +383,6 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
         self.xRange.domain([
             1200,
             2020
-        ]);
-        
-        self.yRange.domain([
-            0.1,
-            d3.max(self.data, function(d) {return self.find_max_y(d, self.current_scale)})
         ]);
         
         /*Add axis elements*/
@@ -475,6 +490,16 @@ function line_graph_class(the_data, graph_container_id, title_text, notes, sourc
             max = order_of_magnitude(max) * 10;//set the max to next highest order of magnitude
         }
         return max;
+    }
+};
+
+var svg_cssRules = {
+    'propertyGroups' : {
+        'block' : ['margin', 'padding'],
+        'inline' : ['accent-height', 'accumulate', 'additive', 'alignment-baseline', 'allowReorder', 'alphabetic', 'amplitude', 'arabic-form', 'ascent', 'attributeName', 'attributeType', 'autoReverse', 'azimuth', 'baseFrequency', 'baseline-shift', 'baseProfile', 'bbox', 'begin', 'bias', 'by', 'calcMode', 'cap-height', 'class', 'clip', 'clipPathUnits', 'clip-path', 'clip-rule', 'color', 'color-interpolation', 'color-interpolation-filters', 'color-profile', 'color-rendering', 'contentScriptType', 'contentStyleType', 'cursor', 'cx', 'cy', 'd', 'decelerate', 'descent', 'diffuseConstant', 'direction', 'display', 'divisor', 'dominant-baseline', 'dur', 'dx', 'dy', 'edgeMode', 'elevation', 'enable-background', 'end', 'exponent', 'externalResourcesRequired', 'fill', 'fill-opacity', 'fill-rule', 'filter', 'filterRes', 'filterUnits', 'flood-color', 'flood-opacity', 'font-family', 'font-size', 'font-size-adjust', 'font-stretch', 'font-style', 'font-variant', 'font-weight', 'format', 'from', 'fx', 'fy', 'g1', 'g2', 'glyph-name', 'glyph-orientation-horizontal', 'glyph-orientation-vertical', 'glyphRef', 'gradientTransform', 'gradientUnits', 'hanging', 'height', 'horiz-adv-x', 'horiz-origin-x', 'id', 'ideographic', 'image-rendering', 'in', 'in2', 'intercept', 'k', 'k1', 'k2', 'k3', 'k4', 'kernelMatrix', 'kernelUnitLength', 'kerning', 'keyPoints', 'keySplines', 'keyTimes', 'lang', 'lengthAdjust', 'letter-spacing', 'lighting-color', 'limitingConeAngle', 'local', 'marker-end', 'marker-mid', 'marker-start', 'markerHeight', 'markerUnits', 'markerWidth', 'mask', 'maskContentUnits', 'maskUnits', 'mathematical', 'max', 'media', 'method', 'min', 'mode', 'name', 'numOctaves', 'offset', 'onabort', 'onactivate', 'onbegin', 'onclick', 'onend', 'onerror', 'onfocusin', 'onfocusout', 'onload', 'onmousedown', 'onmousemove', 'onmouseout', 'onmouseover', 'onmouseup', 'onrepeat', 'onresize', 'onscroll', 'onunload', 'onzoom', 'opacity', 'operator', 'order', 'orient', 'orientation', 'origin', 'overflow', 'overline-position', 'overline-thickness', 'panose-1', 'paint-order', 'pathLength', 'patternContentUnits', 'patternTransform', 'patternUnits', 'pointer-events', 'points', 'pointsAtX', 'pointsAtY', 'pointsAtZ', 'preserveAlpha', 'preserveAspectRatio', 'primitiveUnits', 'r', 'radius', 'refX', 'refY', 'rendering-intent', 'repeatCount', 'repeatDur', 'requiredExtensions', 'requiredFeatures', 'restart', 'result', 'rotate', 'rx', 'ry', 'scale', 'seed', 'shape-rendering', 'slope', 'spacing', 'specularConstant', 'specularExponent', 'speed', 'spreadMethod', 'startOffset', 'stdDeviation', 'stemh', 'stemv', 'stitchTiles', 'stop-color', 'stop-opacity', 'strikethrough-position', 'strikethrough-thickness', 'string', 'stroke', 'stroke-dasharray', 'stroke-dashoffset', 'stroke-linecap', 'stroke-linejoin', 'stroke-miterlimit', 'stroke-opacity', 'stroke-width', 'style', 'surfaceScale', 'systemLanguage', 'tableValues', 'target', 'targetX', 'targetY', 'text-anchor', 'text-decoration', 'text-rendering', 'textLength', 'to', 'transform', 'type', 'u1', 'u2', 'underline-position', 'underline-thickness', 'unicode', 'unicode-bidi', 'unicode-range', 'units-per-em', 'v-alphabetic', 'v-hanging', 'v-ideographic', 'v-mathematical', 'values', 'version', 'vert-adv-y', 'vert-origin-x', 'vert-origin-y', 'viewBox', 'viewTarget', 'visibility', 'width', 'widths', 'word-spacing', 'writing-mode', 'x', 'x-height', 'x1', 'x2', 'xChannelSelector', 'xlink:actuate', 'xlink:arcrole', 'xlink:href', 'xlink:role', 'xlink:show', 'xlink:title', 'xlink:type', 'xml:base', 'xml:lang', 'xml:space', 'y', 'y1', 'y2', 'yChannelSelector', 'z', 'zoomAndPan']
+    },
+    'elementGroups' : {
+        'inline' : ['a', 'altGlyph', 'altGlyphDef', 'altGlyphItem', 'animate', 'animateColor', 'animateMotion', 'animateTransform', 'circle', 'clipPath', 'color-profile', 'cursor', 'defs', 'desc', 'ellipse', 'feBlend', 'feColorMatrix', 'feComponentTransfer', 'feComposite', 'feConvolveMatrix', 'feDiffuseLighting', 'feDisplacementMap', 'feDistantLight', 'feFlood', 'feFuncA', 'feFuncB', 'feFuncG', 'feFuncR', 'feGaussianBlur', 'feImage', 'feMerge', 'feMergeNode', 'feMorphology', 'feOffset', 'fePointLight', 'feSpecularLighting', 'feSpotLight', 'feTile', 'feTurbulence', 'filter', 'font', 'font-face', 'font-face-format', 'font-face-name', 'font-face-src', 'font-face-uri', 'foreignObject', 'g', 'glyph', 'glyphRef', 'hkern', 'image', 'line', 'linearGradient', 'marker', 'mask', 'metadata', 'missing-glyph', 'mpath', 'path', 'pattern', 'polygon', 'polyline', 'radialGradient', 'rect', 'script', 'set', 'stop', 'style', 'svg', 'switch', 'symbol', 'text', 'textPath', 'title', 'tref', 'tspan', 'use', 'view', 'vkern']
     }
 }
 
