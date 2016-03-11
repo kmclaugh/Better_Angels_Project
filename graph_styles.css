@@ -78,6 +78,10 @@ body {
     text-align: left;
     font-style: normal;
 }
+.display_source_row{
+    padding-top: 10px;
+    padding-left: 35px;
+}
 .data_tip{
     background-color: white;
     border: solid;
