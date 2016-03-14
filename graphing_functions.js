@@ -62,8 +62,7 @@ function save_graph_object_to_image(graph_object, image_width, image_height){
 
     //resize the window and graph to get a better size image
     var viewport_tag = $('#viewport_tag')[0].outerHTML;
-    $('#viewport_tag').remove();
-    //$('#viewport_tag').attr('content', 'width='+image_width+1+' initial-scale=0, maximum-scale=1.0, minimum-scale=0.25, user-scalable=yes')
+    $('#viewport_tag').attr('content', 'width='+image_width+1+' initial-scale=0, maximum-scale=1.0, minimum-scale=0.25, user-scalable=yes')
     $('.container').attr('style', 'width: '+image_width+'px; max-width: none!important; height: '+image_height+'px;');
     
     //Set the width
@@ -80,6 +79,7 @@ function save_graph_object_to_image(graph_object, image_width, image_height){
     save_graph_to_image(graph_object.graph_element, graph_object.slug, image_width, image_height);
     
     //Return the window and graph to their original size
+    $('#viewport_tag').remove();
     $('head').prepend(viewport_tag);
     $('.container').attr('style', '');
     graph_object.graph_element.parent().css('width', '');

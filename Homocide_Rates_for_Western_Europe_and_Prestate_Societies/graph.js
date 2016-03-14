@@ -142,7 +142,6 @@ $(window).load(function () {
         var csv_file = 'data.csv';
         line_graph = new line_graph_class(the_data, 'homocide_rates_graph', graph_title, graph_slug, graph_note, graph_source_code, data_source, graph_decription, image, csv_file, false, false);
         line_graph.draw();
-        //save_graph_object_to_image(line_graph, 1170, 500)
     });
 });
 
