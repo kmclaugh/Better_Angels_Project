@@ -62,21 +62,29 @@ function save_graph_object_to_image(graph_object, image_width, image_height){
 
     //resize the window and graph to get a better size image
     var viewport_tag = $('#viewport_tag')[0].outerHTML;
-    console.log(viewport_tag)
     $('#viewport_tag').remove();
     //$('#viewport_tag').attr('content', 'width='+image_width+1+' initial-scale=0, maximum-scale=1.0, minimum-scale=0.25, user-scalable=yes')
-    $('.container').attr('style', 'width: '+image_width+'px; max-width: none!important; height: '+image_height+'px;')
+    $('.container').attr('style', 'width: '+image_width+'px; max-width: none!important; height: '+image_height+'px;');
+    
+    //Set the width
+    graph_object.graph_element.parent().width(image_width);
     graph_object.resize();
     toggle_source_display(graph_object);
     
+    //Set the height
+    var non_graph_height = graph_object.graph_element.height() - $('#svg_'+graph_object.graph_container_id).height();
+    graph_object.fixed_height = image_height - non_graph_height;
+    graph_object.resize();
+    
+    //Save the image
     save_graph_to_image(graph_object.graph_element, graph_object.slug, image_width, image_height);
     
     //Return the window and graph to their original size
-    //$('#viewport_tag').attr('content', stand_view);
-    //$('#viewport_tag').attr('name', 'viewport');
-    $('head').prepend(viewport_tag)
+    $('head').prepend(viewport_tag);
     $('.container').attr('style', '');
+    graph_object.graph_element.parent().css('width', '');
     toggle_source_display(graph_object);
+    graph_object.fixed_height = false;
     graph_object.resize();
 }
 
@@ -92,13 +100,20 @@ function toggle_source_display(graph_object){
     }
 }
 
-function set_graph_dimensions(graph_object, min_height){
-    /*Resets the higheth width and margins based on the containing width and height*/
-    var graph_container_width = graph_object.graph_element.width();
-    var graph_container_height = 500//graph_object.graph_element.height();
-    if (graph_container_height < min_height){
-        graph_container_height = min_height;
+function set_graph_dimensions(graph_object){
+    /*Resets the heighth, width and margins based on the containing width and height*/
+    var graph_container_height
+    if (graph_object.fixed_height == false){
+        graph_container_height = $( window ).height()*.75;
+        if (graph_object.min_height != false && graph_container_height < graph_object.min_height){
+            graph_container_height = graph_object.min_height;
+        }
     }
+    else {
+        graph_container_height = graph_object.fixed_height;
+    }
+    console.log('h', graph_container_height)
+    var graph_container_width = graph_object.graph_element.width();
     graph_object.width = graph_container_width - graph_object.margin.right - graph_object.margin.left;
     graph_object.height = graph_container_height - graph_object.margin.top - graph_object.margin.bottom;
 }

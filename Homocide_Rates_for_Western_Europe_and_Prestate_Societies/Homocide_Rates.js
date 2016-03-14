@@ -127,7 +127,7 @@ $(window).load(function () {
             line_graph.toggle_scale();
         });
         $(document).on("click", '#save', function() {
-            save_graph_object_to_image(line_graph, 1170, 500)
+            save_graph_object_to_image(line_graph, 1170, 500);
         });
         
         //Init the graph
@@ -140,8 +140,9 @@ $(window).load(function () {
         var graph_slug = 'Homocide_Rates_for_Western_Europe_and_Prestate_Societies';
         var image = 'homocide_rates.png';
         var csv_file = 'Homocide_Rate.csv';
-        line_graph = new line_graph_class(the_data, 'homocide_rates_graph', graph_title, graph_slug, graph_note, graph_source_code, data_source, graph_decription, image, csv_file);
+        line_graph = new line_graph_class(the_data, 'homocide_rates_graph', graph_title, graph_slug, graph_note, graph_source_code, data_source, graph_decription, image, csv_file, false, false);
         line_graph.draw();
+        //save_graph_object_to_image(line_graph, 1170, 500)
     });
 });
 
@@ -156,7 +157,7 @@ function add_class(object, class_to_add){
     object.attr('class', new_classes);
 }
 
-function line_graph_class(the_data, graph_container_id, title_text, slug, notes, source_code, data_source, description, image, csv_file){
+function line_graph_class(the_data, graph_container_id, title_text, slug, notes, source_code, data_source, description, image, csv_file, min_height, fixed_height){
     /*Class for the line graph*/
     
     var self = this;
@@ -177,7 +178,9 @@ function line_graph_class(the_data, graph_container_id, title_text, slug, notes,
     self.data_source = data_source;
     self.description = description;
     self.image = image;
-    self.csv_file = csv_file
+    self.csv_file = csv_file;
+    self.min_height = false;
+    self.fixed_height = false;
     
     this.update_self = function(){
         self = this;
@@ -341,7 +344,6 @@ function line_graph_class(the_data, graph_container_id, title_text, slug, notes,
         
         //Get the graph dimensions
         set_graph_dimensions(self);
-        console.log(self.graph_container_id)
         //Create Graph SVG
         self.svg = d3.select('#'+self.graph_container_id)
             .append("svg")
@@ -492,15 +494,6 @@ function line_graph_class(the_data, graph_container_id, title_text, slug, notes,
     }
 };
 
-var svg_cssRules = {
-    'propertyGroups' : {
-        'block' : ['margin', 'padding'],
-        'inline' : ['accent-height', 'accumulate', 'additive', 'alignment-baseline', 'allowReorder', 'alphabetic', 'amplitude', 'arabic-form', 'ascent', 'attributeName', 'attributeType', 'autoReverse', 'azimuth', 'baseFrequency', 'baseline-shift', 'baseProfile', 'bbox', 'begin', 'bias', 'by', 'calcMode', 'cap-height', 'class', 'clip', 'clipPathUnits', 'clip-path', 'clip-rule', 'color', 'color-interpolation', 'color-interpolation-filters', 'color-profile', 'color-rendering', 'contentScriptType', 'contentStyleType', 'cursor', 'cx', 'cy', 'd', 'decelerate', 'descent', 'diffuseConstant', 'direction', 'display', 'divisor', 'dominant-baseline', 'dur', 'dx', 'dy', 'edgeMode', 'elevation', 'enable-background', 'end', 'exponent', 'externalResourcesRequired', 'fill', 'fill-opacity', 'fill-rule', 'filter', 'filterRes', 'filterUnits', 'flood-color', 'flood-opacity', 'font-family', 'font-size', 'font-size-adjust', 'font-stretch', 'font-style', 'font-variant', 'font-weight', 'format', 'from', 'fx', 'fy', 'g1', 'g2', 'glyph-name', 'glyph-orientation-horizontal', 'glyph-orientation-vertical', 'glyphRef', 'gradientTransform', 'gradientUnits', 'hanging', 'height', 'horiz-adv-x', 'horiz-origin-x', 'id', 'ideographic', 'image-rendering', 'in', 'in2', 'intercept', 'k', 'k1', 'k2', 'k3', 'k4', 'kernelMatrix', 'kernelUnitLength', 'kerning', 'keyPoints', 'keySplines', 'keyTimes', 'lang', 'lengthAdjust', 'letter-spacing', 'lighting-color', 'limitingConeAngle', 'local', 'marker-end', 'marker-mid', 'marker-start', 'markerHeight', 'markerUnits', 'markerWidth', 'mask', 'maskContentUnits', 'maskUnits', 'mathematical', 'max', 'media', 'method', 'min', 'mode', 'name', 'numOctaves', 'offset', 'onabort', 'onactivate', 'onbegin', 'onclick', 'onend', 'onerror', 'onfocusin', 'onfocusout', 'onload', 'onmousedown', 'onmousemove', 'onmouseout', 'onmouseover', 'onmouseup', 'onrepeat', 'onresize', 'onscroll', 'onunload', 'onzoom', 'opacity', 'operator', 'order', 'orient', 'orientation', 'origin', 'overflow', 'overline-position', 'overline-thickness', 'panose-1', 'paint-order', 'pathLength', 'patternContentUnits', 'patternTransform', 'patternUnits', 'pointer-events', 'points', 'pointsAtX', 'pointsAtY', 'pointsAtZ', 'preserveAlpha', 'preserveAspectRatio', 'primitiveUnits', 'r', 'radius', 'refX', 'refY', 'rendering-intent', 'repeatCount', 'repeatDur', 'requiredExtensions', 'requiredFeatures', 'restart', 'result', 'rotate', 'rx', 'ry', 'scale', 'seed', 'shape-rendering', 'slope', 'spacing', 'specularConstant', 'specularExponent', 'speed', 'spreadMethod', 'startOffset', 'stdDeviation', 'stemh', 'stemv', 'stitchTiles', 'stop-color', 'stop-opacity', 'strikethrough-position', 'strikethrough-thickness', 'string', 'stroke', 'stroke-dasharray', 'stroke-dashoffset', 'stroke-linecap', 'stroke-linejoin', 'stroke-miterlimit', 'stroke-opacity', 'stroke-width', 'style', 'surfaceScale', 'systemLanguage', 'tableValues', 'target', 'targetX', 'targetY', 'text-anchor', 'text-decoration', 'text-rendering', 'textLength', 'to', 'transform', 'type', 'u1', 'u2', 'underline-position', 'underline-thickness', 'unicode', 'unicode-bidi', 'unicode-range', 'units-per-em', 'v-alphabetic', 'v-hanging', 'v-ideographic', 'v-mathematical', 'values', 'version', 'vert-adv-y', 'vert-origin-x', 'vert-origin-y', 'viewBox', 'viewTarget', 'visibility', 'width', 'widths', 'word-spacing', 'writing-mode', 'x', 'x-height', 'x1', 'x2', 'xChannelSelector', 'xlink:actuate', 'xlink:arcrole', 'xlink:href', 'xlink:role', 'xlink:show', 'xlink:title', 'xlink:type', 'xml:base', 'xml:lang', 'xml:space', 'y', 'y1', 'y2', 'yChannelSelector', 'z', 'zoomAndPan']
-    },
-    'elementGroups' : {
-        'inline' : ['a', 'altGlyph', 'altGlyphDef', 'altGlyphItem', 'animate', 'animateColor', 'animateMotion', 'animateTransform', 'circle', 'clipPath', 'color-profile', 'cursor', 'defs', 'desc', 'ellipse', 'feBlend', 'feColorMatrix', 'feComponentTransfer', 'feComposite', 'feConvolveMatrix', 'feDiffuseLighting', 'feDisplacementMap', 'feDistantLight', 'feFlood', 'feFuncA', 'feFuncB', 'feFuncG', 'feFuncR', 'feGaussianBlur', 'feImage', 'feMerge', 'feMergeNode', 'feMorphology', 'feOffset', 'fePointLight', 'feSpecularLighting', 'feSpotLight', 'feTile', 'feTurbulence', 'filter', 'font', 'font-face', 'font-face-format', 'font-face-name', 'font-face-src', 'font-face-uri', 'foreignObject', 'g', 'glyph', 'glyphRef', 'hkern', 'image', 'line', 'linearGradient', 'marker', 'mask', 'metadata', 'missing-glyph', 'mpath', 'path', 'pattern', 'polygon', 'polyline', 'radialGradient', 'rect', 'script', 'set', 'stop', 'style', 'svg', 'switch', 'symbol', 'text', 'textPath', 'title', 'tref', 'tspan', 'use', 'view', 'vkern']
-    }
-}
 
 function order_of_magnitude(n) {
     /*Return the order of magnitude of n*/
