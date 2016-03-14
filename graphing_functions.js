@@ -112,7 +112,6 @@ function set_graph_dimensions(graph_object){
     else {
         graph_container_height = graph_object.fixed_height;
     }
-    console.log('h', graph_container_height)
     var graph_container_width = graph_object.graph_element.width();
     graph_object.width = graph_container_width - graph_object.margin.right - graph_object.margin.left;
     graph_object.height = graph_container_height - graph_object.margin.top - graph_object.margin.bottom;
