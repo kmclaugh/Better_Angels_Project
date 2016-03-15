@@ -7,6 +7,7 @@ function create_graph_title_footer(graph_object){
     graph_object.title_row = $('#title_row_'+graph_object.graph_container_id);
     graph_object.title_row.prepend('<div class="graph_title" id="title_'+graph_object.graph_container_id+'">'+graph_object.title_text+'</div>');
     graph_object.title = $('#title_'+graph_object.graph_container_id);
+    //graph_object.title_row.prepend('<div class="logo"><img src="https://countingcalculi-assets.s3.amazonaws.com/images/Logo.jpg?Signature=PBrhsHY8BrmUIOMbAzxgBVTKZdg%3D&Expires=1458046360&AWSAccessKeyId=AKIAJCPXYV7BXAHR6XNQ"><span>Counting Calculi</span></div>');
     
     //Create Graph Notes, Sources
     graph_object.graph_element.append('<div class="row source_row" id=source_row_'+graph_object.graph_container_id+'>');
@@ -26,20 +27,25 @@ function create_graph_title_footer(graph_object){
     //Notes display
     graph_object.display_source_row.append('<p>'+graph_object.notes+'</p>');
     
+    copyright_string = '<p>&copy; Kevin McLaughlin under the <a href="https://creativecommons.org/licenses/by/3.0/us/" taget="_blank">CC BY 3.0 US</a> - feel free to share, just please refer to your source</p>';
+    
     //Data
     var modal_header = '<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Data Sources</h4></div>';
-    var modal_body = '<div class="modal-body">'+graph_object.data_source+'</div>';
+    var modal_body = '<div class="modal-body">'+graph_object.data_source+copyright_string+'</div>';
     var modal = '<div class="modal fade" id="data_source_modal_'+graph_object.graph_container_id+'" role="dialog"><div class="modal-dialog"><div class="modal-content">'+modal_header+modal_body+'</div></div>';
     graph_object.data_modal = $('#data_source_modal_'+graph_object.graph_container_id);
     graph_object.source_row.append('<div class="col-xs-6 col-sm-3"><a id=data_source_link_'+graph_object.graph_container_id+' data-toggle="modal" data-target="#data_source_modal_'+graph_object.graph_container_id+'">Data Sources</a></div>'+modal);
     graph_object.data_source_link = $('#data_source_link_'+graph_object.graph_container_id);
     //Data display
-    graph_object.display_source_row.append('<p>Interactive graph and data source available at: <a>www.countingcalculi.com/better_angels_project/'+graph_object.slug+'</a></p>');
+    graph_object.display_source_row.append('<p>Interactive graph and data sources available at: <a>www.countingcalculi.com/better_angels_project/'+graph_object.slug+'</a></p>');
     
     //Code
     graph_object.source_row.append('<div class="col-xs-6 col-sm-3"><a class="source code" target="_blank" href='+graph_object.source_code+'>Source Code</a></div>');
     //Code display
     graph_object.display_source_row.append('<p>Code available at: <a>'+graph_object.source_code+'</a></p>');
+    
+    //Copyright
+    graph_object.display_source_row.append(copyright_string);
     
     //Downloads
     var image_link = '<a href="'+graph_object.image+'" download>static image</a>'

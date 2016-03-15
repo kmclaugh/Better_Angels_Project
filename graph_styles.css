@@ -1,3 +1,16 @@
+.logo{
+    float: left;
+}
+.logo img{
+    height: 50px;
+}
+.logo span{
+    font-weight: bold;
+    text-shadow: 1px 1px 1px rgb(32,32,32);
+    color: #85C285;
+    font-size: 20px;
+}
+
 .graph{
     height: 100%;
 }
