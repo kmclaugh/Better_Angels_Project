@@ -46,7 +46,7 @@ function create_graph_title_footer(graph_object){
     var json_data = JSON.stringify(graph_object.data);
     var json_link = '<a href="data:text/json;charset=utf-8,'+encodeURIComponent(json_data)+'" download="data.json"" target="_blank">JSON data</a>';
     var csv_link = '<a href="'+graph_object.csv_file+'" download>CSV Data</a>';
-    var current_image_link = '<button id="save">Save as Image</button>';
+    var current_image_link = '<a id="save">Save as Image</a>';
     
     var modal_header = '<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Downloads</h4></div>';
     var modal_body = '<div class="modal-body"><p>'+image_link+'</p><p>'+json_link+'</p><p>'+csv_link+'</p><p>'+current_image_link+'</p></div>';
