@@ -67,6 +67,7 @@ function save_graph_object_to_image(graph_object, image_width, image_height){
     
     //Set the width
     graph_object.graph_element.parent().width(image_width);
+    add_class(graph_object.graph_element, 'force-sm');
     graph_object.resize();
     toggle_source_display(graph_object);
     
@@ -83,6 +84,7 @@ function save_graph_object_to_image(graph_object, image_width, image_height){
     $('head').prepend(viewport_tag);
     $('.container').attr('style', '');
     graph_object.graph_element.parent().css('width', '');
+    remove_class(graph_object.graph_element, 'force-sm');
     toggle_source_display(graph_object);
     graph_object.fixed_height = false;
     graph_object.resize();
@@ -115,4 +117,15 @@ function set_graph_dimensions(graph_object){
     var graph_container_width = graph_object.graph_element.width();
     graph_object.width = graph_container_width - graph_object.margin.right - graph_object.margin.left;
     graph_object.height = graph_container_height - graph_object.margin.top - graph_object.margin.bottom;
+}
+
+function remove_class(object, class_to_remove){
+    var current = object.attr('class');
+    var new_classes = current.replace(class_to_remove, "");
+    object.attr('class', new_classes);
+}
+function add_class(object, class_to_add){
+    var current = object.attr('class').trim();
+    var new_classes = current + ' ' + class_to_add;
+    object.attr('class', new_classes);
 }

@@ -145,17 +145,6 @@ $(window).load(function () {
     });
 });
 
-function remove_class(object, class_to_remove){
-    var current = object.attr('class');
-    var new_classes = current.replace(class_to_remove, "");
-    object.attr('class', new_classes);
-}
-function add_class(object, class_to_add){
-    var current = object.attr('class').trim();
-    var new_classes = current + ' ' + class_to_add;
-    object.attr('class', new_classes);
-}
-
 function line_graph_class(the_data, graph_container_id, title_text, slug, notes, source_code, data_source, description, image, csv_file, min_height, fixed_height){
     /*Class for the line graph*/
     
