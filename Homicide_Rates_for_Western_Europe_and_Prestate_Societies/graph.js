@@ -123,24 +123,24 @@ $(window).load(function () {
         $(document).on("click", '.legend_button', function() {
             line_graph.update_data($(this).attr('data_index'));
         });
-        $(document).on("click", '#log_scale_homocide_rates_graph', function() {
+        $(document).on("click", '#log_scale_homicide_rates_graph', function() {
             line_graph.toggle_scale();
         });
         $(document).on("click", '#save', function() {
-            save_graph_object_to_image(line_graph, 1170, 500);
+            save_graph_object_to_image(line_graph, 1024, 512);
         });
         
         //Init the graph
-        var graph_source_code = 'https://github.com/kmclaugh/Better_Angels_Project/tree/master/Homocide_Rates_for_Western_Europe_and_Prestate_Societies';
+        var graph_source_code = 'https://github.com/kmclaugh/Better_Angels_Project/tree/master/Homicide_Rates_for_Western_Europe_and_Prestate_Societies';
         var graph_note = '<sup>1</sup>Nonstate Average is a geometric mean of 26 societies, not including Semai, Inuit, and !Kung</br>';
         graph_note += '<sup>2</sup>European Average is a geometric mean of five regions with missing data interpolated.';
         var data_source = '<strong><i>The Better Angels of Our Nature</i> Sources:</strong> <p> European Data: </p> <p> <a href="https://books.google.com/books?id=J7ATQb6LZX0C&lpg=PT80&dq=%22FIGURE%203%E2%80%93%203.%20Homicide%20rates%20in%20five%20Western%20European%20regions%2C%201300%E2%80%93%202000%22&pg=PT81#v=onepage&q=%22FIGURE%203%E2%80%93%203.%20Homicide%20rates%20in%20five%20Western%20European%20regions,%201300%E2%80%93%202000%22&f=false" target="_blank"> Figure 3-3 in The Better Angels of Our Nature. Page 63, Kindle Location 1629. </a> </p> <p> <a href="https://books.google.com/books?id=J7ATQb6LZX0C&lpg=PT82&dq=%22FIGURE%203%E2%80%93%204.%20Homicide%20rates%20in%20Western%20Europe%2C%201300%E2%80%93%202000%22&pg=PT82#v=onepage&q=%22FIGURE%203%E2%80%93%204.%20Homicide%20rates%20in%20Western%20Europe,%201300%E2%80%93%202000%22&f=false" target="_blank"> Figure 3-4 in The Better Angels of Our Nature. Page 64, Kindle Location 1649. </a> </p> <p> Non-state Data: </p> <p> <a href="https://books.google.com/books?id=J7ATQb6LZX0C&lpg=PT82&dq=%22FIGURE%203%E2%80%93%204.%20Homicide%20rates%20in%20Western%20Europe%2C%201300%E2%80%93%202000%22&pg=PT82#v=onepage&q=%22FIGURE%203%E2%80%93%204.%20Homicide%20rates%20in%20Western%20Europe,%201300%E2%80%93%202000%22&f=false" target="_blank"> Figure 2-3 in The Better Angels of Our Nature. Page 53, Kindle Location 1459. </a> </p> <p> <a href="https://books.google.com/books?id=J7ATQb6LZX0C&lpg=PT82&dq=%22FIGURE%203%E2%80%93%204.%20Homicide%20rates%20in%20Western%20Europe%2C%201300%E2%80%93%202000%22&pg=PT82#v=onepage&q=%22FIGURE%203%E2%80%93%204.%20Homicide%20rates%20in%20Western%20Europe,%201300%E2%80%93%202000%22&f=false" target="_blank"> Figure 2-4 in The Better Angels of Our Nature. Page 55, Kindle Location 1503. </a> </p> <p> <strong>Original Sources:</strong> </p> <p> European Data: </p> <p> 1300-1984 from <a href="https://soci.ucalgary.ca/brannigan/sites/soci.ucalgary.ca.brannigan/files/long-term-historical-trends-of-violent-crime.pdf#page=13" target="_blank"> Table 1 in Manual Eisner (2003) - Long-Term Historical Trends in Violent Crime. In Crime and Justice. Page 99. </a> </p> <p> 2010 from <a href="http://www.unodc.org/gsh/en/data.html" target="_blank"> Homicide counts and rates, time series 2000-2012. By United Nations Office on Drugs and Crime. </a> </p> <p> <i>via:</i> <a href="http://ourworldindata.org/data/violence-rights/homicides/#homicide-rates-in-five-western-european-regions-1300-2010-max-roserref" target="_blank"> Max Roser (2015) - "Homicides". At OurWorldInData.org. </a> </p> <p> Non-state Data: </p> <p> Kung! and Inuit from <a href="http://www.amazon.com/War-Human-Civilization-Azar-Gat-ebook/dp/B006QV81C6/ref=mt_kindle?_encoding=UTF8&me=" target="_blank"> Azar Gat (2008) - War in Human Civilization. </a> </p> <p> Semai and average from <a href="http://www.amazon.com/War-before-Civilization-Lawrence-Keeley-ebook/dp/B005JC0PTK/ref=mt_kindle?_encoding=UTF8&me=" target="_blank"> Keeley (1997) - War Before Civilization: The Myth of the Peaceful Savage. </a> </p> <p> <i>via:</i> <a href="http://ourworldindata.org/data/violence-rights/ethnographic-and-archaeological-evidence-on-violent-deaths/#rate-of-violent-deaths-in-non-state-societies-max-roserref" target="_blank"> Max Roser (2015) - "Rate of Violent Deaths in State and Non-State Societies". At OurWorldInData.org. </a> </p>';
-        var graph_title = 'Homocide Rates for Western Europe and Prestate Societies'
-        var graph_decription = 'Long term homocide rates for Western Europe 1300-200 compared to prestate societies'
-        var graph_slug = 'Homocide_Rates_for_Western_Europe_and_Prestate_Societies';
+        var graph_title = 'Homicide Rates for Western Europe and Prestate Societies'
+        var graph_decription = 'Long term homicide rates for Western Europe 1300-200 compared to prestate societies'
+        var graph_slug = 'Homicide_Rates_for_Western_Europe_and_Prestate_Societies';
         var image = 'graph.png';
         var csv_file = 'data.csv';
-        line_graph = new line_graph_class(the_data, 'homocide_rates_graph', graph_title, graph_slug, graph_note, graph_source_code, data_source, graph_decription, image, csv_file, false, false);
+        line_graph = new line_graph_class(the_data, 'homicide_rates_graph', graph_title, graph_slug, graph_note, graph_source_code, data_source, graph_decription, image, csv_file, 255, false);
         line_graph.draw();
     });
 });
@@ -167,8 +167,8 @@ function line_graph_class(the_data, graph_container_id, title_text, slug, notes,
     self.description = description;
     self.image = image;
     self.csv_file = csv_file;
-    self.min_height = false;
-    self.fixed_height = false;
+    self.min_height = min_height;
+    self.fixed_height = fixed_height;
     
     this.update_self = function(){
         self = this;
@@ -189,7 +189,7 @@ function line_graph_class(the_data, graph_container_id, title_text, slug, notes,
             //Update the actual lines
             i = 0;
             self.lines.forEach(function(line) {
-                line.transition().attr("d", self.homocide_line_function(self.data[i].values));
+                line.transition().attr("d", self.homicide_line_function(self.data[i].values));
                 i++;
             });
             
@@ -214,7 +214,7 @@ function line_graph_class(the_data, graph_container_id, title_text, slug, notes,
             //Update the actual lines
             i = 0;
             self.lines.forEach(function(line) {
-                line.transition().attr("d", self.homocide_line_function(self.data[i].values));
+                line.transition().attr("d", self.homicide_line_function(self.data[i].values));
                 i++;
             });
             
@@ -253,7 +253,7 @@ function line_graph_class(the_data, graph_container_id, title_text, slug, notes,
         self.lines.forEach(function(line) {
             line
                 .transition()
-                .attr("d", self.homocide_line_function(self.data[i].values))
+                .attr("d", self.homicide_line_function(self.data[i].values))
                 .attr('visibility', self.data[i].display);
             i++;
         });
@@ -312,7 +312,7 @@ function line_graph_class(the_data, graph_container_id, title_text, slug, notes,
         //Update the actual lines
         i = 0;
         self.lines.forEach(function(line) {
-            line.attr("d", self.homocide_line_function(self.data[i].values));
+            line.attr("d", self.homicide_line_function(self.data[i].values));
             i++;
         });
         
@@ -387,7 +387,7 @@ function line_graph_class(the_data, graph_container_id, title_text, slug, notes,
         self.y_axis.call(self.yAxis);
     
         /*Create the line function.*/
-        self.homocide_line_function = d3.svg.line()
+        self.homicide_line_function = d3.svg.line()
             .x(function(d) { return self.xRange(d.x); })
             .y(function(d) { return self.yRange(d.y); });
             
@@ -418,7 +418,7 @@ function line_graph_class(the_data, graph_container_id, title_text, slug, notes,
                 .attr("class", "line "+country.name)
                 .attr('fill', 'none')
                 .attr('visibility', country.display)
-                .attr("d", self.homocide_line_function(country.values));
+                .attr("d", self.homicide_line_function(country.values));
             self.lines.push(new_line);
     
         });
@@ -444,7 +444,7 @@ function line_graph_class(the_data, graph_container_id, title_text, slug, notes,
             .attr("x",0 - (self.height / 2))
             .attr("dy", ".75em")
             .style("text-anchor", "middle")
-            .text("Homocides per 100,000 per year");
+            .text("Homicides per 100,000 per year");
         
         //Create Graph legend
         self.graph_element.prepend('<div class="row legend_row" id=legend_row_'+self.graph_container_id+'>')
