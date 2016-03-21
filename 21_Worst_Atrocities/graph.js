@@ -40,36 +40,26 @@ $(window).load(function () {
         var graph_source_code = 'https://github.com/kmclaugh/Better_Angels_Project/tree/master/21_Worst_Atrocities';
         var graph_note = 'Pinker: "Each death toll is the median or mode of the figures cited in a large number of histories and encyclopedias. They include not just deaths on the battlefield but indirect deaths of civilians from starvation and disease; they are thus considerably higher than estimates of battlefield casualties, though consistently so for both recent and ancient events."'
         var data_source = '<strong><i>The Better Angels of Our Nature</i> Source:</strong> <p> <a href="https://books.google.com/books?id=J7ATQb6LZX0C&lpg=PT224&ots=6AVqfDE3pN&dq=High-throughput%20massacre%20was%20also%20perfected&pg=PT223#v=onepage&q=High-throughput%20massacre%20was%20also%20perfected&f=false" target="_blank"> 21 Worst Atrocities Table in The Better Angels of Our Nature. Page 195, Kindle Location 4436. </a> </p> <p> <strong>Original Source:</strong> </p> <p> <a href="http://necrometrics.com/pre1700a.htm" target="_blank"> Matthew White 2012 - "(Possibly) The Twenty (or so) Worst Things People Have Done to Each Other". At necrometrics.com. </a> </p>'
-        var graph_title = '21 Worst Atrocities - Absolute Death Toll'
-        var graph_decription = '21 worst recorded atrocities in human history by absolute and 1950 equivalent death tolls'
-        var image = 'Worst_Atrocities_Bar_Graph.png';
-        var csv_file = '21_Worst_Atrocisties.csv';
-        var worst_atrocities_graph = new worst_atrocities_graph_class(the_data, 'worst_atrocities_graph', graph_title, graph_note, graph_source_code, data_source, graph_decription, image, csv_file);
+        var graph_title = '21 Worst Atrocities - Absolute Death Toll';
+        var graph_decription = '21 worst recorded atrocities in human history by absolute and 1950 equivalent death tolls';
+        var graph_slug = '21_worst_atrocities'
+        var image = 'graph.png';
+        var csv_file = 'data.csv';
+        var margin = {top: 30, right: 0, bottom: 200, left: 50};
+        var worst_atrocities_graph = new worst_atrocities_graph_class(the_data, 'worst_atrocities_graph', graph_title, graph_slug, graph_note, graph_source_code, data_source, graph_decription, image, csv_file, 255, false, margin);
         worst_atrocities_graph.draw();
+        graph_lists.push(worst_atrocities_graph);
     });
 });
 
-function worst_atrocities_graph_class(the_data, graph_container_id, title_text, notes, source_code, data_source, description, image, csv_file){
+function worst_atrocities_graph_class(the_data, graph_container_id, title_text, slug, notes, source_code, data_source, description, image, csv_file, min_height, fixed_height, margin){
     /*Class for the worst atrocities graph*/
     
     var self = this;
-    self.margin = {
-        top: 30,
-        right: 0,
-        bottom: 200,
-        left: 50
-    };
+    graph_class.call(this, the_data, graph_container_id, title_text, slug, notes, source_code, data_source, description, image, csv_file, min_height, fixed_height, margin);
+
+    self.margin = margin;
     self.current_data = 'death_total';
-    self.data = the_data;
-    self.graph_container_id = graph_container_id;
-    self.graph_element = $('#'+self.graph_container_id);
-    self.title_text = title_text;
-    self.notes = notes;
-    self.source_code = source_code;
-    self.data_source = data_source;
-    self.description = description;
-    self.image = image;
-    self.csv_file = csv_file
 
     self.update_data = function(){
         /*Switches the data from absolute to relative dataset or visa-versa*/
@@ -129,15 +119,7 @@ function worst_atrocities_graph_class(the_data, graph_container_id, title_text, 
     self.resize = function(){
         /*Resizes the graph due to a window size change*/
         
-        //Get the new graph dimensions
-        set_graph_dimensions(self, 350);
-        
-        //Update the svg dimensions
-        self.svg
-            .attr("width", self.width + self.margin.left + self.margin.right)
-            .attr("height", self.height + self.margin.top + self.margin.bottom);
-        self.svg_g
-            .attr("transform", "translate(" + self.margin.left + "," + self.margin.top + ")");
+        self.start_resize();
         
         //Rescale the range and axis functions to account for the new dimensions
         self.xRange
@@ -182,18 +164,7 @@ function worst_atrocities_graph_class(the_data, graph_container_id, title_text, 
     self.draw = function(){
         /*Draws the graph according to the size of the graph element*/
         
-        //Get the graph dimensions
-        set_graph_dimensions(self, 350);
-        
-        //Create Graph SVG
-        self.svg = d3.select('#'+self.graph_container_id)
-            .append("svg")
-                .attr("width", self.width + self.margin.left + self.margin.right)
-                .attr("height", self.height + self.margin.top + self.margin.bottom);
-        
-        //Add a layer to the svg
-        self.svg_g = self.svg.append("g")
-            .attr("transform", "translate(" + self.margin.left + "," + self.margin.top + ")");
+        self.start_draw();
                     
         self.xRange = d3.scale.ordinal()
             .rangeRoundBands([0, self.width], .1)
@@ -308,3 +279,7 @@ function worst_atrocities_graph_class(the_data, graph_container_id, title_text, 
         return "rotate(-"+rotate_angle_degrees+") translate("+dy+","+dx+")"
     }
 }
+worst_atrocities_graph_class.prototype = Object.create(graph_class.prototype); // See note below
+worst_atrocities_graph_class.prototype.constructor = worst_atrocities_graph_class;
+
+

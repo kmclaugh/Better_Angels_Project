@@ -4,7 +4,6 @@ $(window).load(function () {
     
     $(document).ready(function () {
         
-        
         var the_data = [
             {'Country':'Average Non-State<sup>1</sup>', 'name':'average_non_state', 'display':'visible', 'values':[{x:1250, y:518}]},
             {'Country':'European Average<sup>2</sup>', 'name':'european_averages', 'display':'visible', 'values':[
@@ -116,18 +115,11 @@ $(window).load(function () {
             {'Country':'!Kung', 'name':'kung', 'display':'hidden', 'values':[{x:1250, y:42}]}
         ]
         
-        //When the window resizes, resize the graph
-        $( window ).resize(function() {
-            line_graph.resize();
-        });
         $(document).on("click", '.legend_button', function() {
             line_graph.update_data($(this).attr('data_index'));
         });
         $(document).on("click", '#log_scale_homicide_rates_graph', function() {
             line_graph.toggle_scale();
-        });
-        $(document).on("click", '#save', function() {
-            save_graph_object_to_image(line_graph, 1024, 512);
         });
         
         //Init the graph
@@ -140,39 +132,22 @@ $(window).load(function () {
         var graph_slug = 'Homicide_Rates_for_Western_Europe_and_Prestate_Societies';
         var image = 'graph.png';
         var csv_file = 'data.csv';
-        line_graph = new line_graph_class(the_data, 'homicide_rates_graph', graph_title, graph_slug, graph_note, graph_source_code, data_source, graph_decription, image, csv_file, 255, false);
+        var margin = {top: 10, right: 10, bottom: 20, left: 50};
+        line_graph = new line_graph_class(the_data, 'homicide_rates_graph', graph_title, graph_slug, graph_note, graph_source_code, data_source, graph_decription, image, csv_file, 255, false, margin);
         line_graph.draw();
+        
+        graph_lists.push(line_graph);
+    
     });
 });
 
-function line_graph_class(the_data, graph_container_id, title_text, slug, notes, source_code, data_source, description, image, csv_file, min_height, fixed_height){
+function line_graph_class(the_data, graph_container_id, title_text, slug, notes, source_code, data_source, description, image, csv_file, min_height, fixed_height, margin){
     /*Class for the line graph*/
-    
     var self = this;
-    self.margin = {
-        top: 10,
-        right: 10,
-        bottom: 20,
-        left: 50
-    };
+    graph_class.call(this, the_data, graph_container_id, title_text, slug, notes, source_code, data_source, description, image, csv_file, min_height, fixed_height);
+
+    self.margin = margin;
     self.current_scale = 'log';
-    self.slug = slug;
-    self.data = the_data;
-    self.graph_container_id = graph_container_id;
-    self.graph_element = $('#'+self.graph_container_id);
-    self.title_text = title_text;
-    self.notes = notes;
-    self.source_code = source_code;
-    self.data_source = data_source;
-    self.description = description;
-    self.image = image;
-    self.csv_file = csv_file;
-    self.min_height = min_height;
-    self.fixed_height = fixed_height;
-    
-    this.update_self = function(){
-        self = this;
-    }
 
     self.toggle_scale = function(){
         if (self.current_scale == 'log'){
@@ -274,16 +249,7 @@ function line_graph_class(the_data, graph_container_id, title_text, slug, notes,
         
     self.resize = function(){
         /*Resizes the graph due to a window size change*/
-        
-        //Get the new graph dimensions
-        set_graph_dimensions(self);
-        
-        //Update the svg dimensions
-        self.svg
-            .attr("width", self.width + self.margin.left + self.margin.right)
-            .attr("height", self.height + self.margin.top + self.margin.bottom);
-        self.svg_g
-            .attr("transform", "translate(" + self.margin.left + "," + self.margin.top + ")");
+        self.start_resize();
         
         //Rescale the range and axis functions to account for the new dimensions
         self.xRange
@@ -330,19 +296,8 @@ function line_graph_class(the_data, graph_container_id, title_text, slug, notes,
     self.draw = function(){
         /*Draws the graph according to the size of the graph element*/
         
-        //Get the graph dimensions
-        set_graph_dimensions(self);
-        //Create Graph SVG
-        self.svg = d3.select('#'+self.graph_container_id)
-            .append("svg")
-                .attr('id', 'svg_'+self.graph_container_id)
-                .attr("width", self.width + self.margin.left + self.margin.right)
-                .attr("height", self.height + self.margin.top + self.margin.bottom);
+        self.start_draw();
         
-        //Add a layer to the svg
-        self.svg_g = self.svg.append("g")
-            .attr("transform", "translate(" + self.margin.left + "," + self.margin.top + ")");
-                    
         self.xRange = d3.scale.linear()
             .range([0, self.width]);
         
@@ -481,7 +436,8 @@ function line_graph_class(the_data, graph_container_id, title_text, slug, notes,
         return max;
     }
 };
-
+line_graph_class.prototype = Object.create(graph_class.prototype); // See note below
+line_graph_class.prototype.constructor = line_graph_class;
 
 function order_of_magnitude(n) {
     /*Return the order of magnitude of n*/

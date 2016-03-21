@@ -1,4 +1,68 @@
 
+var graph_lists = [];
+
+$(document).on("click", "[name='save_current']" , function(event) {
+    /*Saves the graph any time any graph's save current image is clicked*/
+    graph_lists.forEach(function(graph_object){//HACKy not to break
+        if (graph_object.slug == $(event.target).attr('slug')){
+            save_graph_object_to_image(graph_object, 1024, 512);
+        }
+    });
+});
+
+//When the window resizes, resize the graph
+$( window ).resize(function() {
+    graph_lists.forEach(function(graph_object){
+        graph_object.resize();
+    });
+});
+
+function graph_class(the_data, graph_container_id, title_text, slug, notes, source_code, data_source, description, image, csv_file, min_height, fixed_height){
+    var self = this;
+    self.data = the_data;
+    self.graph_container_id = graph_container_id;
+    self.slug = slug;
+    self.data = the_data;
+    self.graph_container_id = graph_container_id;
+    self.graph_element = $('#'+self.graph_container_id);
+    self.title_text = title_text;
+    self.notes = notes;
+    self.source_code = source_code;
+    self.data_source = data_source;
+    self.description = description;
+    self.image = image;
+    self.csv_file = csv_file;
+    self.min_height = min_height;
+    self.fixed_height = fixed_height;
+    
+    self.start_resize = function(){
+        //Get the new graph dimensions
+        set_graph_dimensions(self);
+        
+        //Update the svg dimensions
+        self.svg
+            .attr("width", self.width + self.margin.left + self.margin.right)
+            .attr("height", self.height + self.margin.top + self.margin.bottom);
+        self.svg_g
+            .attr("transform", "translate(" + self.margin.left + "," + self.margin.top + ")");
+    }
+    
+    self.start_draw = function(){
+        //Get the graph dimensions
+        set_graph_dimensions(self);
+        //Create Graph SVG
+        self.svg = d3.select('#'+self.graph_container_id)
+            .append("svg")
+                .attr('id', 'svg_'+self.graph_container_id)
+                .attr("width", self.width + self.margin.left + self.margin.right)
+                .attr("height", self.height + self.margin.top + self.margin.bottom);
+        
+        //Add a layer to the svg
+        self.svg_g = self.svg.append("g")
+            .attr("transform", "translate(" + self.margin.left + "," + self.margin.top + ")");
+    }
+}
+
 function create_graph_title_footer(graph_object){
     /*Creates the graph title, and footer with data sources notes, and downloads*/
     
@@ -52,7 +116,7 @@ function create_graph_title_footer(graph_object){
     var json_data = JSON.stringify(graph_object.data);
     var json_link = '<a href="data:text/json;charset=utf-8,'+encodeURIComponent(json_data)+'" download="data.json"" target="_blank">JSON data</a>';
     var csv_link = '<a href="'+graph_object.csv_file+'" download>CSV Data</a>';
-    var current_image_link = '<a id="save">Save as Image</a>';
+    var current_image_link = '<a id="save_'+graph_object.graph_container_id+'" slug="'+graph_object.slug+'" name="save_current">Save as Image</a>';
     
     var modal_header = '<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Downloads</h4></div>';
     var modal_body = '<div class="modal-body"><p>'+image_link+'</p><p>'+json_link+'</p><p>'+csv_link+'</p><p>'+current_image_link+'</p></div>';
