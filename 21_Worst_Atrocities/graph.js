@@ -46,7 +46,7 @@ $(window).load(function () {
         var image = 'graph.png';
         var csv_file = 'data.csv';
         var margin = {top: 30, right: 0, bottom: 200, left: 50};
-        var worst_atrocities_graph = new worst_atrocities_graph_class(the_data, 'worst_atrocities_graph', graph_title, graph_slug, graph_note, graph_source_code, data_source, graph_decription, image, csv_file, 255, false, margin);
+        var worst_atrocities_graph = new worst_atrocities_graph_class(the_data, 'worst_atrocities_graph', graph_title, graph_slug, graph_note, graph_source_code, data_source, graph_decription, image, csv_file, 390, false, margin);
         worst_atrocities_graph.draw();
         graph_lists.push(worst_atrocities_graph);
     });
@@ -129,6 +129,7 @@ function worst_atrocities_graph_class(the_data, graph_container_id, title_text, 
         self.yRange
             .range([self.height, 0]);
         self.yAxis
+            .ticks(Math.max(self.height/20, 2))
             .scale(self.yRange);
         
         //resize the x-axis
@@ -192,8 +193,8 @@ function worst_atrocities_graph_class(the_data, graph_container_id, title_text, 
           
         self.yAxis = d3.svg.axis()
             .scale(self.yRange)
-            .tickSize(5)
             .orient('left')
+            .ticks(Math.max(self.height/20, 2))
             .tickSubdivide(true);
       
         //add the x-axis
