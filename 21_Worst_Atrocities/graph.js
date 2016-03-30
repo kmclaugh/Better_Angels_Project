@@ -64,7 +64,7 @@ function worst_atrocities_graph_class(the_data, graph_container_id, title_text, 
                 .attr("height", function(d) { return self.height - self.y_data_function(d)});
             
             //Update the graph title
-            self.title.text('21 Worst Atrocities - Absolute Death Toll');
+            self.title.text('21 Worst Atrocities in History - Absolute Death Toll');
         }
     }
     
