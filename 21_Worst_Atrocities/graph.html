@@ -21,15 +21,58 @@
         <script type="text/javascript" src="graph.js"></script>
         <link rel="stylesheet" href="graph.css">
         <title>21 Worst Atrocities</title>
+        <script>
+            $(window).load(function () {
+    
+                $(document).ready(function () {
+                    
+                    var the_data = [
+                        {"Relative": 105000000.0, "Cause": "Fall of Rome", "Century_String": "3rd-5th", "Death_Total": 8000000.0, "Year": 350.0},
+                        {"Relative": 429000000.0, "Cause": "An Lushan Revolt", "Century_String": "8th", "Death_Total": 36000000.0, "Year": 763.0},
+                        {"Relative": 278000000.0, "Cause": "Mongol Conquests", "Century_String": "13th", "Death_Total": 40000000.0, "Year": 1227.0},
+                        {"Relative": 83000000.0, "Cause": "Mideast Slave Trade", "Century_String": "7th-19th", "Death_Total": 19000000.0, "Year": 1250.0},
+                        {"Relative": 100000000.0, "Cause": "Timur Lenk (Tamerlane)", "Century_String": "14th-15th", "Death_Total": 17000000.0, "Year": 1405.0},
+                        {"Relative": 14000000.0, "Cause": "French Wars of Religion", "Century_String": "16th", "Death_Total": 3000000.0, "Year": 1598.0},
+                        {"Relative": 23000000.0, "Cause": "Russia's Time of Troubles", "Century_String": "16th-17th", "Death_Total": 5000000.0, "Year": 1603.0},
+                        {"Relative": 112000000.0, "Cause": "Fall of the Ming Dynasty", "Century_String": "17th", "Death_Total": 25000000.0, "Year": 1644.0},
+                        {"Relative": 32000000.0, "Cause": "Thirty Years War", "Century_String": "17th", "Death_Total": 7000000.0, "Year": 1648.0},
+                        {"Relative": 92000000.0, "Cause": "Conquest of America", "Century_String": "15th-19th", "Death_Total": 20000000.0, "Year": 1790.0},
+                        {"Relative": 82000000.0, "Cause": "Atlantic Slave Trade", "Century_String": "15th-19th", "Death_Total": 18000000.0, "Year": 1795.0},
+                        {"Relative": 11000000.0, "Cause": "Napoleonic Wars", "Century_String": "19th", "Death_Total": 4000000.0, "Year": 1815.0},
+                        {"Relative": 40000000.0, "Cause": "Taiping Rebellion", "Century_String": "19th", "Death_Total": 20000000.0, "Year": 1864.0},
+                        {"Relative": 35000000.0, "Cause": "British India", "Century_String": "19th", "Death_Total": 17000000.0, "Year": 1879.0},
+                        {"Relative": 12000000.0, "Cause": "Congo Free State", "Century_String": "19th-20th", "Death_Total": 8000000.0, "Year": 1908.0},
+                        {"Relative": 15000000.0, "Cause": "First World War", "Century_String": "20th", "Death_Total": 15000000.0, "Year": 1918.0},
+                        {"Relative": 9000000.0, "Cause": "Russian Civil War", "Century_String": "20th", "Death_Total": 9000000.0, "Year": 1922.0},
+                        {"Relative": 55000000.0, "Cause": "World War II", "Century_String": "20th", "Death_Total": 55000000.0, "Year": 1945.0},
+                        {"Relative": 3000000.0, "Cause": "Chinese Civil Wars", "Century_String": "20th", "Death_Total": 3000000.0, "Year": 1950.0},
+                        {"Relative": 20000000.0, "Cause": "Josef Stalin", "Century_String": "20th", "Death_Total": 20000000.0, "Year": 1953.0},
+                        {"Relative": 40000000.0, "Cause": "Mao Zedong", "Century_String": "20th", "Death_Total": 40000000.0, "Year": 1975.0},
+                    ];
+                    
+                    //Init the graph
+                    var graph_source_code = 'https://github.com/kmclaugh/Better_Angels_Project/tree/master/21_Worst_Atrocities';
+                    var graph_note = 'Pinker: "Each death toll is the median or mode of the figures cited in a large number of histories and encyclopedias. They include not just deaths on the battlefield but indirect deaths of civilians from starvation and disease; they are thus considerably higher than estimates of battlefield casualties, though consistently so for both recent and ancient events."'
+                    var data_source = '<strong><i>The Better Angels of Our Nature</i> Source:</strong> <p> <a href="https://books.google.com/books?id=J7ATQb6LZX0C&lpg=PT224&ots=6AVqfDE3pN&dq=High-throughput%20massacre%20was%20also%20perfected&pg=PT223#v=onepage&q=High-throughput%20massacre%20was%20also%20perfected&f=false" target="_blank"> 21 Worst Atrocities Table in The Better Angels of Our Nature. Page 195, Kindle Location 4436. </a> </p> <p> <strong>Original Source:</strong> </p> <p> <a href="http://necrometrics.com/pre1700a.htm" target="_blank"> Matthew White 2012 - "(Possibly) The Twenty (or so) Worst Things People Have Done to Each Other". At necrometrics.com. </a> </p>'
+                    var graph_title = '21 Worst Atrocities in History - Absolute Death Toll';
+                    var graph_decription = '21 worst recorded atrocities in human history by absolute and 1950 equivalent death tolls';
+                    var graph_slug = 'the_21_worst_atrocities'
+                    var image = 'the_21_worst_atrocities-canonical.png';
+                    var csv_file = 'data.csv';
+                    
+                    var worst_atrocities_graph = new worst_atrocities_graph_class(the_data, 'the_21_worst_atrocities', graph_title, graph_slug, graph_note, graph_source_code, data_source, graph_decription, image, csv_file);
+                    worst_atrocities_graph.draw();
+                    graph_lists.push(worst_atrocities_graph);
+                });
+            });
+        </script>
     </head>
     <body>
         <div class="container-fluid">
-            <div class='row text-center' style='margin-top: 10px;'>
-                <button class="btn btn-primary" type="button" id='change_releative_absolute'>Switch to 1950 Equivalent</button>
-            </div>
             <div class='row'>
                 <div class='col-xs-12 graph_column'>
-                    <div class="graph" id='worst_atrocities_graph'></div>
+                    <div class="graph" id='the_21_worst_atrocities_controls'></div>
+                    <div class="graph" id='the_21_worst_atrocities'></div>
                 </div>
             </div>
         </div>

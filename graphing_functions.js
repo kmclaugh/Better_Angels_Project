@@ -17,10 +17,8 @@ $( window ).resize(function() {
     });
 });
 
-function graph_class(the_data, graph_container_id, title_text, slug, notes, source_code, data_source, description, image, csv_file, min_height, fixed_height){
+function graph_class(the_data, graph_container_id, title_text, slug, notes, source_code, data_source, description, image, csv_file, min_height, fixed_height, margin){
     var self = this;
-    self.data = the_data;
-    self.graph_container_id = graph_container_id;
     self.slug = slug;
     self.data = the_data;
     self.graph_container_id = graph_container_id;
@@ -34,6 +32,12 @@ function graph_class(the_data, graph_container_id, title_text, slug, notes, sour
     self.csv_file = csv_file;
     self.min_height = min_height;
     self.fixed_height = fixed_height;
+    self.margin = margin;
+    
+    //When the window resizes, resize the graph
+    $( window ).resize(function() {
+        self.resize();
+    });
     
     self.start_resize = function(){
         //Get the new graph dimensions
@@ -89,7 +93,7 @@ function create_graph_title_footer(graph_object){
     graph_object.source_row.append('<div class="col-xs-6 col-sm-3"><a id=notes_link_'+graph_object.graph_container_id+' data-toggle="modal" data-target="#notes_modal_'+graph_object.graph_container_id+'">Graph Notes</a></div>'+modal);
     graph_object.data_source_link = $('#notes_link_'+graph_object.graph_container_id);
     //Notes display
-    graph_object.display_source_row.append('<p>'+graph_object.notes+'</p>');
+    //graph_object.display_source_row.append('<p>'+graph_object.notes+'</p>');
     
     copyright_string = '<p>&copy; Kevin McLaughlin under the <a href="https://creativecommons.org/licenses/by/3.0/us/" taget="_blank">CC BY 3.0 US</a> - feel free to share, just please refer to your source</p>';
     
@@ -106,13 +110,13 @@ function create_graph_title_footer(graph_object){
     //Code
     graph_object.source_row.append('<div class="col-xs-6 col-sm-3"><a class="source code" target="_blank" href='+graph_object.source_code+'>Source Code</a></div>');
     //Code display
-    graph_object.display_source_row.append('<p>Code available at: <a>'+graph_object.source_code+'</a></p>');
+    //graph_object.display_source_row.append('<p>Code available at: <a>'+graph_object.source_code+'</a></p>');
     
     //Copyright
     graph_object.display_source_row.append(copyright_string);
     
     //Downloads
-    var image_link = '<a href="'+graph_object.image+'" download>static image</a>'
+    var image_link = '<a href="'+graph_object.image+'" download>Cononical Image</a>'
     var json_data = JSON.stringify(graph_object.data);
     var json_link = '<a href="data:text/json;charset=utf-8,'+encodeURIComponent(json_data)+'" download="data.json"" target="_blank">JSON data</a>';
     var csv_link = '<a href="'+graph_object.csv_file+'" download>CSV Data</a>';
