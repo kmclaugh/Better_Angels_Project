@@ -256,6 +256,7 @@ function homicide_rates_line_graph_class(the_data, graph_container_id, title_tex
                     .data(function(d) { ;return d.values; })
                     .enter().append("circle")
                         .attr("class", "dot")
+                        .attr('r', '5')
                         .on('mouseout', self.tool_tip.hide)
                         .on('mouseover', self.tool_tip.show)
                         .attr("cx", function(d) { return self.xRange(d.x); })

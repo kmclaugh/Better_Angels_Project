@@ -3,18 +3,6 @@
     .line{
         stroke-width: 1px;
     }
-    .dot{
-        r: 4px;
-    }
-    .semai .dot,
-    .inuit .dot,
-    .kung .dot,
-    .average_non_state .dot{
-        r: 6px;
-    }
-    .dot:hover{
-        r: 8px;
-    }
 }
 @media (min-width: 550px) {
     .line{
