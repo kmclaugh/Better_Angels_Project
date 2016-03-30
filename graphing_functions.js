@@ -1,22 +1,4 @@
 
-var graph_lists = [];
-
-$(document).on("click", "[name='save_current']" , function(event) {
-    /*Saves the graph any time any graph's save current image is clicked*/
-    graph_lists.forEach(function(graph_object){//HACKy not to break
-        if (graph_object.slug == $(event.target).attr('slug')){
-            save_graph_object_to_image(graph_object, 1024, 512);
-        }
-    });
-});
-
-//When the window resizes, resize the graph
-$( window ).resize(function() {
-    graph_lists.forEach(function(graph_object){
-        graph_object.resize();
-    });
-});
-
 function graph_class(the_data, graph_container_id, title_text, slug, notes, source_code, data_source, description, image, csv_file, min_height, fixed_height, margin){
     var self = this;
     self.slug = slug;
@@ -37,6 +19,9 @@ function graph_class(the_data, graph_container_id, title_text, slug, notes, sour
     //When the window resizes, resize the graph
     $( window ).resize(function() {
         self.resize();
+    });
+    $(document).on("click", '#save_'+self.graph_container_id, function() {
+        save_graph_object_to_image(self, 1024, 512);
     });
     
     self.start_resize = function(){

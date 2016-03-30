@@ -1,3 +1,11 @@
+$(window).load(function () {
+    $(document).ready(function () {
+
+        var worst_atrocities_graph = new worst_atrocities_graph_class(the_data, 'the_21_worst_atrocities', graph_title, graph_slug, graph_note, graph_source_code, data_source, graph_decription, image, csv_file);
+        worst_atrocities_graph.draw();
+        
+    });
+});
 
 function worst_atrocities_graph_class(the_data, graph_container_id, title_text, slug, notes, source_code, data_source, description, image, csv_file){
     /*Class for the worst atrocities graph*/

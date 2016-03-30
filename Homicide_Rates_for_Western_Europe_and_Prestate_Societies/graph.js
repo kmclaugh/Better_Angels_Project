@@ -1,3 +1,11 @@
+$(window).load(function () {
+    $(document).ready(function () {
+        
+        var Homicide_Rates_for_Western_Europe_and_Prestate_Societies = new homicide_rates_line_graph_class(the_data, graph_container_id, graph_title, graph_slug, graph_note, graph_source_code, data_source, graph_decription, image, csv_file);
+        Homicide_Rates_for_Western_Europe_and_Prestate_Societies.draw();
+    
+    });
+});
 
 function homicide_rates_line_graph_class(the_data, graph_container_id, title_text, slug, notes, source_code, data_source, description, image, csv_file){
     /*Class for the homicide line graph*/
@@ -10,10 +18,10 @@ function homicide_rates_line_graph_class(the_data, graph_container_id, title_tex
         
     graph_class.call(this, the_data, graph_container_id, title_text, slug, notes, source_code, data_source, description, image, csv_file, min_height, fixed_height, margin);
     
-    $(document).on("click", '.legend_button.'+self.slug, function() {
+    $(document).on("click", '.legend_button.'+self.graph_container_id, function() {
         self.update_data($(this).attr('data_index'));
     });
-    $(document).on("click", '#log_scale_'+self.slug, function() {
+    $(document).on("click", '#log_scale_'+self.graph_container_id, function() {
         self.toggle_scale();
     });
 
@@ -280,7 +288,7 @@ function homicide_rates_line_graph_class(the_data, graph_container_id, title_tex
         self.legend_col = $('#legend_col_'+self.graph_container_id);
         var i = 0;
         self.data.forEach(function(datum){
-            var legend_element = '<button class="legend_button '+self.slug+'" data_index='+i+' id=legend_id'+i+'><svg width="15" height="14" style="vertical-align: middle"><circle id=circle_id'+i+' class="legend series visibility_'+datum.display+' '+datum.name+'" r="5" cx="6" cy="7"></circle></svg>'+datum.Country+'</button>';
+            var legend_element = '<button class="legend_button '+self.graph_container_id+'" data_index='+i+' id=legend_id'+i+'><svg width="15" height="14" style="vertical-align: middle"><circle id=circle_id'+i+' class="legend series visibility_'+datum.display+' '+datum.name+'" r="5" cx="6" cy="7"></circle></svg>'+datum.Country+'</button>';
             self.legend_col.append('<div class="legend_button_wrapper">'+legend_element+'</div>');       
             i++;
         });
