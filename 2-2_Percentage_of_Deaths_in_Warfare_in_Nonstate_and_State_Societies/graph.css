@@ -1,0 +1,21 @@
+.bar
+{
+    fill: #8A0707;
+}
+
+@media (min-width: 10px) {
+    .axis text{
+        font-family: 'Arial';
+        font-size: 10px;
+    }
+}
+@media (min-width: 400px) {
+    .axis text{
+        font-family: 'Arial';
+        font-size: 13px;
+    }
+}
+.change_button_row{
+    text-align: center;
+    padding-top: 10px;
+}

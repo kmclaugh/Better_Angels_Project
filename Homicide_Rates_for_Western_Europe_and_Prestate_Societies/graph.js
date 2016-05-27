@@ -1,8 +1,10 @@
+var Homicide_Rates_for_Western_Europe_and_Prestate_Societies
 $(window).load(function () {
     $(document).ready(function () {
-        
-        var Homicide_Rates_for_Western_Europe_and_Prestate_Societies = new homicide_rates_line_graph_class(the_data, graph_container_id, graph_title, graph_slug, graph_note, graph_source_code, data_source, graph_decription, image, csv_file);
-        Homicide_Rates_for_Western_Europe_and_Prestate_Societies.draw();
+        if (auto_create_graph == true){
+            Homicide_Rates_for_Western_Europe_and_Prestate_Societies = new homicide_rates_line_graph_class(the_data, graph_container_id, graph_title, graph_slug, graph_note, graph_source_code, data_source, graph_decription, image, csv_file);
+            Homicide_Rates_for_Western_Europe_and_Prestate_Societies.draw();
+        }
     
     });
 });
