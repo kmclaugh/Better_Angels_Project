@@ -2,7 +2,9 @@
 {
     fill: #8A0707;
 }
-
+.hover_bar{
+    fill: none;
+}
 @media (min-width: 10px) {
     .axis text{
         font-family: 'Arial';
@@ -12,7 +14,7 @@
 @media (min-width: 400px) {
     .axis text{
         font-family: 'Arial';
-        font-size: 13px;
+        font-size: 10px;
     }
 }
 .change_button_row{

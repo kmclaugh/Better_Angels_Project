@@ -81,9 +81,9 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         
         self.start_draw();
         self.yRange = d3.scale.ordinal()
-            .rangeRoundBands([0, self.height], .1)
+            .rangeBands([0, self.height], .15)
             .domain(self.data.map(function(d) {
-                    return [d.ID, d.Name, d.Location, d.Date_String];
+                    return [d.ID, d.Name, d.Location];
                 })
             );
             
@@ -97,9 +97,24 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
             .tickFormat(formatPercent)
             .orient("bottom");
         
-        
+        var y_label_format = function(d, i){
+            var label_string = '';
+            console.log(d[1], d[2], d[1] != null && d[2] != null)
+            if (d[1] != null){
+                label_string += d[1]
+            }
+            if (d[1] != null && d[2] != null){
+                label_string += ', ';
+            }
+            if (d[2] != null){
+                label_string += d[2];
+            }
+            return label_string;
+        }
+            
         self.yAxis = d3.svg.axis()
             .scale(self.yRange)
+            .tickFormat(y_label_format)
             .orient('left');
       
         //add the x-axis
@@ -111,13 +126,7 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         //Add the y-axis
         self.y_axis = self.svg_g.append('svg:g')
             .attr('class', 'y axis');
-        self.y_axis.call(self.yAxis)
-            .selectAll("text")
-                .style("text-anchor", "end")
-                .attr("dx", "-.8em")
-                .attr("dy", "-.55em")
-                .attr('class', 'tick_labels')
-                .text(self.y_labels_data_function);
+        self.y_axis.call(self.yAxis);
         
         //Add the y axis label
         self.y_axis_label = self.svg_g.append("text")
@@ -128,14 +137,24 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
             .style("text-anchor", "middle")
             .text("Society");
     
-        var bar = self.svg_g.selectAll("bar")
+        self.data_bars = self.svg_g.selectAll("bar")
             .data(self.data)
             .enter().append("rect")
                 .attr("class", "bar")
-                .attr("y", function(d) { return self.yRange( [d.ID, d.Name, d.Location, d.Date_String]); })
+                .attr("y", function(d) { return self.yRange([d.ID, d.Name, d.Location]); })
                 .attr("width", function(d) {
-                    console.log(self.xRange(d['Percentage of Deaths from Warfare']), d['Percentage of Deaths from Warfare']);
                     return self.xRange(d['Percentage of Deaths from Warfare'])
+                })
+                .attr("x", 0)
+                .attr("height", self.yRange.rangeBand());
+        
+        self.hover_bars = self.svg_g.selectAll("bar")
+            .data(self.data)
+            .enter().append("rect")
+                .attr("class", "hover_bar")
+                .attr("y", function(d) { return self.yRange([d.ID, d.Name, d.Location]); })
+                .attr("width", function(d) {
+                    return self.xRange(1)
                 })
                 .attr("x", 0)
                 .attr("height", self.yRange.rangeBand());
@@ -147,18 +166,7 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
     
     }//End draw graph
     
-    /* Reusable functions********************/
-    self.y_labels_data_function = function(d){
-        /*Returns the correct label for the y axis*/
-        var label_string = '';
-        if (d[1] != null){
-            label_string += d[1] + ', ';
-        }
-        if (d[2] != null){
-            label_string += d[2];
-        }
-        return label_string;
-    }
+    
 }
 Percentage_of_Deaths_in_Warfare_class.prototype = Object.create(graph_class.prototype); // See note below
 Percentage_of_Deaths_in_Warfare_class.prototype.constructor = Percentage_of_Deaths_in_Warfare_class;
