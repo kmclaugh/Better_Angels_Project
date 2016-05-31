@@ -80,17 +80,16 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         /*Draws the graph according to the size of the graph element*/
         
         self.start_draw();
-        console.log(self.width)
         self.yRange = d3.scale.ordinal()
             .rangeRoundBands([0, self.height], .1)
             .domain(self.data.map(function(d) {
-                    return [d.Name];
+                    return [d.ID, d.Name, d.Location, d.Date_String];
                 })
             );
             
         self.xRange = d3.scale.linear()
             .range([0, self.width])
-            .domain([0,100]);
+            .domain([0,1]);
         
         var formatPercent = d3.format(".0%");
         self.xAxis = d3.svg.axis()
@@ -112,7 +111,13 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         //Add the y-axis
         self.y_axis = self.svg_g.append('svg:g')
             .attr('class', 'y axis');
-        self.y_axis.call(self.yAxis);
+        self.y_axis.call(self.yAxis)
+            .selectAll("text")
+                .style("text-anchor", "end")
+                .attr("dx", "-.8em")
+                .attr("dy", "-.55em")
+                .attr('class', 'tick_labels')
+                .text(self.y_labels_data_function);
         
         //Add the y axis label
         self.y_axis_label = self.svg_g.append("text")
@@ -127,7 +132,7 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
             .data(self.data)
             .enter().append("rect")
                 .attr("class", "bar")
-                .attr("y", function(d) { return self.yRange([d.Name]); })
+                .attr("y", function(d) { return self.yRange( [d.ID, d.Name, d.Location, d.Date_String]); })
                 .attr("width", function(d) {
                     console.log(self.xRange(d['Percentage of Deaths from Warfare']), d['Percentage of Deaths from Warfare']);
                     return self.xRange(d['Percentage of Deaths from Warfare'])
@@ -142,7 +147,18 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
     
     }//End draw graph
     
-    
+    /* Reusable functions********************/
+    self.y_labels_data_function = function(d){
+        /*Returns the correct label for the y axis*/
+        var label_string = '';
+        if (d[1] != null){
+            label_string += d[1] + ', ';
+        }
+        if (d[2] != null){
+            label_string += d[2];
+        }
+        return label_string;
+    }
 }
 Percentage_of_Deaths_in_Warfare_class.prototype = Object.create(graph_class.prototype); // See note below
 Percentage_of_Deaths_in_Warfare_class.prototype.constructor = Percentage_of_Deaths_in_Warfare_class;
