@@ -15,7 +15,7 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
       var self = this;
     var min_height = 390,
         fixed_height = false,
-        margin = {top: 30, right: 20, bottom: 20, left: 300};
+        margin = {top: 0, right: 20, bottom: 20, left: 300};
     self.current_data = 'death_total';
     
     graph_class.call(this, the_data, graph_container_id, title_text, slug, notes, source_code, data_source, description, image, csv_file, min_height, fixed_height, margin);
@@ -89,7 +89,7 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
             
         self.xRange = d3.scale.linear()
             .range([0, self.width])
-            .domain([0,1]);
+            .domain([0,.65]);
         
         var formatPercent = d3.format(".0%");
         self.xAxis = d3.svg.axis()
@@ -99,7 +99,6 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         
         var y_label_format = function(d, i){
             var label_string = '';
-            console.log(d[1], d[2], d[1] != null && d[2] != null)
             if (d[1] != null){
                 label_string += d[1]
             }
@@ -127,6 +126,11 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         self.y_axis = self.svg_g.append('svg:g')
             .attr('class', 'y axis');
         self.y_axis.call(self.yAxis);
+        self.y_axis.selectAll('text').each(function(){
+            if (this.textContent.substring(0,7) == 'Average'){
+                this.classList.add("Average_tick");
+            }
+        });
         
         //Add the y axis label
         self.y_axis_label = self.svg_g.append("text")
@@ -140,7 +144,7 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         self.data_bars = self.svg_g.selectAll("bar")
             .data(self.data)
             .enter().append("rect")
-                .attr("class", "bar")
+                .attr("class", function(d) { return 'bar ' + d.Group.replace(/ /g , "_");; })
                 .attr("y", function(d) { return self.yRange([d.ID, d.Name, d.Location]); })
                 .attr("width", function(d) {
                     return self.xRange(d['Percentage of Deaths from Warfare'])
@@ -158,6 +162,35 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
                 })
                 .attr("x", 0)
                 .attr("height", self.yRange.rangeBand());
+        
+        //Create the grouping labels
+        self.text1 = self.svg_g.append('text')
+            .attr('class', 'group_label')
+            .attr('x', function() { return self.xRange(.60) })
+            .attr('y', function() { return self.yRange([self.data[9].ID, self.data[9].Name, self.data[9].Location]); })
+            .attr('text-anchor', 'end')
+            .text('Prehistoric Archaeological Sites');
+        
+        self.text2 = self.svg_g.append('text')
+            .attr('class', 'group_label')
+            .attr('x', function() { return self.xRange(.30) })
+            .attr('y', function() { return self.yRange([self.data[26].ID, self.data[26].Name, self.data[26].Location]); })
+            .attr('text-anchor', 'end')
+            .text('Hunter-gathers');
+        
+        self.text3 = self.svg_g.append('text')
+            .attr('class', 'group_label')
+            .attr('x', function() { return self.xRange(.60) })
+            .attr('y', function() { return self.yRange([self.data[37].ID, self.data[37].Name, self.data[37].Location]); })
+            .attr('text-anchor', 'end')
+            .text('Hunter-horticultururalists and Other Tribal Groups');
+        
+        self.text4 = self.svg_g.append('text')
+            .attr('class', 'group_label')
+            .attr('x', function() { return self.xRange(.05) })
+            .attr('y', function() { return self.yRange([self.data[48].ID, self.data[48].Name, self.data[48].Location]); })
+            .attr('text-anchor', 'end')
+            .text('States');
         
         create_graph_title_footer(self);
         

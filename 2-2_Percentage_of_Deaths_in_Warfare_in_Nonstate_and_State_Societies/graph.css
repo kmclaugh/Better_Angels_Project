@@ -5,6 +5,13 @@
 .hover_bar{
     fill: none;
 }
+.group_label{
+    font-size: 14px;
+    font-weight: bold;
+}
+.Average_tick{
+    font-weight: bold;
+}
 @media (min-width: 10px) {
     .axis text{
         font-family: 'Arial';
