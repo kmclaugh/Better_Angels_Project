@@ -4,6 +4,12 @@ $(window).load(function () {
         if (auto_create_graph == true){
             Percentage_of_Deaths_in_Warfare_in_Nonstate_and_State_Societies = new Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, graph_title, graph_slug, graph_note, graph_source_code, data_source, graph_decription, image, csv_file);
             Percentage_of_Deaths_in_Warfare_in_Nonstate_and_State_Societies.draw();
+            d3.selectAll(".tick")
+                .on("click", function(d) {
+                    if (d[3] != null) {
+                        window.open(d[3], '_blank');
+                    }
+                });
         }
     
     });
@@ -76,6 +82,8 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
     
     }//end resize
     
+    
+    
     self.draw = function(){
         /*Draws the graph according to the size of the graph element*/
         
@@ -83,7 +91,7 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         self.yRange = d3.scale.ordinal()
             .rangeBands([0, self.height], .15)
             .domain(self.data.map(function(d) {
-                    return [d.ID, d.Name, d.Location];
+                    return [d.ID, d.Name, d.Location, d['Source Link']];
                 })
             );
             
@@ -130,6 +138,9 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
             if (this.textContent.substring(0,7) == 'Average'){
                 this.classList.add("Average_tick");
             }
+            else{
+                this.classList.add("source_tick");
+            }
         });
         
         //Add the y axis label
@@ -144,8 +155,8 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         self.data_bars = self.svg_g.selectAll("bar")
             .data(self.data)
             .enter().append("rect")
-                .attr("class", function(d) { return 'bar ' + d.Group.replace(/ /g , "_");; })
-                .attr("y", function(d) { return self.yRange([d.ID, d.Name, d.Location]); })
+                .attr("class", function(d) { return 'bar ' + d.Group.replace(/ /g , "_"); })
+                .attr("y", function(d) { return self.yRange([d.ID, d.Name, d.Location, d['Source Link']]); })
                 .attr("width", function(d) {
                     return self.xRange(d['Percentage of Deaths from Warfare'])
                 })
@@ -156,7 +167,7 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
             .data(self.data)
             .enter().append("rect")
                 .attr("class", "hover_bar")
-                .attr("y", function(d) { return self.yRange([d.ID, d.Name, d.Location]); })
+                .attr("y", function(d) { return self.yRange([d.ID, d.Name, d.Location, d['Source Link']]); })
                 .attr("width", function(d) {
                     return self.xRange(1)
                 })
@@ -167,28 +178,28 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         self.text1 = self.svg_g.append('text')
             .attr('class', 'group_label')
             .attr('x', function() { return self.xRange(.60) })
-            .attr('y', function() { return self.yRange([self.data[9].ID, self.data[9].Name, self.data[9].Location]); })
+            .attr('y', function() { return self.yRange([self.data[9].ID, self.data[9].Name, self.data[9].Location, self.data[9]['Source Link']]); })
             .attr('text-anchor', 'end')
             .text('Prehistoric Archaeological Sites');
         
         self.text2 = self.svg_g.append('text')
             .attr('class', 'group_label')
             .attr('x', function() { return self.xRange(.30) })
-            .attr('y', function() { return self.yRange([self.data[26].ID, self.data[26].Name, self.data[26].Location]); })
+            .attr('y', function() { return self.yRange([self.data[26].ID, self.data[26].Name, self.data[26].Location, self.data[26]['Source Link']]); })
             .attr('text-anchor', 'end')
             .text('Hunter-gathers');
         
         self.text3 = self.svg_g.append('text')
             .attr('class', 'group_label')
             .attr('x', function() { return self.xRange(.60) })
-            .attr('y', function() { return self.yRange([self.data[37].ID, self.data[37].Name, self.data[37].Location]); })
+            .attr('y', function() { return self.yRange([self.data[37].ID, self.data[37].Name, self.data[37].Location, self.data[37]['Source Link']]); })
             .attr('text-anchor', 'end')
             .text('Hunter-horticultururalists and Other Tribal Groups');
         
         self.text4 = self.svg_g.append('text')
             .attr('class', 'group_label')
             .attr('x', function() { return self.xRange(.05) })
-            .attr('y', function() { return self.yRange([self.data[48].ID, self.data[48].Name, self.data[48].Location]); })
+            .attr('y', function() { return self.yRange([self.data[48].ID, self.data[48].Name, self.data[48].Location, self.data[48]['Source Link']]); })
             .attr('text-anchor', 'end')
             .text('States');
         
@@ -197,6 +208,7 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         //Add the change button
         $('#'+self.graph_container_id+'_controls').prepend('<div class="row change_button_row"><button class="btn btn-primary" type="button" id="change_releative_absolute">Switch to 1950 Equivalent</button></div>');
     
+        
     }//End draw graph
     
     

@@ -1,6 +1,18 @@
-.bar
+.bar.Prehistoric_Archaeological_Sites
 {
     fill: #8A0707;
+}
+.bar.Hunter-gathers
+{
+    fill: #000066;
+}
+.bar.States
+{
+    fill: #006600;
+}
+.bar.Hunter-horticultururalists_and_Other_Tribal_Groups
+{
+    fill: #cc9900;
 }
 .hover_bar{
     fill: none;
@@ -23,6 +35,16 @@
         font-family: 'Arial';
         font-size: 10px;
     }
+}
+.source_tick{
+    fill: #337ab7;
+}
+.source_tick:hover{
+    fill: #23527c;
+    text-decoration: underline;
+}
+.tick{
+    cursor: pointer;
 }
 .change_button_row{
     text-align: center;
