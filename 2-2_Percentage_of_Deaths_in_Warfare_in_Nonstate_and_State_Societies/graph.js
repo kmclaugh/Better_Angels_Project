@@ -151,18 +151,19 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
             .attr("dy", "1em")
             .style("text-anchor", "middle")
             .text("Society");
-    
+            
         self.data_bars = self.svg_g.selectAll("bar")
             .data(self.data)
             .enter().append("rect")
                 .attr("class", function(d) { return 'bar ' + d.Group.replace(/ /g , "_"); })
+                .attr('id', function(d) { return 'bar'+d.ID} )
                 .attr("y", function(d) { return self.yRange([d.ID, d.Name, d.Location, d['Source Link']]); })
                 .attr("width", function(d) {
                     return self.xRange(d['Percentage of Deaths from Warfare'])
                 })
                 .attr("x", 0)
-                .attr("height", self.yRange.rangeBand());
-        
+                .attr("height", self.yRange.rangeBand())
+            
         self.hover_bars = self.svg_g.selectAll("bar")
             .data(self.data)
             .enter().append("rect")
@@ -172,11 +173,18 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
                     return self.xRange(1)
                 })
                 .attr("x", 0)
-                .attr("height", self.yRange.rangeBand());
+                .attr("height", self.yRange.rangeBand())
+                .on('mouseover', function(d){
+                    self.show_tip(d);
+                })
+                .on("mouseout", function(d){
+                    self.tool_tip.hide();
+                });
         
         //Create the grouping labels
         self.text1 = self.svg_g.append('text')
             .attr('class', 'group_label')
+            .attr('id', 'test')
             .attr('x', function() { return self.xRange(.60) })
             .attr('y', function() { return self.yRange([self.data[9].ID, self.data[9].Name, self.data[9].Location, self.data[9]['Source Link']]); })
             .attr('text-anchor', 'end')
@@ -208,10 +216,26 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         //Add the change button
         $('#'+self.graph_container_id+'_controls').prepend('<div class="row change_button_row"><button class="btn btn-primary" type="button" id="change_releative_absolute">Switch to 1950 Equivalent</button></div>');
     
-        
+        self.init_tooltip();
     }//End draw graph
     
+    self.init_tooltip = function(){
+        /*Initializes the tootltip for the graph*/
+        self.tool_tip = d3.tip()
+            .attr('class', 'd3-tip')
+            .attr('id', 'd3_tip_'+self.slug)
+            .html('test')
+        
+        self.svg_g.call(self.tool_tip);
+    }
     
+    self.show_tip = function(hover_target){
+        
+        var data_bar = self.data_bars[0][hover_target.ID-1];
+        console.log(data_bar)
+        self.tool_tip.show([1], data_bar);
+    }
+
 }
 Percentage_of_Deaths_in_Warfare_class.prototype = Object.create(graph_class.prototype); // See note below
 Percentage_of_Deaths_in_Warfare_class.prototype.constructor = Percentage_of_Deaths_in_Warfare_class;

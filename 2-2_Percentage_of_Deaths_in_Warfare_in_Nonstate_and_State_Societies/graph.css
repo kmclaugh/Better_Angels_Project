@@ -15,7 +15,8 @@
     fill: #cc9900;
 }
 .hover_bar{
-    fill: none;
+    fill-opacity: 0;
+    
 }
 .group_label{
     font-size: 14px;
