@@ -53,4 +53,11 @@
 }
 .d3-tip{
     background-color: white;
+    border: solid;
+    border-width: 1px;
+    padding: 5px;
+    text-align: center;
+}
+.highlight{
+    filter: url("#dropshadow");
 }

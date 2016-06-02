@@ -156,7 +156,7 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
                 .attr("class", "hover_bar")
                 .attr("y", function(d) { return self.yRange([d.ID, d.Name, d.Location, d['Source Link']]); })
                 .attr("width", function(d) {
-                    return self.xRange(1)
+                    return self.xRange(.65)
                 })
                 .attr("x", 0)
                 .attr("height", self.yRange.rangeBand())
@@ -225,7 +225,13 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
     
     self.show_tip = function(hover_target){
         
+        var hover_bar = self.hover_bars[0][hover_target.ID-1];
         var data_bar = self.data_bars[0][hover_target.ID-1];
+        add_class(d3.select(data_bar), 'highlight')
+        //.classList.add("highlight");
+        self.tool_tip.offset(function() {
+            return [0, self.xRange(.65)/3]
+        })
         self.tool_tip.show(hover_target, data_bar);
     }
     
