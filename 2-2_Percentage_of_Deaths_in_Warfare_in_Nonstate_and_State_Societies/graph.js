@@ -104,24 +104,10 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
             .scale(self.xRange)
             .tickFormat(formatPercent)
             .orient("bottom");
-        
-        var y_label_format = function(d, i){
-            var label_string = '';
-            if (d[1] != null){
-                label_string += d[1]
-            }
-            if (d[1] != null && d[2] != null){
-                label_string += ', ';
-            }
-            if (d[2] != null){
-                label_string += d[2];
-            }
-            return label_string;
-        }
             
         self.yAxis = d3.svg.axis()
             .scale(self.yRange)
-            .tickFormat(y_label_format)
+            .tickFormat(self.y_label_format)
             .orient('left');
       
         //add the x-axis
@@ -224,7 +210,15 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         self.tool_tip = d3.tip()
             .attr('class', 'd3-tip')
             .attr('id', 'd3_tip_'+self.slug)
-            .html('test')
+            .html(function(d) {
+                html_string = '<div>';
+                html_string += self.y_label_format([d.ID, d.Name, d.Location, d['Source Link']])
+                html_string += '</br>';
+                var decimal = d["Percentage of Deaths from Warfare"]*100;
+                html_string += decimal.toPrecision(2)+ "%</br>";
+                html_string += "</div>";
+                return html_string;
+            });
         
         self.svg_g.call(self.tool_tip);
     }
@@ -232,8 +226,22 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
     self.show_tip = function(hover_target){
         
         var data_bar = self.data_bars[0][hover_target.ID-1];
-        console.log(data_bar)
-        self.tool_tip.show([1], data_bar);
+        self.tool_tip.show(hover_target, data_bar);
+    }
+    
+    /********Reusable functions**************/
+    self.y_label_format = function(d){
+        var label_string = '';
+        if (d[1] != null){
+            label_string += d[1]
+        }
+        if (d[1] != null && d[2] != null){
+            label_string += ', ';
+        }
+        if (d[2] != null){
+            label_string += d[2];
+        }
+        return label_string;
     }
 
 }

@@ -189,3 +189,10 @@ function add_class(object, class_to_add){
     var new_classes = current + ' ' + class_to_add;
     object.attr('class', new_classes);
 }
+
+function order_of_magnitude(n) {
+    /*Return the order of magnitude of n*/
+    var order = Math.floor(Math.log(n) / Math.LN10
+                       + 0.000000001); // because float math sucks like that
+    return Math.pow(10,order);
+}

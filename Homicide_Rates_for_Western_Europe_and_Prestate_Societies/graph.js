@@ -318,10 +318,3 @@ function homicide_rates_line_graph_class(the_data, graph_container_id, title_tex
 };
 homicide_rates_line_graph_class.prototype = Object.create(graph_class.prototype);
 homicide_rates_line_graph_class.prototype.constructor = homicide_rates_line_graph_class;
-
-function order_of_magnitude(n) {
-    /*Return the order of magnitude of n*/
-    var order = Math.floor(Math.log(n) / Math.LN10
-                       + 0.000000001); // because float math sucks like that
-    return Math.pow(10,order);
-}
