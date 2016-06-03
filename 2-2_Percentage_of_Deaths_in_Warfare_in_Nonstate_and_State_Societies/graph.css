@@ -52,12 +52,41 @@
     padding-top: 10px;
 }
 .d3-tip{
+    line-height: 1;
     background-color: white;
     border: solid;
     border-width: 1px;
     padding: 5px;
     text-align: center;
+    max-width: 300px;
+}
+.value,
+.tip_title{
+    font-weight: bold;
+}
+.source{
+    font-style: italic;
 }
 .highlight{
-    filter: url("#dropshadow");
+    stroke-width:1;
+    stroke: black;
+    fill: #55ff00!important;
+}
+.highlight.tooltip_line{
+    stroke-width:1;
+    stroke: black;
+}
+.d3-tip:after {
+    text-align: center;
+    content:'';
+    display:block;
+    width:0;
+    height:0;
+    position:absolute;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid black;
+    bottom:-10px;
+    left: 50%;
+    margin-left: -10px;
 }

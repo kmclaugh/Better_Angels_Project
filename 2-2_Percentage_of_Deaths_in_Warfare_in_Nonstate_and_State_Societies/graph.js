@@ -1,4 +1,5 @@
-var Percentage_of_Deaths_in_Warfare_in_Nonstate_and_State_Societies
+var Percentage_of_Deaths_in_Warfare_in_Nonstate_and_State_Societies;
+
 $(window).load(function () {
     $(document).ready(function () {
         if (auto_create_graph == true){
@@ -18,10 +19,11 @@ $(window).load(function () {
 function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, title_text, slug, notes, source_code, data_source, description, image, csv_file){
     /*Class for the percentage of deaths in warfare bar graph graph*/
     
-      var self = this;
+    var self = this;
     var min_height = 390,
         fixed_height = false,
-        margin = {top: 0, right: 20, bottom: 20, left: 300};
+        margin = {top: 0, right: 20, bottom: 20, left: 200};
+    self.max_value = .65;
     self.current_data = 'death_total';
     
     graph_class.call(this, the_data, graph_container_id, title_text, slug, notes, source_code, data_source, description, image, csv_file, min_height, fixed_height, margin);
@@ -97,7 +99,7 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
             
         self.xRange = d3.scale.linear()
             .range([0, self.width])
-            .domain([0,.65]);
+            .domain([0,self.max_value]);
         
         var formatPercent = d3.format(".0%");
         self.xAxis = d3.svg.axis()
@@ -121,7 +123,7 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
             .attr('class', 'y axis');
         self.y_axis.call(self.yAxis);
         self.y_axis.selectAll('text').each(function(){
-            if (this.textContent.substring(0,7) == 'Average'){
+            if (this.textContent.substring(0,7) == 'Average'){//HACK from data
                 this.classList.add("Average_tick");
             }
             else{
@@ -136,8 +138,17 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
             .attr("x",0 - (self.height / 2))
             .attr("dy", "1em")
             .style("text-anchor", "middle")
-            .text("Society");
-            
+            .text("Society (click for source)");
+        
+        self.tooltip_lines = self.svg_g.selectAll("bar")
+            .data(self.data)
+            .enter().append("line")
+                .attr("class", "tooltip_line")
+                .attr("x1", self.xRange(0))
+                .attr("y1", function(d) { return self.yRange([d.ID, d.Name, d.Location, d['Source Link']]) + self.yRange.rangeBand()/2; })
+                .attr("x2", self.xRange(self.max_value)/2+self.xRange(self.max_value)/3)
+                .attr("y2", function(d) { return self.yRange([d.ID, d.Name, d.Location, d['Source Link']]) + self.yRange.rangeBand()/2; });
+        
         self.data_bars = self.svg_g.selectAll("bar")
             .data(self.data)
             .enter().append("rect")
@@ -156,7 +167,7 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
                 .attr("class", "hover_bar")
                 .attr("y", function(d) { return self.yRange([d.ID, d.Name, d.Location, d['Source Link']]); })
                 .attr("width", function(d) {
-                    return self.xRange(.65)
+                    return self.xRange(self.max_value)
                 })
                 .attr("x", 0)
                 .attr("height", self.yRange.rangeBand())
@@ -164,9 +175,9 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
                     self.show_tip(d);
                 })
                 .on("mouseout", function(d){
-                    self.tool_tip.hide();
+                    self.hide_tip(d);
                 });
-        
+                
         //Create the grouping labels
         self.text1 = self.svg_g.append('text')
             .attr('class', 'group_label')
@@ -212,10 +223,24 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
             .attr('id', 'd3_tip_'+self.slug)
             .html(function(d) {
                 html_string = '<div>';
-                html_string += self.y_label_format([d.ID, d.Name, d.Location, d['Source Link']])
+                //Name
+                var name = self.y_label_format([d.ID, d.Name, d.Location, d['Source Link']], true);
+                if (name.substring(0,7) == 'Average'){//HACK from data
+                    name = "Average - " + d.Group;
+                }
+                html_string += '<span class="tip_title">'+name+'</span>';
                 html_string += '</br>';
+                //Date
+                if (d["Date String"] != null){
+                    html_string += d['Date String'] + '</br>';
+                }
+                //Source
+                if (d["Source Name"] != null){
+                    html_string += '<span class="source">'+d['Source Name'] + '</span></br>';
+                }
+                //Value
                 var decimal = d["Percentage of Deaths from Warfare"]*100;
-                html_string += decimal.toPrecision(2)+ "%</br>";
+                html_string += '<span class="value">'+decimal.toPrecision(2)+ "%</span></br>";
                 html_string += "</div>";
                 return html_string;
             });
@@ -224,19 +249,36 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
     }
     
     self.show_tip = function(hover_target){
+        if (hover_target.Name == null || hover_target.Name.substring(0,1) != " " ){//HACK from data
+            var hover_bar = self.hover_bars[0][hover_target.ID-1];
+            var tooltip_line = self.tooltip_lines[0][hover_target.ID-1];
+            var data_bar = self.data_bars[0][hover_target.ID-1];
+            add_class(d3.select(data_bar), 'highlight');
+            add_class(d3.select(tooltip_line), 'highlight');
+            self.tool_tip.offset(function() {
+                if (hover_target["Percentage of Deaths from Warfare"] < self.max_value/2+self.max_value/3){
+                    return [self.yRange.rangeBand()/2-9, self.xRange(self.max_value)/3];
+                }
+                else{
+                    return [-9, self.xRange(self.max_value)/3];
+                }
+            })
+            self.tool_tip.show(hover_target, hover_bar);
+        }
+    }
+    
+    self.hide_tip = function(hover_target){
         
-        var hover_bar = self.hover_bars[0][hover_target.ID-1];
         var data_bar = self.data_bars[0][hover_target.ID-1];
-        add_class(d3.select(data_bar), 'highlight')
-        //.classList.add("highlight");
-        self.tool_tip.offset(function() {
-            return [0, self.xRange(.65)/3]
-        })
-        self.tool_tip.show(hover_target, data_bar);
+        var tooltip_line = self.tooltip_lines[0][hover_target.ID-1];
+        remove_class(d3.select(data_bar), 'highlight')
+        remove_class(d3.select(tooltip_line), 'highlight')
+        self.tool_tip.hide()
     }
     
     /********Reusable functions**************/
-    self.y_label_format = function(d){
+    self.y_label_format = function(d, tooltip){
+        /*Returns the y label. Used for both y-axis tick labels and the tooltip title. Little HACKy*/
         var label_string = '';
         if (d[1] != null){
             label_string += d[1]
@@ -246,6 +288,12 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         }
         if (d[2] != null){
             label_string += d[2];
+        }
+        //The below code is complete bullshit HACK
+        if (tooltip != true){
+            if (d[0] >= 45 && d[1].substring(0,7) != 'Average'){//HACK from data
+                label_string += ', ' + self.data[d[0]-1]['Date String'];
+            }
         }
         return label_string;
     }
