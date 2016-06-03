@@ -1,18 +1,18 @@
-.bar.Prehistoric_Archaeological_Sites
+.Prehistoric_Archaeological_Sites
 {
     fill: #8A0707;
 }
-.bar.Hunter-gathers
+.Hunter-gathers
 {
     fill: #000066;
 }
-.bar.States
-{
-    fill: #006600;
-}
-.bar.Hunter-horticultururalists_and_Other_Tribal_Groups
+.Hunter-horticultururalists_and_Other_Tribal_Groups
 {
     fill: #cc9900;
+}
+.States
+{
+    fill: #006600;
 }
 .hover_bar{
     fill-opacity: 0;
@@ -89,4 +89,25 @@
     bottom:-10px;
     left: 50%;
     margin-left: -10px;
+}
+
+.legend.series{
+    stroke-width: 2px;
+}
+.legend_row{
+    text-align: right;
+}
+@media (min-width: 1px) {
+    .legend_button_wrapper{
+        float: left!important;
+    }
+}
+@media (min-width: 550px) {
+    .legend_button_wrapper{
+        float: right!important;
+    }
+}
+.legend_button{
+    background-color: transparent;
+    border: hidden;
 }

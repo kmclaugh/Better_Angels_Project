@@ -24,10 +24,14 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         fixed_height = false,
         margin = {top: 0, right: 20, bottom: 20, left: 200};
     self.max_value = .65;
-    self.current_data = 'death_total';
     
     graph_class.call(this, the_data, graph_container_id, title_text, slug, notes, source_code, data_source, description, image, csv_file, min_height, fixed_height, margin);
-    
+    var groups = d3.map(self.data, function(d){ return d.Group}).keys();
+    self.display_dictionary = {};
+    groups.forEach(function(group){
+        self.display_dictionary[group.replace(/ /g , "_")] = {'visible':true, 'display_name':group};
+    });
+    console.log(self.display_dictionary)
     $(document).on("click", '#change_releative_absolute', function() {
         self.update_data();
     });
@@ -207,6 +211,21 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
             .attr('y', function() { return self.yRange([self.data[48].ID, self.data[48].Name, self.data[48].Location, self.data[48]['Source Link']]); })
             .attr('text-anchor', 'end')
             .text('States');
+        
+        //Create Graph legend
+        self.graph_element.prepend('<div class="row legend_row" id=legend_row_'+self.graph_container_id+'>')
+        self.legend_row = $('#legend_row_'+self.graph_container_id);
+        self.legend_row.append('<div class="col-xs-12 col-sm-2 scale_col" id=scale_col_'+self.graph_container_id+'></div>')
+        self.scale_col = $('#scale_col_'+self.graph_container_id);
+        self.legend_row.append('<div class="col-xs-12 col-sm-10" id=legend_col_'+self.graph_container_id+'></div>')
+        self.legend_col = $('#legend_col_'+self.graph_container_id);
+        var i = 0;
+        for (var group in self.display_dictionary){
+            var value = self.display_dictionary[group];
+            var legend_element = '<button class="legend_button '+self.graph_container_id+'"><svg width="15" height="14" style="vertical-align: middle"><circle class="legend series visible_'+value.visible+' '+group+'" r="5" cx="6" cy="7"></circle></svg>'+value.display_name+'</button>';
+            self.legend_col.append('<div class="legend_button_wrapper">'+legend_element+'</div>');       
+            i++;
+        };
         
         create_graph_title_footer(self);
         
