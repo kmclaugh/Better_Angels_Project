@@ -14,19 +14,22 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
     /*Class for the percentage of deaths in warfare bar graph graph*/
     
     var self = this;
-    var min_height = 390,
+    var min_height = 530,
         fixed_height = false,
         margin = {top: 0, right: 20, bottom: 20, left: 200};
     self.max_value = .65;
     
     graph_class.call(this, the_data, graph_container_id, title_text, slug, notes, source_code, data_source, description, image, csv_file, min_height, fixed_height, margin);
+    
+    //Create the groups display dictionary
     var groups = d3.map(self.data, function(d){ return d.Group}).keys();
     self.display_dictionary = {};
     groups.forEach(function(group){
         self.display_dictionary[group.replace(/ /g , "_")] = {'visible':true, 'display_name':group};
     });
     
-     $(document).on("click", '.legend_button.'+self.graph_container_id, function() {
+    //Legend clicks
+    $(document).on("click", '.legend_button.'+self.graph_container_id, function() {
         self.update_data($(this).attr('data_name'));
     });
 
@@ -135,48 +138,69 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         self.start_resize();
         
         //Rescale the range and axis functions to account for the new dimensions
-        self.xRange
-            .rangeRoundBands([0, self.width], .1);
-        self.xAxis
-            .scale(self.xRange);
-        self.yRange
-            .range([self.height, 0]);
-        self.yAxis
-            .ticks(Math.max(self.height/20, 2))
-            .scale(self.yRange);
+        self.yRange.rangeBands([0, self.height], .15)
+        self.xRange.range([0, self.width]);
+        self.xAxis.scale(self.xRange).ticks(Math.max(self.width/85, 2));
+        self.yAxis.scale(self.yRange);
         
-        //resize the x-axis
+        //resize the y and x axis
         self.x_axis
             .attr("transform", "translate(0," + self.height + ")")
             .call(self.xAxis)
-                .selectAll("text")
-                    .style("text-anchor", "end")
-                    .attr("dx", "-.8em")
-                    .attr("dy", "-.55em")
-                    .attr('class', 'tick_labels')
-                    .text(self.x_labels_data_function)
-                    .attr("transform", self.x_labels_transform_function());
-        
-        //resize the y-axis
-        self.y_axis
-            .call(self.yAxis);
+        self.y_axis.call(self.yAxis);
         
         //Update the position of the y axis label
         self.y_axis_label
             .attr("y", 0 - self.margin.left)
             .attr("x",0 - (self.height / 2))
         
-        //Update the actual bar rectangles
-        self.svg.selectAll("rect")
-            .attr("x", function(d) { return self.xRange([d.Cause, d.Century_String]); })
-            .attr("width", self.xRange.rangeBand())
-            .attr("y", function(d) { return self.y_data_function(d); })
-            .attr("height", function(d) { return self.height - self.y_data_function(d)});
+        //Update the data bars
+        self.svg.selectAll("rect.data")
+            .transition()
+            .attr("y", function(d) {return self.yRange([d.ID, d.Name, d.Location, d['Source Link']]); })
+            .attr("width", function(d) {return self.xRange(d['Percentage of Deaths from Warfare'])})
+            .attr("height", self.yRange.rangeBand());
+        
+        //Update the hover bars
+        self.svg.selectAll("rect.hover_bar")
+                .attr("y", function(d) { return self.yRange([d.ID, d.Name, d.Location, d['Source Link']]); })
+                .attr("width", function(d) {return self.xRange(self.max_value)})
+                .attr("height", self.yRange.rangeBand())
+        
+        //Update the tooltip lines
+        self.tooltip_lines
+            .attr("x1", self.xRange(0))
+            .attr("y1", function(d) {
+                var y = self.yRange([d.ID, d.Name, d.Location, d['Source Link']]) + self.yRange.rangeBand()/2;
+                if (isNaN(y)){y = 0;}//Need to check for NaN
+                return y;
+            })
+            .attr("x2", self.xRange(self.max_value)/2+self.xRange(self.max_value)/3)
+            .attr("y2", function(d) {
+                var y = self.yRange([d.ID, d.Name, d.Location, d['Source Link']]) + self.yRange.rangeBand()/2;
+                if (isNaN(y)){y = 0;}//Need to check for NaN
+                return y;
+            });
+        
+        //Update the texts
+        self.text1
+            .attr('x', function() { return self.xRange(.65) })
+            .attr('y', function() { return self.yRange([self.data[9].ID, self.data[9].Name, self.data[9].Location, self.data[9]['Source Link']]); })
+        
+        self.text2
+            .attr('x', function() { return self.xRange(.35) })
+            .attr('y', function() { return self.yRange([self.data[26].ID, self.data[26].Name, self.data[26].Location, self.data[26]['Source Link']]); })
+        
+        self.text3
+            .attr('x', function() { return self.xRange(.65) })
+            .attr('y', function() { return self.yRange([self.data[37].ID, self.data[37].Name, self.data[37].Location, self.data[37]['Source Link']]); })
+        
+        self.text4
+            .attr('x', function() { return self.xRange(.10) })
+            .attr('y', function() { return self.yRange([self.data[48].ID, self.data[48].Name, self.data[48].Location, self.data[48]['Source Link']]); })
     
     }//end resize
-    
-    
-    
+
     self.draw = function(){
         /*Draws the graph according to the size of the graph element*/
         
@@ -202,6 +226,7 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         self.xAxis = d3.svg.axis()
             .scale(self.xRange)
             .tickFormat(formatPercent)
+            .ticks(Math.max(self.width/85, 2))
             .orient("bottom");
             
         self.yAxis = d3.svg.axis()
@@ -274,28 +299,28 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         self.text1 = self.svg_g.append('text')
             .attr('class', 'group_label')
             .attr('id', 'test')
-            .attr('x', function() { return self.xRange(.60) })
+            .attr('x', function() { return self.xRange(.65) })
             .attr('y', function() { return self.yRange([self.data[9].ID, self.data[9].Name, self.data[9].Location, self.data[9]['Source Link']]); })
             .attr('text-anchor', 'end')
             .text('Prehistoric Archaeological Sites');
         
         self.text2 = self.svg_g.append('text')
             .attr('class', 'group_label')
-            .attr('x', function() { return self.xRange(.30) })
+            .attr('x', function() { return self.xRange(.35) })
             .attr('y', function() { return self.yRange([self.data[26].ID, self.data[26].Name, self.data[26].Location, self.data[26]['Source Link']]); })
             .attr('text-anchor', 'end')
             .text('Hunter-gathers');
         
         self.text3 = self.svg_g.append('text')
             .attr('class', 'group_label')
-            .attr('x', function() { return self.xRange(.60) })
+            .attr('x', function() { return self.xRange(.65) })
             .attr('y', function() { return self.yRange([self.data[37].ID, self.data[37].Name, self.data[37].Location, self.data[37]['Source Link']]); })
             .attr('text-anchor', 'end')
             .text('Hunter-horticultururalists and Other Tribal Groups');
         
         self.text4 = self.svg_g.append('text')
             .attr('class', 'group_label')
-            .attr('x', function() { return self.xRange(.05) })
+            .attr('x', function() { return self.xRange(.10) })
             .attr('y', function() { return self.yRange([self.data[48].ID, self.data[48].Name, self.data[48].Location, self.data[48]['Source Link']]); })
             .attr('text-anchor', 'end')
             .text('States');
@@ -389,7 +414,7 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         d3.selectAll(".tick")
             .on("click", function(d) {
                 if (d[3] != null) {
-                    window.open(d[3], '_blank');
+                    window.open(d[3], '_blank');//Open the source link
                 }
             });
         

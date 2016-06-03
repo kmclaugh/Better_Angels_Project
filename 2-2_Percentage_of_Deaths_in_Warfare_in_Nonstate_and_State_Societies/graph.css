@@ -22,6 +22,11 @@
     fill-opacity: 0;
     
 }
+@media (max-width : 767px) {
+    .group_label{
+        visibility: hidden;
+    }
+}
 .group_label{
     font-size: 14px;
     font-weight: bold;
