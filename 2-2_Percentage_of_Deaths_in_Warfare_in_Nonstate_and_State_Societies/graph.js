@@ -31,15 +31,64 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
     groups.forEach(function(group){
         self.display_dictionary[group.replace(/ /g , "_")] = {'visible':true, 'display_name':group};
     });
-    console.log(self.display_dictionary)
-    $(document).on("click", '#change_releative_absolute', function() {
-        self.update_data();
+    
+     $(document).on("click", '.legend_button.'+self.graph_container_id, function() {
+        self.update_data($(this).attr('data_name'));
     });
 
-    self.update_data = function(){
-        /*Switches the data from absolute to relative dataset or visa-versa*/
+    self.update_data = function(group){
+        /*Hide or shows the group*/
         
+        //Toggle the display visibility for the group
+        var display_values = self.display_dictionary[group];
+        if (display_values.visible == true){
+            self.display_dictionary[group].visible = false;
+        }
+        else if(display_values.visible == false){
+            self.display_dictionary[group].visible = true;
+        }
         
+        //Update the visible data
+        self.visible_data = [];
+        self.max_value = 0;
+        self.data.forEach(function(datum){
+            if (self.display_dictionary[datum.Group.replace(/ /g , "_")].visible == true){
+                self.visible_data.push(datum)
+                if (datum['Percentage of Deaths from Warfare'] > self.max_value){
+                    self.max_value = datum['Percentage of Deaths from Warfare'];
+                }
+            }
+        });
+        
+        //Update the range and axis
+        self.xRange
+            .domain([0,self.max_value]);
+        self.yRange
+            .domain(self.visible_data.map(function(d) {
+                    return [d.ID, d.Name, d.Location, d['Source Link']];
+                })
+            );
+        self.y_axis.transition().call(self.yAxis);
+        self.x_axis.transition().call(self.xAxis);
+        
+        //Update the data bars
+        self.svg.selectAll("rect")
+                .data(self.data)
+                .transition()
+                .attr('visibility', function(d){
+                    if (self.display_dictionary[d.Group.replace(/ /g , "_")].visible == true){
+                        return 'visible';
+                    }
+                    else{
+                        return 'hidden';
+                    }
+                })
+                .attr("y", function(d) { return self.yRange([d.ID, d.Name, d.Location, d['Source Link']]); })
+                .attr("width", function(d) {
+                    return self.xRange(d['Percentage of Deaths from Warfare'])
+                })
+                .attr("x", 0)
+                .attr("height", self.yRange.rangeBand())
     }
     
     self.resize = function(){
@@ -97,7 +146,9 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         self.yRange = d3.scale.ordinal()
             .rangeBands([0, self.height], .15)
             .domain(self.data.map(function(d) {
-                    return [d.ID, d.Name, d.Location, d['Source Link']];
+                    if (self.display_dictionary[d.Group.replace(/ /g , "_")].visible == true){
+                        return [d.ID, d.Name, d.Location, d['Source Link']];
+                    }
                 })
             );
             
@@ -222,7 +273,7 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         var i = 0;
         for (var group in self.display_dictionary){
             var value = self.display_dictionary[group];
-            var legend_element = '<button class="legend_button '+self.graph_container_id+'"><svg width="15" height="14" style="vertical-align: middle"><circle class="legend series visible_'+value.visible+' '+group+'" r="5" cx="6" cy="7"></circle></svg>'+value.display_name+'</button>';
+            var legend_element = '<button class="legend_button '+self.graph_container_id+'" data_name="'+group+'"><svg width="15" height="14" style="vertical-align: middle"><circle class="legend series visible_'+value.visible+' '+group+'" r="5" cx="6" cy="7"></circle></svg>'+value.display_name+'</button>';
             self.legend_col.append('<div class="legend_button_wrapper">'+legend_element+'</div>');       
             i++;
         };
