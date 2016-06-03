@@ -156,7 +156,6 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         
         //Update the data bars
         self.svg.selectAll("rect.data")
-            .transition()
             .attr("y", function(d) {return self.yRange([d.ID, d.Name, d.Location, d['Source Link']]); })
             .attr("width", function(d) {return self.xRange(d['Percentage of Deaths from Warfare'])})
             .attr("height", self.yRange.rangeBand());

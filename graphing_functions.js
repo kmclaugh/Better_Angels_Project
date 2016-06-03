@@ -21,7 +21,13 @@ function graph_class(the_data, graph_container_id, title_text, slug, notes, sour
         self.resize();
     });
     $(document).on("click", '#save_'+self.graph_container_id, function() {
-        save_graph_object_to_image(self, 1024, 512);
+        console.log(self.min_height)
+        if (self.min_height < 512){
+            save_graph_object_to_image(self, 1024, 512);
+        }
+        else{
+            save_graph_object_to_image(self, 1024, self.min_height);
+        }
     });
     
     self.start_resize = function(){
@@ -132,6 +138,9 @@ function save_graph_object_to_image(graph_object, image_width, image_height){
     
     //Set the height
     var non_graph_height = graph_object.graph_element.height() - $('#svg_'+graph_object.graph_container_id).height();
+    if (graph_object.min_height == image_height){
+        image_height += non_graph_height;
+    }
     graph_object.fixed_height = image_height - non_graph_height;
     graph_object.resize();
     
