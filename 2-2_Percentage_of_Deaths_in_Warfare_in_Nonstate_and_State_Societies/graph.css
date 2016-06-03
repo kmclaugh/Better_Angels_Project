@@ -1,18 +1,22 @@
 .Prehistoric_Archaeological_Sites
 {
     fill: #8A0707;
+    stroke: #8A0707;
 }
 .Hunter-gathers
 {
     fill: #000066;
+    stroke: #000066;
 }
 .Hunter-horticultururalists_and_Other_Tribal_Groups
 {
     fill: #cc9900;
+    stroke: #cc9900;
 }
 .States
 {
     fill: #006600;
+    stroke: #006600;
 }
 .hover_bar{
     fill-opacity: 0;
@@ -96,6 +100,9 @@
 }
 .legend_row{
     text-align: right;
+}
+.visible_false{
+    fill: none!important;
 }
 @media (min-width: 1px) {
     .legend_button_wrapper{
