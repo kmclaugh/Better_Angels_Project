@@ -84,9 +84,10 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         
         //Update the hover bars
         self.svg.selectAll("rect.hover_bar")
-                .attr("y", function(d) { return self.yRange([d.ID, d.Name, d.Location, d['Source Link']]); })
-                .attr("width", function(d) {return self.xRange(self.max_value)})
-                .attr("height", self.yRange.rangeBand())
+            .attr('visibility', function(d){return self.return_group_visibility(d.Group)})
+            .attr("y", function(d) { return self.yRange([d.ID, d.Name, d.Location, d['Source Link']]); })
+            .attr("width", function(d) {return self.xRange(self.max_value)})
+            .attr("height", self.yRange.rangeBand())
         
         //Update the tooltip lines
         self.tooltip_lines
@@ -108,25 +109,25 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         self.text1
             .transition()
             .attr('visibility', function(d){return self.return_group_visibility('Prehistoric Archaeological Sites')})
-            .attr('x', function() { return self.xRange(.60) })
+            .attr('x', function() { return self.xRange(.65) })
             .attr('y', function() { return self.yRange([self.data[9].ID, self.data[9].Name, self.data[9].Location, self.data[9]['Source Link']]); })
         
         self.text2
             .transition()
             .attr('visibility', function(d){return self.return_group_visibility('Hunter-gathers')})
-            .attr('x', function() { return self.xRange(.30) })
+            .attr('x', function() { return self.xRange(.35) })
             .attr('y', function() { return self.yRange([self.data[26].ID, self.data[26].Name, self.data[26].Location, self.data[26]['Source Link']]); })
         
         self.text3
             .transition()
             .attr('visibility', function(d){return self.return_group_visibility('Hunter-horticultururalists and Other Tribal Groups')})
-            .attr('x', function() { return self.xRange(.60) })
+            .attr('x', function() { return self.xRange(.65) })
             .attr('y', function() { return self.yRange([self.data[37].ID, self.data[37].Name, self.data[37].Location, self.data[37]['Source Link']]); })
         
         self.text4
             .transition()
             .attr('visibility', function(d){return self.return_group_visibility('States')})
-            .attr('x', function() { return self.xRange(.05) })
+            .attr('x', function() { return self.xRange(.10) })
             .attr('y', function() { return self.yRange([self.data[48].ID, self.data[48].Name, self.data[48].Location, self.data[48]['Source Link']]); })
         
         self.tick_label_links();
