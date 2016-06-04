@@ -16,7 +16,7 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
     var self = this;
     var min_height = 530,
         fixed_height = false,
-        margin = {top: 0, right: 20, bottom: 20, left: 200};
+        margin = {top: 0, right: 20, bottom: 20, left: 215};
     self.max_value = .65;
     
     graph_class.call(this, the_data, graph_container_id, title_text, slug, notes, source_code, data_source, description, image, csv_file, min_height, fixed_height, margin);
@@ -210,12 +210,12 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         //Create y and x ranges
         self.yRange = d3.scale.ordinal()
             .rangeBands([0, self.height], .15)
-            .domain(self.data.map(function(d) {
-                    if (self.display_dictionary[d.Group.replace(/ /g , "_")].visible == true){
-                        return [d.ID, d.Name, d.Location, d['Source Link']];
-                    }
-                })
-            );
+            .domain(self.data.map(function(d) {  
+                if (self.display_dictionary[d.Group.replace(/ /g , "_")].visible == true){
+                    return [d.ID, d.Name, d.Location, d['Source Link']];
+                }
+            })
+        );
             
         self.xRange = d3.scale.linear()
             .range([0, self.width])
@@ -355,7 +355,7 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
             .html(function(d) {
                 html_string = '<div>';
                 //Name
-                var name = self.y_label_format([d.ID, d.Name, d.Location, d['Source Link']], true);
+                var name = self.y_label_format([d.ID, d.Name, d.Location, d['Source Link']], 'tooltip');
                 if (name.substring(0,7) == 'Average'){//HACK from data
                     name = "Average - " + d.Group;
                 }
@@ -452,7 +452,7 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
             label_string += d[2];
         }
         //The below code is complete bullshit HACK
-        if (tooltip != true){
+        if (tooltip != 'tooltip'){
             if (d[0] >= 45 && d[1].substring(0,7) != 'Average'){//HACK from data
                 label_string += ', ' + self.data[d[0]-1]['Date String'];
             }
