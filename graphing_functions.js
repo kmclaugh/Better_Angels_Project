@@ -111,11 +111,11 @@ function create_graph_title_footer(graph_object){
     graph_object.display_source_row.append(copyright_string);
     
     //Downloads
-    var image_link = '<a href="'+graph_object.image+'" download GA-category="Visualizations" action="download" label="'+graph_object.name+'" value="0">Cononical Image</a>'
+    var image_link = '<a href="'+graph_object.image+'" download GA-event=true GA-category="Visualizations" action="download" label="'+graph_object.name+'" value="0">Cononical Image</a>'
     var json_data = JSON.stringify(graph_object.data);
-    var json_link = '<a href="data:text/json;charset=utf-8,'+encodeURIComponent(json_data)+'" download="data.json"" target="_blank" GA-category="Visualizations" action="download" label="'+graph_object.name+'" value="1">JSON data</a>';
-    var csv_link = '<a href="'+graph_object.csv_file+'" download GA-category="Visualizations" action="download" label="'+graph_object.name+'" value="2">CSV Data</a>';
-    var current_image_link = '<a id="save_'+graph_object.graph_container_id+'" slug="'+graph_object.slug+'" name="save_current" GA-category="Visualizations" action="download" label="'+graph_object.name+'" value="3">Save as Image</a>';
+    var json_link = '<a href="data:text/json;charset=utf-8,'+encodeURIComponent(json_data)+'" download="data.json"" target="_blank" GA-event=true GA-category="Visualizations" action="download" label="'+graph_object.name+'" value="1">JSON data</a>';
+    var csv_link = '<a href="'+graph_object.csv_file+'" download GA-event=true GA-category="Visualizations" action="download" label="'+graph_object.name+'" value="2">CSV Data</a>';
+    var current_image_link = '<a id="save_'+graph_object.graph_container_id+'" slug="'+graph_object.slug+'" name="save_current" GA-event=true GA-category="Visualizations" action="download" label="'+graph_object.name+'" value="3">Save as Image</a>';
     
     var modal_header = '<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Downloads</h4></div>';
     var modal_body = '<div class="modal-body"><p>'+image_link+'</p><p>'+json_link+'</p><p>'+csv_link+'</p><p>'+current_image_link+'</p></div>';
