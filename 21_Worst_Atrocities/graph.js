@@ -18,7 +18,7 @@ function worst_atrocities_graph_class(the_data, graph_container_id, title_text, 
         margin = {top: 30, right: 0, bottom: 200, left: 50};
     self.current_data = 'death_total';
     
-    graph_class.call(this, the_data, graph_container_id, title_text, slug, notes, source_code, data_source, description, image, csv_file, min_height, fixed_height, margin);
+    graph_class.call(this, the_data, graph_container_id, title_text, slug, notes, source_code, data_source, description, image, csv_file, min_height, fixed_height, margin, 'The 21 Worst Atrocities in History');
     
     $(document).on("click", '#change_releative_absolute', function() {
         self.update_data();
