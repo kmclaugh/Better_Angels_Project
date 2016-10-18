@@ -198,7 +198,7 @@ function worst_atrocities_graph_class(the_data, graph_container_id, title_text, 
         create_graph_title_footer(self);
         
         //Add the change button
-        $('#'+self.graph_container_id+'_controls').prepend('<div class="row change_button_row"><button class="btn btn-primary" type="button" id="change_releative_absolute">Switch to 1950 Equivalent</button></div>');
+        $('#'+self.graph_container_id+'_controls').prepend('<div class="row change_button_row"><button class="btn btn-primary" type="button" id="change_releative_absolute" GA-event="true" GA-category="Visualizations" GA-action="Interaction" GA-label="'+self.name+'">Switch to 1950 Equivalent</button></div>');
     
     }//End draw graph
     

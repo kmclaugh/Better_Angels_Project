@@ -290,13 +290,13 @@ function homicide_rates_line_graph_class(the_data, graph_container_id, title_tex
         self.legend_col = $('#legend_col_'+self.graph_container_id);
         var i = 0;
         self.data.forEach(function(datum){
-            var legend_element = '<button class="legend_button '+self.graph_container_id+'" data_index='+i+' id=legend_id'+i+'><svg width="15" height="14" style="vertical-align: middle"><circle id=circle_id'+i+' class="legend series visibility_'+datum.display+' '+datum.name+'" r="5" cx="6" cy="7"></circle></svg>'+datum.Country+'</button>';
+            var legend_element = '<button class="legend_button '+self.graph_container_id+'" data_index='+i+' id=legend_id'+i+' GA-event="true" GA-category="Visualizations" GA-action="Interaction" GA-label="'+self.name+'"><svg width="15" height="14" style="vertical-align: middle"><circle id=circle_id'+i+' class="legend series visibility_'+datum.display+' '+datum.name+'" r="5" cx="6" cy="7"></circle></svg>'+datum.Country+'</button>';
             self.legend_col.append('<div class="legend_button_wrapper">'+legend_element+'</div>');       
             i++;
         });
         
         //Create log button
-        self.scale_col.append('<span class="scale"><input class="scale" type="checkbox" id="log_scale_'+self.graph_container_id+'" value="log" checked><label class="scale" for="log_scale_'+self.graph_container_id+'">&nbsplog scale<label></span>');
+        self.scale_col.append('<span class="scale"><input class="scale" type="checkbox" GA-event="true" GA-category="Visualizations" GA-action="Interaction" GA-label="'+self.name+'" id="log_scale_'+self.graph_container_id+'" value="log" checked><label class="scale" for="log_scale_'+self.graph_container_id+'">&nbsplog scale<label></span>');
         self.scale_button = $('#log_scale_'+self.graph_container_id);
         
         create_graph_title_footer(self);

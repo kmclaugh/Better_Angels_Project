@@ -85,7 +85,7 @@ function create_graph_title_footer(graph_object){
     var modal_body = '<div class="modal-body">'+graph_object.notes+'</div>';
     var modal = '<div class="modal fade" id="notes_modal_'+graph_object.graph_container_id+'" role="dialog"><div class="modal-dialog"><div class="modal-content">'+modal_header+modal_body+'</div></div>';
     graph_object.data_modal = $('#notes_modal_'+graph_object.graph_container_id);
-    graph_object.source_row.append('<div class="col-xs-6 col-sm-3"><a id=notes_link_'+graph_object.graph_container_id+' data-toggle="modal" data-target="#notes_modal_'+graph_object.graph_container_id+'">Graph Notes</a></div>'+modal);
+    graph_object.source_row.append('<div class="col-xs-6 col-sm-3"><a id=notes_link_'+graph_object.graph_container_id+' data-toggle="modal" data-target="#notes_modal_'+graph_object.graph_container_id+'" GA-event="true" GA-category="Visualizations" GA-action="Notes" GA-label="'+graph_object.name+'">Graph Notes</a></div>'+modal);
     graph_object.data_source_link = $('#notes_link_'+graph_object.graph_container_id);
     //Notes display
     //graph_object.display_source_row.append('<p>'+graph_object.notes+'</p>');
@@ -97,13 +97,14 @@ function create_graph_title_footer(graph_object){
     var modal_body = '<div class="modal-body">'+graph_object.data_source+copyright_string+'</div>';
     var modal = '<div class="modal fade" id="data_source_modal_'+graph_object.graph_container_id+'" role="dialog"><div class="modal-dialog"><div class="modal-content">'+modal_header+modal_body+'</div></div>';
     graph_object.data_modal = $('#data_source_modal_'+graph_object.graph_container_id);
-    graph_object.source_row.append('<div class="col-xs-6 col-sm-3"><a id=data_source_link_'+graph_object.graph_container_id+' data-toggle="modal" data-target="#data_source_modal_'+graph_object.graph_container_id+'">Data Sources</a></div>'+modal);
+    graph_object.source_row.append('<div class="col-xs-6 col-sm-3"><a id=data_source_link_'+graph_object.graph_container_id+' data-toggle="modal" data-target="#data_source_modal_'+graph_object.graph_container_id+'" GA-event="true" GA-category="Visualizations" GA-action="Sources" GA-label="'+graph_object.name+'">Data Sources</a></div>'+modal);
     graph_object.data_source_link = $('#data_source_link_'+graph_object.graph_container_id);
+    
     //Data display
     graph_object.display_source_row.append('<p>Interactive graph and data sources available at: <a>www.countingcalculi.com/better_angels_project/'+graph_object.slug+'</a></p>');
     
     //Code
-    graph_object.source_row.append('<div class="col-xs-6 col-sm-3"><a class="source code" target="_blank" href='+graph_object.source_code+'>Source Code</a></div>');
+    graph_object.source_row.append('<div class="col-xs-6 col-sm-3"><a class="source code" target="_blank" href='+graph_object.source_code+' GA-event="true" GA-category="Visualizations" GA-action="Source Code" GA-label="'+graph_object.name+'">Source Code</a></div>');
     //Code display
     //graph_object.display_source_row.append('<p>Code available at: <a>'+graph_object.source_code+'</a></p>');
     
@@ -111,11 +112,11 @@ function create_graph_title_footer(graph_object){
     graph_object.display_source_row.append(copyright_string);
     
     //Downloads
-    var image_link = '<a href="'+graph_object.image+'" download GA-event=true GA-category="Visualizations" action="download" label="'+graph_object.name+'" value="0">Cononical Image</a>'
+    var image_link = '<a href="'+graph_object.image+'" download GA-event=true GA-category="Visualizations" GA-action="download" GA-label="'+graph_object.name+'" GA-value="0">Cononical Image</a>'
     var json_data = JSON.stringify(graph_object.data);
-    var json_link = '<a href="data:text/json;charset=utf-8,'+encodeURIComponent(json_data)+'" download="data.json"" target="_blank" GA-event=true GA-category="Visualizations" action="download" label="'+graph_object.name+'" value="1">JSON data</a>';
-    var csv_link = '<a href="'+graph_object.csv_file+'" download GA-event=true GA-category="Visualizations" action="download" label="'+graph_object.name+'" value="2">CSV Data</a>';
-    var current_image_link = '<a id="save_'+graph_object.graph_container_id+'" slug="'+graph_object.slug+'" name="save_current" GA-event=true GA-category="Visualizations" action="download" label="'+graph_object.name+'" value="3">Save as Image</a>';
+    var json_link = '<a href="data:text/json;charset=utf-8,'+encodeURIComponent(json_data)+'" download="data.json"" target="_blank" GA-event=true GA-category="Visualizations" GA-action="download" GA-label="'+graph_object.name+'" GA-value="1">JSON data</a>';
+    var csv_link = '<a href="'+graph_object.csv_file+'" download GA-event=true GA-category="Visualizations" GA-action="download" GA-label="'+graph_object.name+'" GA-value="2">CSV Data</a>';
+    var current_image_link = '<a id="save_'+graph_object.graph_container_id+'" slug="'+graph_object.slug+'" name="save_current" GA-event=true GA-category="Visualizations" GA-action="download" GA-label="'+graph_object.name+'" GA-value="3">Save as Image</a>';
     
     var modal_header = '<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Downloads</h4></div>';
     var modal_body = '<div class="modal-body"><p>'+image_link+'</p><p>'+json_link+'</p><p>'+csv_link+'</p><p>'+current_image_link+'</p></div>';
