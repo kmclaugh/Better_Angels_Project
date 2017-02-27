@@ -335,7 +335,7 @@ function Percentage_of_Deaths_in_Warfare_class(the_data, graph_container_id, tit
         var i = 0;
         for (var group in self.display_dictionary){
             var value = self.display_dictionary[group];
-            var legend_element = '<button GA-event="true" GA-category="Visualizations" GA-action="Interaction" GA-label="'+self.name+'" class="legend_button '+self.graph_container_id+'" data_name="'+group+'" ><svg width="15" height="14" style="vertical-align: middle"><circle class="legend series visible_'+value.visible+' '+group+'" data_name="'+group+'" r="5" cx="6" cy="7"></circle></svg>'+value.display_name+'</button>';
+            var legend_element = '<button GA-event="true" GA-category="Visualizations" GA-action="Interaction" GA-label="'+self.name+'" GA-interactionName="'+group+'" class="legend_button '+self.graph_container_id+'" data_name="'+group+'" ><svg width="15" height="14" style="vertical-align: middle"><circle class="legend series visible_'+value.visible+' '+group+'" data_name="'+group+'" r="5" cx="6" cy="7"></circle></svg>'+value.display_name+'</button>';
             self.legend_col.append('<div class="legend_button_wrapper">'+legend_element+'</div>');       
             i++;
         };
